@@ -1,0 +1,69 @@
+/*
+ *  @Author: José Sánchez-Gallego (gallegoj@uw.edu)
+ *  @Date: 2023-07-15
+ *  @Filename: usePath.ts
+ *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
+ */
+
+import { useLocation, useParams } from 'react-router-dom';
+
+function shortcutToTelescope(short: string) {
+  switch (short.toLowerCase()) {
+    case 'sci':
+      return 'Science';
+    case 'spec':
+      return 'Spec';
+    case 'skye':
+      return 'SkyE';
+    case 'skyw':
+      return 'SkyW';
+    default:
+      throw Error(`Invalid shortcut ${short.toLowerCase()}.`);
+  }
+}
+
+export interface URLPath {
+  url: string;
+  title: string;
+  className?: string;
+}
+
+export default function usePath() {
+  const { pathname } = useLocation();
+  const params = useParams();
+
+  const path: URLPath = { url: '/', title: '' };
+
+  if (pathname.startsWith('/pwi')) {
+    const { pwi = 'sci' } = params;
+    if (pwi) {
+      path.url = `http://localhost:8080/pwi${pwi}/vnc_lite.html?scale=true&path=pwi${pwi}/websockify`;
+      path.title = `PlaneWave ${shortcutToTelescope(pwi)}`;
+      path.className = 'vnc-iframe';
+    }
+  } else if (pathname.startsWith('/motan')) {
+    path.url = 'http://localhost:8080/motan/default';
+    path.title = 'Motor controllers';
+    path.className = 'vnc-iframe';
+  } else if (pathname.startsWith('/rabbitmq')) {
+    path.url = 'http://localhost:8080/rabbitmq/#/queues';
+    path.title = 'RabbitMQ';
+    path.className = 'full-screen-iframe';
+  } else if (pathname.startsWith('/weather')) {
+    path.url = 'http://weather.lco.cl';
+    path.title = 'LCO Weather';
+    path.className = 'full-screen-iframe';
+  } else if (pathname.startsWith('/docs')) {
+    const { docs } = params;
+    path.className = 'full-screen-iframe';
+    console.log(docs);
+    switch (docs) {
+      case 'gort':
+        path.url = 'https://lvmgort.readthedocs.io/en/latest/';
+        path.title = 'GORT Documentation';
+        break;
+    }
+  }
+
+  return path;
+}
