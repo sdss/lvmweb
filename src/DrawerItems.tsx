@@ -10,6 +10,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   Box,
   Divider,
+  Link,
   List,
   ListItem,
   ListItemButton,
@@ -24,7 +25,9 @@ import logo from '/lvm_logo.png';
 function DrawerToolbar() {
   return (
     <Toolbar style={{ paddingLeft: 16, paddingRight: 8 }}>
-      <img src={logo} width={50} style={{ marginRight: 8 }} />
+      <Link href='/'>
+        <img src={logo} width={50} style={{ marginRight: 16 }} />
+      </Link>
       <Divider orientation='vertical' variant='middle' flexItem />
       <Box flexGrow={1}>
         <Typography
