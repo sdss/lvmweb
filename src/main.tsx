@@ -12,36 +12,39 @@ import Home from './Home';
 import IFrame from './IFrame.tsx';
 import './index.css';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <Home /> },
-      {
-        path: 'pwi/:pwi?',
-        element: <IFrame />,
-      },
-      {
-        path: 'motan',
-        element: <IFrame />,
-      },
-      {
-        path: 'rabbitmq',
-        element: <IFrame />,
-      },
-      {
-        path: 'weather',
-        element: <IFrame />,
-      },
-      {
-        path: 'docs/:docs',
-        element: <IFrame />,
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <App />,
+      errorElement: <ErrorPage />,
+      children: [
+        { index: true, element: <Home /> },
+        {
+          path: 'pwi/:pwi?',
+          element: <IFrame />,
+        },
+        {
+          path: 'motan',
+          element: <IFrame />,
+        },
+        {
+          path: 'rabbitmq',
+          element: <IFrame />,
+        },
+        {
+          path: 'weather',
+          element: <IFrame />,
+        },
+        {
+          path: 'docs/:docs',
+          element: <IFrame />,
+        },
+      ],
+    },
+  ],
+  { basename: '/lvmweb' }
+);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
