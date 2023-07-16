@@ -56,7 +56,6 @@ export default function usePath() {
   } else if (pathname.startsWith('/docs')) {
     const { docs } = params;
     path.className = 'full-screen-iframe';
-    console.log(docs);
     switch (docs) {
       case 'gort':
         path.url = 'https://lvmgort.readthedocs.io/en/latest/';

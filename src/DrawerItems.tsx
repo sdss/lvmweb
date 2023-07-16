@@ -119,6 +119,12 @@ export default function DrawerItems() {
           link='http://localhost:8080/jupyter'
           newWindow
         />
+        <Item
+          text='Grafana'
+          variant='subitem'
+          link='https://lvm-grafana.lco.cl'
+          newWindow
+        />
         <Item text='RabbitMQ' variant='subitem' link='/rabbitmq' />
         <Item text='Weather' variant='subitem' link='/weather' />
         <Item
