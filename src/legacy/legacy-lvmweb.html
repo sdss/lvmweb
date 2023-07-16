@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  height: calc(100vh - 100px);
+}
+
+.container_p {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+  /* padding-top: 100%; */
+}
+
+.container_l {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 85%;
+}
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Kube')">Kube</button>
+  <button class="tablinks" onclick="window.open('/jupyter/lab', '_blank');">Jupyter</button>
+  <button class="tablinks" onclick="openCity(event, 'RabbitMQ')">RabbitMQ</button>
+  <button class="tablinks" onclick="openCity(event, 'PwiSci')">PwiSci</button>
+  <button class="tablinks" onclick="openCity(event, 'PwiSkye')">PwiSkye</button>
+  <button class="tablinks" onclick="openCity(event, 'PwiSkyw')">PwiSkyw</button>
+  <button class="tablinks" onclick="openCity(event, 'PwiSpec')">PwiSpec</button>
+  <button class="tablinks" onclick="openCity(event, 'MoTan')">MoTan</button>
+  <button class="tablinks" onclick="openCity(event, 'Weather')">Weather</button>
+  <button class="tablinks" onclick="window.open('https://unifi.ui.com/consoles/74ACB9EAA1330000000004EEE703000000000527B72A000000005F3370F7:1394809887/protect/timelapse/6446d73003a1b503e401550a', '_blank');">Webcams</button>
+  <!-- <button class="tablinks" onclick="openCity(event, 'PduSci')">PduSci</button>
+  <button class="tablinks" onclick="openCity(event, 'PduSkyE')">PduSkye</button>
+  <button class="tablinks" onclick="openCity(event, 'PduSkyW')">PduSkyw</button>
+  <button class="tablinks" onclick="openCity(event, 'PduSpec')">PduSpec</button> -->
+  <!-- <button class="tablinks" onclick="openCity(event, 'PduCab')">PduCab</button> -->
+</div>
+
+<div id="Container" class="tabcontent">
+   <div class="container_p">
+     <iframe id="Frame" class="responsive-iframe" src="/pwisci/default"></iframe>
+   </div>
+</div>
+
+<!-- <div id="RabbitMQ" class="tabcontent">
+   <div class="container_p">
+     <iframe class="responsive-iframe" src="/rabbitmq/#/queues" ></iframe>
+   </div>
+</div>
+
+<div id="PwiSci" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="/pwisci/default"></iframe>
+   </div>
+</div>
+
+<div id="PwiSkye" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="/pwiskye/default"></iframe>
+   </div>
+</div>
+
+<div id="PwiSkyw" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="/pwiskyw/default"></iframe>
+   </div>
+</div>
+
+<div id="PwiSpec" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="/pwispec/default"></iframe>
+   </div>
+</div>
+
+<div id="MoTan" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="/motan/default"></iframe>
+   </div>
+</div>
+
+<div id="Jupyter" class="tabcontent">
+<h1>
+    <a href="/jupyter/lab" target="_blank"> Open Jupyter in new tab </a>
+    <br>
+    <a href="print.html"
+       onclick="window.open('/jupyter/lab',
+                            'newwindow',
+                            'width=1200,height=1000'); return false;"> Open Jupyter in new window </a>
+</h1>
+</div>
+
+<div id="PduSci" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="http://10.8.38.106"></iframe>
+   </div>
+</div>
+
+<div id="PduSkyE" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="http://10.8.38.107"></iframe>
+   </div>
+</div>
+
+<div id="PduSkyW" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="http://10.8.38.108"></iframe>
+   </div>
+</div>
+
+<div id="PduSpec" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="http://10.8.38.109"></iframe>
+   </div>
+</div>
+
+<div id="PduCab" class="tabcontent">
+   <div class="container_l">
+     <iframe class="responsive-iframe" src="http://10.8.38.110"></iframe>
+   </div>
+</div>
+
+<div id="Webcams" class="tabcontent">
+  <div class="container_l">
+    <iframe class="responsive-iframe" src="https://unifi.ui.com/consoles/74ACB9EAA1330000000004EEE703000000000527B72A000000005F3370F7:1394809887/protect/timelapse/6446d73003a1b503e401550a"></iframe>
+  </div>
+</div> -->
+
+<script>
+function openCity(evt, cityName) {
+  console.log(cityName)
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById("Container").style.display = "block";
+  evt.currentTarget.className += " active";
+
+  const container = document.getElementById('Container');
+  const frame = container.childNodes[1].childNodes[1];
+  switch (cityName) {
+    case "RabbitMQ":
+      frame.src = "/rabbitmq/#/queues";
+      break;
+    case "PwiSci":
+      frame.src = "/pwisci/default";
+      break;
+    case "PwiSpec":
+      frame.src = "/pwispec/default";
+      break;
+    case "PwiSkye":
+      frame.src = "/pwiskye/default";
+      break;
+    case "PwiSkyw":
+      frame.src = "/pwiskyw/default";
+      break;
+    case "MoTan":
+      frame.src = "/motan/default";
+      break;
+    case "Weather":
+      frame.src = "http://weather.lco.cl";
+      break;
+    default:
+      frame.src = "/pwisci/default"
+      break;
+  }
+
+}
+
+openCity(event, 'PwiSci')
+
+</script>
+
+</body>
+</html>
