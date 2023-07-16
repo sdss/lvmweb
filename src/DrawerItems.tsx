@@ -69,11 +69,14 @@ interface ItemProps {
 function Item(props: ItemProps) {
   const { text, icon, variant = 'main', link, newWindow = false } = props;
 
+  const textVariant = variant === 'main' ? 'body1' : 'body2';
+
   const ItemText = () => {
-    if (!newWindow) return text;
+    if (!newWindow)
+      return <Typography variant={textVariant}>{text}</Typography>;
     return (
       <Stack direction='row' alignItems='center' spacing={1}>
-        <Typography>{text}</Typography>
+        <Typography variant={textVariant}>{text}</Typography>
         <OpenInNewIcon sx={{ fontSize: 16 }} />
       </Stack>
     );
