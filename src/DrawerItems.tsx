@@ -112,10 +112,10 @@ export default function DrawerItems() {
         <Item text='Home' icon={<HomeIcon />} />
 
         <Header text='PlaneWave' />
-        <Item text='Science' variant='subitem' link='/pwi/sci' />
-        <Item text='Spec' variant='subitem' link='/pwi/spec' />
-        <Item text='SkyE' variant='subitem' link='/pwi/skye' />
-        <Item text='SkyW' variant='subitem' link='/pwi/skyw' />
+        <Item text='Science' variant='subitem' link='/pwi?tel=sci' />
+        <Item text='Spec' variant='subitem' link='/pwi?tel=spec' />
+        <Item text='SkyE' variant='subitem' link='/pwi?tel=skye' />
+        <Item text='SkyW' variant='subitem' link='/pwi?tel=skyw' />
         <Item text='Motor controllers' variant='subitem' link='/motan' />
 
         <Header text='Tools' />
@@ -142,7 +142,7 @@ export default function DrawerItems() {
           link='https://wiki.sdss.org/display/LVM/Local+Volume+Mapper+Instrument+Operations+and+Maintenance+Manual'
           newWindow
         />
-        <Item text='GORT' variant='subitem' link='/docs/gort' />
+        <Item text='GORT' variant='subitem' link='/docs?page=gort' />
       </List>
     </div>
   );

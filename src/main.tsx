@@ -21,7 +21,7 @@ const router = createBrowserRouter(
       children: [
         { index: true, element: <Home /> },
         {
-          path: 'pwi/:pwi?',
+          path: 'pwi',
           element: <IFrame />,
         },
         {
@@ -37,7 +37,7 @@ const router = createBrowserRouter(
           element: <IFrame />,
         },
         {
-          path: 'docs/:docs',
+          path: 'docs',
           element: <IFrame />,
         },
       ],

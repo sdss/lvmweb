@@ -5,7 +5,7 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 function shortcutToTelescope(short: string) {
   switch (short.toLowerCase()) {
@@ -30,12 +30,12 @@ export interface URLPath {
 
 export default function usePath() {
   const { pathname } = useLocation();
-  const params = useParams();
+  const [searchParams] = useSearchParams();
 
   const path: URLPath = { url: '/', title: '' };
 
   if (pathname.startsWith('/pwi')) {
-    const { pwi = 'sci' } = params;
+    const pwi = searchParams.get('tel') || 'sci';
     if (pwi) {
       path.url = `/pwi${pwi}/vnc_lite.html?scale=true&path=pwi${pwi}/websockify`;
       path.title = `PlaneWave ${shortcutToTelescope(pwi)}`;
@@ -54,7 +54,7 @@ export default function usePath() {
     path.title = 'LCO Weather';
     path.className = 'full-screen-iframe';
   } else if (pathname.startsWith('/docs')) {
-    const { docs } = params;
+    const docs = searchParams.get('page') || 'gort';
     path.className = 'full-screen-iframe';
     switch (docs) {
       case 'gort':
