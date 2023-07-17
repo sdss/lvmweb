@@ -37,16 +37,16 @@ export default function usePath() {
   if (pathname.startsWith('/pwi')) {
     const { pwi = 'sci' } = params;
     if (pwi) {
-      path.url = `http://localhost:8080/pwi${pwi}/vnc_lite.html?scale=true&path=pwi${pwi}/websockify`;
+      path.url = `/pwi${pwi}/vnc_lite.html?scale=true&path=pwi${pwi}/websockify`;
       path.title = `PlaneWave ${shortcutToTelescope(pwi)}`;
       path.className = 'vnc-iframe';
     }
   } else if (pathname.startsWith('/motan')) {
-    path.url = 'http://localhost:8080/motan/default';
+    path.url = '/motan/default';
     path.title = 'Motor controllers';
     path.className = 'vnc-iframe';
   } else if (pathname.startsWith('/rabbitmq')) {
-    path.url = 'http://localhost:8080/rabbitmq/#/queues';
+    path.url = '/rabbitmq/#/queues';
     path.title = 'RabbitMQ';
     path.className = 'full-screen-iframe';
   } else if (pathname.startsWith('/weather')) {

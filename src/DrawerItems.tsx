@@ -119,12 +119,7 @@ export default function DrawerItems() {
         <Item text='Motor controllers' variant='subitem' link='/motan' />
 
         <Header text='Tools' />
-        <Item
-          text='Jupyter'
-          variant='subitem'
-          link='http://localhost:8080/jupyter'
-          newWindow
-        />
+        <Item text='Jupyter' variant='subitem' link='/jupyter' newWindow />
         <Item
           text='Grafana'
           variant='subitem'

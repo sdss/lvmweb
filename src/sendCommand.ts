@@ -14,13 +14,13 @@ interface GortReply {
   [k: string]: unknown;
 }
 
-const WS_URL = 'ws://localhost:9000';
+const WS_URL = 'ws://10.8.38.21:9000';
 
 export default function sendCommand(command: string, params: unknown = {}) {
   return new Promise<GortReply>((resolve, reject) => {
     if (!RWS) {
       RWS = new ReconnectingWebSocket(WS_URL);
-      console.log(`Creating WS connection to ${'ws://localhost:9000'}`);
+      console.log(`Creating WS connection to ${WS_URL}`);
       RWS.onopen = () => {
         console.log('Connection to WS open.');
       };
