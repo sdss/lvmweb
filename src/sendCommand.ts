@@ -14,7 +14,19 @@ interface GortReply {
   [k: string]: unknown;
 }
 
-const WS_URL = 'ws://10.8.38.21:9000';
+const WS_URL = 'ws://10.8.38.21:8080/wslvmweb';
+
+function createUUID() {
+  var s: string[] = [];
+  var hexDigits = '0123456789abcdef';
+  for (var i = 0; i < 36; i++) {
+    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+  }
+  s[14] = '4';
+  s[19] = hexDigits.substr((parseInt(s[19]) & 0x3) | 0x8, 1);
+  s[8] = s[13] = s[18] = s[23] = '-';
+  return s.join('');
+}
 
 export default function sendCommand(command: string, params: unknown = {}) {
   return new Promise<GortReply>((resolve, reject) => {
@@ -32,7 +44,7 @@ export default function sendCommand(command: string, params: unknown = {}) {
       };
     }
 
-    const command_id = crypto.randomUUID();
+    const command_id = createUUID();
 
     const listenForMessages = (event: MessageEvent<string>) => {
       const data = JSON.parse(event.data) as GortReply;
