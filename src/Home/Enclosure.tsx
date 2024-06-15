@@ -21,62 +21,56 @@ import {
   styled,
 } from '@mui/material';
 import React from 'react';
-import sendCommand from '../sendCommand';
 
-interface EnclosureHeaderProps {
-  status: string | null;
-}
+function EmergencyStopButton() {
+  const [label, setLabel] = React.useState('Emergency shutdown');
+  const [disabled, setDisabled] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
-function EnclosureHeader(props: EnclosureHeaderProps) {
-  const { status } = props;
-
-  let message = '';
-  if (status?.includes('MOVING')) {
-    if (status?.includes('MOTOR_OPENING')) {
-      message = 'opening';
-    } else if (status.includes('MOTOR_CLOSING')) {
-      message = 'closing';
+  React.useEffect(() => {
+    if (disabled) {
+      setLabel('Shutting down ...');
     } else {
-      ('moving');
+      setLabel('Emergency shutdown');
     }
-  } else if (status?.includes('POSITION_UNKNOWN')) {
-    message = 'unknown position';
-  } else if (status?.includes('OPEN')) {
-    message = 'open';
-  } else if (status?.includes('CLOSED')) {
-    message = 'closed';
-  } else {
-    message = 'unknown';
-  }
+  }, [disabled]);
 
-  if (!status || !message) return <Skeleton animation='wave' />;
+  const handleShutdown = () => {
+    setDisabled(true);
+    setDialogOpen(false);
 
-  return <Typography variant='h6'>Roll-off status: {message}</Typography>;
-}
-
-interface EmergencyStopButtonProps {
-  status: string | null;
-}
-
-function EmergencyStopButton(props: EmergencyStopButtonProps) {
-  const { status } = props;
-
-  if (!status)
-    return <Skeleton animation='wave' variant='rectangular' height='80px' />;
+    fetch('api/macros/shutdown')
+      .then(() => {})
+      .catch(() => {})
+      .finally(() => setDisabled(false));
+  };
 
   return (
-    <Button
-      variant='contained'
-      color='error'
-      sx={{
-        minHeight: '80px',
-        fontSize: 20,
-        backgroundColor: 'error.dark',
-      }}
-      disableRipple={false}
-    >
-      Emergency close
-    </Button>
+    <>
+      <Button
+        onClick={() => setDialogOpen(true)}
+        variant='contained'
+        color='error'
+        disabled={disabled}
+        sx={{
+          minHeight: '80px',
+          fontSize: 20,
+          backgroundColor: 'error.dark',
+        }}
+        disableRipple={false}
+      >
+        {label}
+      </Button>
+      <Dialog open={dialogOpen}>
+        <DialogTitle>Execute emergency shutdown?</DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleShutdown} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
@@ -136,20 +130,29 @@ function EnclosureSlider(props: EnclosureSliderProps) {
   ];
 
   React.useEffect(() => {
-    if (status?.includes('OPEN') && !status?.includes('OPENING')) {
-      setDomePosition(1);
-      setIsPositionUnknown(false);
-    } else if (status?.includes('CLOSED')) {
-      setDomePosition(0);
-      setIsPositionUnknown(false);
-    } else {
-      setDomePosition(0.5);
-      setIsPositionUnknown(true);
+    switch (status) {
+      case 'moving':
+        setIsMoving(true);
+        break;
+      case 'closed':
+        setDomePosition(0);
+        setIsPositionUnknown(false);
+        setIsMoving(false);
+        break;
+      case 'open':
+        setDomePosition(1);
+        setIsPositionUnknown(false);
+        setIsMoving(false);
+        break;
+      default:
+        setDomePosition(0.5);
+        setIsPositionUnknown(true);
+        setIsMoving(false);
     }
   }, [status]);
 
   const stopEnclosure = () => {
-    sendCommand('enclosure_action', { action: 'stop' })
+    fetch('api/enclosure/stop')
       .then(() => {})
       .catch(() => {});
   };
@@ -157,7 +160,7 @@ function EnclosureSlider(props: EnclosureSliderProps) {
   if (!status)
     return <Skeleton animation='wave' variant='rectangular' height='30px' />;
 
-  if (status.includes('MOVING') || isMoving) {
+  if (status === 'moving' || isMoving) {
     return (
       <Stack direction='row'>
         <Box flexGrow={1} alignSelf='center' px={2}>
@@ -178,11 +181,11 @@ function EnclosureSlider(props: EnclosureSliderProps) {
   const handleAction = () => {
     if (domePositionRequested < 0) return;
 
-    sendCommand('enclosure_action', {
-      action: domePositionRequested === 1 ? 'open' : 'close',
-    })
+    const action = domePositionRequested === 1 ? 'open' : 'close';
+
+    fetch(`api/enclosure/${action}`)
       .then((result) => {
-        if (result.error) {
+        if (result.status !== 200) {
           setDomePosition(0.5);
           setIsPositionUnknown(true);
           setIsMoving(false);
@@ -223,18 +226,34 @@ function EnclosureSlider(props: EnclosureSliderProps) {
   );
 }
 
+async function parseEnclosureResponse(response: Response) {
+  if (response.status !== 200) return null;
+
+  const data = await response.json();
+  const domeStatus = data['dome_status']['labels'];
+
+  if (domeStatus.includes('MOVING')) {
+    return 'moving';
+  } else if (domeStatus.includes('CLOSED')) {
+    return 'closed';
+  } else if (domeStatus.includes('OPEN')) {
+    return 'open';
+  } else if (domeStatus.includes('POSITION_UNKNOWN')) {
+    return null;
+  } else {
+    return null;
+  }
+}
+
 export default function Enclosure() {
-  const [status, setStatus] = React.useState<string | null>(null);
+  const [rolloffStatus, setStatus] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const commandLoop = setInterval(
       () =>
-        sendCommand('enclosure_status')
-          .then((value) => {
-            if ('dome_status_labels' in value) {
-              setStatus(value.dome_status_labels as string);
-            }
-          })
+        fetch('api/enclosure/status')
+          .then(parseEnclosureResponse)
+          .then((status: string | null) => setStatus(status))
           .catch(() => setStatus(null)),
       2000
     );
@@ -244,9 +263,9 @@ export default function Enclosure() {
   return (
     <Box width='20%'>
       <Stack direction='column' textAlign='center' spacing={2}>
-        <EnclosureHeader status={status} />
-        <EmergencyStopButton status={status} />
-        <EnclosureSlider status={status} />
+        <Typography variant='h6'>Roll-off status: {rolloffStatus}</Typography>
+        <EmergencyStopButton />
+        <EnclosureSlider status={rolloffStatus} />
       </Stack>
     </Box>
   );
