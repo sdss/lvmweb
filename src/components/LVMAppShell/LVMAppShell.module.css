@@ -1,0 +1,8 @@
+.navbar {
+  background-color: var(--dark-background);
+  border-inline-end: none;
+}
+
+.header {
+  border-bottom: 1px solid var(--dark-background);
+}

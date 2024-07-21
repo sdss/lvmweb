@@ -1,0 +1,27 @@
+.root {
+  --icon-background-color: #223547;
+  /* color: inherit;
+  text-decoration: inherit; */
+  border-radius: em(10px);
+  padding: em(6px);
+  &[data-selected] {
+    background-color: var(--icon-background-color);
+  }
+}
+
+.theme_icon {
+  width: calc(2.125rem * var(--mantine-scale));
+  height: calc(2.125rem * var(--mantine-scale));
+  background-color: var(--icon-background-color);
+  color: #72bcf7;
+  border-radius: em(10px);
+}
+
+.theme_icon svg {
+  width: calc(1.375rem * var(--mantine-scale));
+  height: calc(1.375rem * var(--mantine-scale));
+}
+
+.title {
+  font-weight: 500;
+}

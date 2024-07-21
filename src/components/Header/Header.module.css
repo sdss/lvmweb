@@ -1,0 +1,11 @@
+.root {
+  color: inherit;
+  text-decoration: inherit;
+  height: 100%;
+  padding-left: rem(20px);
+  padding-right: rem(20px);
+}
+
+.group {
+  height: 100%;
+}

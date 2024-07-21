@@ -1,0 +1,9 @@
+.root {
+  font-family: monospace;
+
+  &[data-error='true'] {
+    color: var(--mantine-color-yellow-9);
+    text-decoration: underline dotted var(--mantine-color-yellow-9);
+    text-underline-offset: rem(2px);
+  }
+}

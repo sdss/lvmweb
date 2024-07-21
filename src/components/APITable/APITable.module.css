@@ -1,0 +1,20 @@
+.paper {
+  background-color: var(--mantine-color-dark-8);
+  min-width: max-content;
+  border-left: 2px solid var(--mantine-color-dark-3);
+  border-radius: 5;
+
+  .header {
+    background-color: var(--mantine-color-dark-6);
+    border-top-left-radius: rem(5px);
+    border-top-right-radius: rem(5px);
+    padding-left: rem(10px);
+    padding-right: rem(10px);
+
+    .title {
+      font-weight: 500;
+      height: rem(40px);
+      align-content: center;
+    }
+  }
+}

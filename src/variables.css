@@ -1,0 +1,9 @@
+:root {
+  --dark-background: var(--mantine-color-dark-8);
+
+  /* Do not change text decoration and color for links. */
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+}
