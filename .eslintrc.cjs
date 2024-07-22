@@ -13,5 +13,7 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'import/extensions': 'off',
+    'max-len': ['error', { code: 88 }],
+    'import/order': 'off',
   },
 };

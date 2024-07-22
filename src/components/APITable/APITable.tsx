@@ -8,8 +8,17 @@
 'use client';
 
 import { APICallStatus } from '@/src/hooks/use-api-call';
-import { Box, Group, Paper, Skeleton, Table, Text, Title, Tooltip } from '@mantine/core';
-import { IconAlertTriangle, IconSunrise } from '@tabler/icons-react';
+import {
+  Box,
+  Group,
+  Paper,
+  Skeleton,
+  Table,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
+import { IconAlertTriangle, IconSettings } from '@tabler/icons-react';
 import React from 'react';
 import APIStatusText from '../APIStatusText/APIStatusText';
 import classses from './APITable.module.css';
@@ -28,21 +37,19 @@ export default function APITable(props: {
   title: string;
   elements: Elements;
   status: APICallStatus;
+  icon?: JSX.Element;
 }) {
-  const { title, elements, status } = props;
+  const { title, elements, status, icon = <IconSettings /> } = props;
 
-  const [isError, setIsError] = React.useState(false);
+  const [noData, setNoData] = React.useState(false);
 
   React.useEffect(() => {
     // Once the status changes to ERROR, do not change it back until a explicit OK.
-    if (status === APICallStatus.ERROR) {
-      setIsError(true);
-      return;
-    }
 
-    if (status === APICallStatus.OK) {
-      setIsError(false);
-      return;
+    if (status === APICallStatus.ERROR) {
+      setNoData(true);
+    } else if (status === APICallStatus.OK) {
+      setNoData(false);
     }
   }, [status]);
 
@@ -60,14 +67,14 @@ export default function APITable(props: {
         return value;
       }
 
-      return <APIStatusText error={isError}>{value}</APIStatusText>;
+      return <APIStatusText nodata={noData}>{value}</APIStatusText>;
     },
-    [status]
+    [status, noData]
   );
 
   const rows = elements.map((element) => (
     <Table.Tr key={element.key}>
-      <Table.Td>
+      <Table.Td w="35%" className={classses.name_column}>
         <Text size="sm">{element.label}</Text>
       </Table.Td>
       <Table.Td>{getValue(element.value)}</Table.Td>
@@ -78,14 +85,14 @@ export default function APITable(props: {
     <>
       <Paper shadow="sm" className={classses.paper} radius="5px">
         <Group className={classses.header}>
-          <IconSunrise />
+          {icon}
           <Title order={4} className={classses.title}>
             {title}
           </Title>
           <Box style={{ flexGrow: 1 }} />
-          {isError && <WarningIcon />}
+          {noData && <WarningIcon />}
         </Group>
-        <Table withRowBorders={false} horizontalSpacing="sm">
+        <Table withRowBorders={false} horizontalSpacing="sm" mb={4}>
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
       </Paper>

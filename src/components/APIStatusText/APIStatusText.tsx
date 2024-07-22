@@ -5,21 +5,50 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import { Text } from '@mantine/core';
+import { Text, Tooltip } from '@mantine/core';
 import React from 'react';
 import classes from './APIStatusText.module.css';
 
-export default function APIStatusText({
-  children,
-  error,
-}: {
+type APIStatusTextProps = {
+  nodata?: boolean;
+  error?: boolean;
+  errorTooltipText?: string;
+  defaultTooltipText?: string;
   children: React.ReactNode;
-  error: boolean;
-}) {
-  console.log(error);
+};
+
+export default function APIStatusText(props: APIStatusTextProps) {
+  const {
+    nodata = false,
+    error = false,
+    errorTooltipText,
+    defaultTooltipText,
+    children,
+  } = props;
+
+  const tooltipText = React.useMemo(() => {
+    if (error) {
+      return errorTooltipText || 'Unknown error';
+    }
+
+    if (nodata) {
+      return 'Failed to fetch data';
+    }
+
+    return defaultTooltipText;
+  }, [defaultTooltipText, errorTooltipText, error, nodata]);
+
   return (
-    <Text size="sm" className={classes.root} span data-error={error}>
-      {children}
-    </Text>
+    <Tooltip label={tooltipText} hidden={!tooltipText}>
+      <Text
+        size="sm"
+        className={classes.root}
+        span
+        data-nodata={nodata}
+        data-error={error}
+      >
+        {children}
+      </Text>
+    </Tooltip>
   );
 }

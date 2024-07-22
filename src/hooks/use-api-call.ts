@@ -37,11 +37,11 @@ export default function useAPICall<T>(
   useIntervalImmediate(() => {
     setStatus(APICallStatus.FETCHING);
     fetchFromAPI<T>(route, baseURL)
-      .then((data) => {
-        setData(data);
+      .then((dd) => {
+        setData(dd);
         setStatus(APICallStatus.OK);
       })
-      .catch((err) => {
+      .catch(() => {
         setStatus(APICallStatus.ERROR);
       });
   }, interval);

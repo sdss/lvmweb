@@ -8,14 +8,14 @@
 'use client';
 
 import EphemerisTable from '@/src/components/APITables/EphemerisTable/EphemerisTable';
+import SpecTable from '@/src/components/APITables/SpecTable/SpecTable';
 import { SimpleGrid } from '@mantine/core';
 
 export default function OverviewPage() {
   return (
     <SimpleGrid cols={{ sm: 1, md: 2, xl: 3 }} spacing="xl" verticalSpacing="xl">
       <EphemerisTable />
-      <EphemerisTable />
-      <EphemerisTable />
+      <SpecTable />
     </SimpleGrid>
   );
 }

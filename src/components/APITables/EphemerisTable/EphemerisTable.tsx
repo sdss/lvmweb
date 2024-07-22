@@ -9,6 +9,7 @@ import useAPICall from '@/src/hooks/use-api-call';
 import useNow from '@/src/hooks/use-now';
 import booleanYesNo from '@/src/tools/boolean-yes-no';
 import JDToISO from '@/src/tools/jd-to-iso';
+import { IconSunrise } from '@tabler/icons-react';
 import APITable from '../../APITable/APITable';
 
 type EphemerisResponse = {
@@ -55,9 +56,21 @@ export default function EphemerisTable() {
       value: JDToISO(ephemeris?.sunrise),
     },
     { key: 'is_night', label: 'Is Night?', value: booleanYesNo(ephemeris?.is_night) },
-    { key: 'is_twilight', label: 'Is Twilight?', value: booleanYesNo(ephemeris?.is_twilight) },
-    { key: 'time_to_sunset', label: 'Time to Sunset (hours)', value: ephemeris?.time_to_sunset },
-    { key: 'time_to_sunrise', label: 'Time to Sunrise (hours)', value: ephemeris?.time_to_sunrise },
+    {
+      key: 'is_twilight',
+      label: 'Is Twilight?',
+      value: booleanYesNo(ephemeris?.is_twilight),
+    },
+    {
+      key: 'time_to_sunset',
+      label: 'Time to Sunset (hours)',
+      value: ephemeris?.time_to_sunset,
+    },
+    {
+      key: 'time_to_sunrise',
+      label: 'Time to Sunrise (hours)',
+      value: ephemeris?.time_to_sunrise,
+    },
     {
       key: 'moon_illumination',
       label: 'Moon Illumination',
@@ -65,5 +78,12 @@ export default function EphemerisTable() {
     },
   ];
 
-  return <APITable title="Ephemeris" elements={elements} status={ephemerisStatus} />;
+  return (
+    <APITable
+      title="Ephemeris"
+      elements={elements}
+      status={ephemerisStatus}
+      icon={<IconSunrise />}
+    />
+  );
 }
