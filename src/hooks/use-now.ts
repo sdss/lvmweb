@@ -7,15 +7,40 @@
 
 import React from 'react';
 
-export default function useNow(refreshFrequency: number = 1000, precision: number = 0): string {
-  /** Adapted from https://stackoverflow.com/questions/73019483/update-date-now-in-react-hook */
+interface UseNowParams {
+  delay?: number;
+  precision?: number;
+  asString?: boolean;
+}
+
+interface UseNowParamsString extends UseNowParams {
+  asString?: true;
+}
+
+interface UseNowParamsDate extends UseNowParams {
+  asString?: false;
+}
+
+export default function useNow(params: UseNowParamsString): string;
+export default function useNow(params: UseNowParamsDate): Date;
+export default function useNow(params: UseNowParams): string | Date {
+  /** Adapted from
+   *  https://stackoverflow.com/questions/73019483/update-date-now-in-react-hook
+   *
+   * */
+
+  const { delay = 1000, precision = 1, asString = true } = params || {};
 
   const [now, setNow] = React.useState(new Date());
 
   React.useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), refreshFrequency);
+    const interval = setInterval(() => setNow(new Date()), delay);
     return () => clearInterval(interval);
   });
+
+  if (!asString) {
+    return now;
+  }
 
   const iso = now.toISOString().replace('T', ' ').replace('Z', '');
 

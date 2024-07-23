@@ -7,15 +7,29 @@
 
 'use client';
 
+import EnclosureTable from '@/src/components/APITables/EnclosureTable/EnclosureTable';
 import EphemerisTable from '@/src/components/APITables/EphemerisTable/EphemerisTable';
 import SpecTable from '@/src/components/APITables/SpecTable/SpecTable';
-import { SimpleGrid } from '@mantine/core';
+import WeatherTable from '@/src/components/APITables/WeatherTable/WeatherTable';
+import useAlerts, { AlertsModel } from '@/src/hooks/use-alerts';
+import { SimpleGrid, Stack } from '@mantine/core';
+import React from 'react';
+
+export const AlertsContext = React.createContext<AlertsModel | undefined>(undefined);
 
 export default function OverviewPage() {
+  const alerts = useAlerts();
+
   return (
-    <SimpleGrid cols={{ sm: 1, md: 2, xl: 3 }} spacing="xl" verticalSpacing="xl">
-      <EphemerisTable />
-      <SpecTable />
-    </SimpleGrid>
+    <AlertsContext.Provider value={alerts}>
+      <SimpleGrid cols={{ sm: 1, lg: 2, xl: 3 }} spacing="lg" verticalSpacing="lg">
+        <Stack gap="lg">
+          <SpecTable />
+          <WeatherTable />
+        </Stack>
+        <EnclosureTable />
+        <EphemerisTable />
+      </SimpleGrid>
+    </AlertsContext.Provider>
   );
 }

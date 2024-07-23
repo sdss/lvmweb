@@ -35,6 +35,7 @@ export interface AlertsResponse {
   o2_alert: boolean;
   o2_room_alerts: { [key in O2Rooms]: boolean };
   rain: boolean;
+  door_alert: boolean;
 }
 
 export interface AlertsModel extends AlertsResponse {
@@ -42,20 +43,20 @@ export interface AlertsModel extends AlertsResponse {
   o2_active_alerts: O2Rooms[];
 }
 
-export default function useAlerts(): AlertsModel | undefined {
+export default function useAlerts(interval: number = 15000): AlertsModel | undefined {
   /** Returns active alerts from the API. */
 
-  const [alerts, status] = useAPICall<AlertsResponse>('/alerts', { interval: 5000 });
+  const [alerts, status] = useAPICall<AlertsResponse>('/alerts', { interval });
 
   if (!alerts || status === APICallStatus.ERROR || status === APICallStatus.NODATA) {
     return undefined;
   }
 
-  const tempAlerts = Object.keys(alerts.camera_alerts).filter(
+  const tempAlerts = Object.keys(alerts.camera_alerts || []).filter(
     (alert) => alerts.camera_alerts[alert as CameraAlerts]
   );
 
-  const o2Alerts = Object.keys(alerts.o2_room_alerts).filter(
+  const o2Alerts = Object.keys(alerts.o2_room_alerts || []).filter(
     (alert) => alerts.o2_room_alerts[alert as O2Rooms]
   );
 

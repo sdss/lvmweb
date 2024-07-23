@@ -18,4 +18,11 @@ export const theme = createTheme({
       '#2d4b81',
     ],
   },
+  breakpoints: {
+    xs: '30em',
+    sm: '48em',
+    md: '64em',
+    lg: '78em',
+    xl: '94em',
+  },
 });

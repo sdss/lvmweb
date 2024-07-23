@@ -23,7 +23,15 @@ import React from 'react';
 import APIStatusText from '../APIStatusText/APIStatusText';
 import classses from './APITable.module.css';
 
-type Elements = { key: string; label: string; value: any | undefined }[];
+type Element = {
+  key: string;
+  label: string;
+  value: any | undefined;
+  unit?: string;
+  valign?: string;
+};
+
+type Elements = Element[];
 
 function WarningIcon() {
   return (
@@ -54,30 +62,39 @@ export default function APITable(props: {
   }, [status]);
 
   const getValue = React.useCallback(
-    (value: any) => {
-      if (status === APICallStatus.NODATA || value === undefined) {
+    (element: Element) => {
+      if (status === APICallStatus.NODATA || element === undefined) {
         return <Skeleton height={10} mr={10} miw={100} />;
       }
 
-      if (value === undefined) {
+      if (element === undefined) {
         return '';
       }
 
-      if (React.isValidElement(value)) {
-        return value;
+      if (React.isValidElement(element)) {
+        return element;
       }
 
-      return <APIStatusText nodata={noData}>{value}</APIStatusText>;
+      const unit = element.unit || '';
+      return (
+        <APIStatusText nodata={noData}>
+          {element.value}
+          {unit}
+        </APIStatusText>
+      );
     },
     [status, noData]
   );
 
   const rows = elements.map((element) => (
     <Table.Tr key={element.key}>
-      <Table.Td w="35%" className={classses.name_column}>
+      <Table.Td
+        w="35%"
+        valign={(element.valign as (typeof Table.Td)['valign']) || 'top'}
+      >
         <Text size="sm">{element.label}</Text>
       </Table.Td>
-      <Table.Td>{getValue(element.value)}</Table.Td>
+      <Table.Td>{getValue(element)}</Table.Td>
     </Table.Tr>
   ));
 

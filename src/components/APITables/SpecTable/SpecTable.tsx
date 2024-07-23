@@ -7,7 +7,7 @@
 
 'use client';
 
-import useAlerts from '@/src/hooks/use-alerts';
+import { AlertsContext } from '@/app/overview/page';
 import useAPICall, { APICallStatus } from '@/src/hooks/use-api-call';
 import { Divider, Group, Pill, Stack, Text } from '@mantine/core';
 import { IconPrismLight } from '@tabler/icons-react';
@@ -37,7 +37,7 @@ function SpecStatusPills(specs: string[], nodata: boolean) {
   return (
     <Group gap="xs">
       {specs.map((spec) => (
-        <Pill key={spec}>
+        <Pill key={spec} bg="dark.5">
           <APIStatusText nodata={nodata}>{spec}</APIStatusText>
         </Pill>
       ))}
@@ -57,6 +57,7 @@ function SpecTemperatures(
       return (
         <React.Fragment key={camera}>
           <APIStatusText
+            size="xs"
             nodata={nodata}
             error={error}
             errorTooltipText="Temperature exceeds threshold"
@@ -75,19 +76,25 @@ function SpecTemperatures(
     <Stack gap={2}>
       <Group gap="xs" key="sp1">
         <>
-          <Text ff="monospace">sp1: </Text>
+          <Text size="xs" ff="monospace">
+            sp1:{' '}
+          </Text>
           {['b1', 'r1', 'z1'].map((camera, idx) => getRow(camera as Cameras, idx))}
         </>
       </Group>
       <Group gap="xs" key="sp2">
         <>
-          <Text ff="monospace">sp2: </Text>
+          <Text size="xs" ff="monospace">
+            sp2:{' '}
+          </Text>
           {['b2', 'r2', 'z2'].map((camera, idx) => getRow(camera as Cameras, idx))}
         </>
       </Group>
       <Group gap="xs" key="sp3">
         <>
-          <Text ff="monospace">sp3: </Text>
+          <Text size="xs" ff="monospace">
+            sp3:{' '}
+          </Text>
           {['b3', 'r3', 'z3'].map((camera, idx) => getRow(camera as Cameras, idx))}
         </>
       </Group>
@@ -113,6 +120,8 @@ function getAlertPills(alerts: string[], nodata: boolean = false) {
 export default function SpecTable() {
   const INTERVAL = 30000;
 
+  const alerts = React.useContext(AlertsContext);
+
   const [specState, specStateStatus] = useAPICall<SpecStatusResponse>(
     '/spectrographs/status',
     { interval: INTERVAL }
@@ -122,8 +131,6 @@ export default function SpecTable() {
     '/spectrographs/temperatures?start=-1m&last=true',
     { interval: INTERVAL }
   );
-
-  const alerts = useAlerts();
 
   const noData = React.useMemo(
     () => specStateStatus === APICallStatus.ERROR,

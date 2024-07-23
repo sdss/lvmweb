@@ -5,7 +5,10 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-export default function JDToISO(jd: number | undefined, precision: number = 0): string | undefined {
+export default function JDToISO(
+  jd: number | undefined,
+  precision: number = 0
+): string | undefined {
   if (jd === undefined) {
     return undefined;
   }
