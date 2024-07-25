@@ -71,8 +71,12 @@ export default function APITable(props: {
         return '';
       }
 
-      if (React.isValidElement(element)) {
-        return element;
+      if (
+        element.value &&
+        typeof element.value === 'object' &&
+        React.isValidElement(element.value)
+      ) {
+        return element.value;
       }
 
       const unit = element.unit || '';
@@ -88,10 +92,7 @@ export default function APITable(props: {
 
   const rows = elements.map((element) => (
     <Table.Tr key={element.key}>
-      <Table.Td
-        w="35%"
-        valign={(element.valign as (typeof Table.Td)['valign']) || 'top'}
-      >
+      <Table.Td valign={(element.valign as (typeof Table.Td)['valign']) || 'top'}>
         <Text size="sm">{element.label}</Text>
       </Table.Td>
       <Table.Td>{getValue(element)}</Table.Td>
@@ -100,7 +101,7 @@ export default function APITable(props: {
 
   return (
     <>
-      <Paper shadow="sm" className={classses.paper} radius="5px">
+      <Paper shadow="sm" className={classses.paper} radius={5}>
         <Group className={classses.header}>
           {icon}
           <Title order={4} className={classses.title}>
