@@ -38,6 +38,11 @@ function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
           {data.ping ? 'alive' : 'dead'}
         </APIStatusText>
       </Pill>
+      <Pill bg="blue">
+        <APIStatusText size="xs" nodata={noData}>
+          Ready
+        </APIStatusText>
+      </Pill>
     </Group>
   );
 }

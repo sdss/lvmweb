@@ -46,7 +46,7 @@ export interface AlertsModel extends AlertsResponse {
 export default function useAlerts(interval: number = 15000): AlertsModel | undefined {
   /** Returns active alerts from the API. */
 
-  const [alerts, status] = useAPICall<AlertsResponse>('/alerts', { interval });
+  const [alerts, status] = useAPICall<AlertsResponse>('/alerts/', { interval });
 
   if (!alerts || status === APICallStatus.ERROR || status === APICallStatus.NODATA) {
     return undefined;

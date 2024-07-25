@@ -272,7 +272,7 @@ function DoorStatus(props: {
 }
 
 export default function EnclosureTable() {
-  const [enclosure, , noData] = useAPICall<EnclosureResponse>('/enclosure', {
+  const [enclosure, , noData] = useAPICall<EnclosureResponse>('/enclosure/', {
     interval: 10000,
   });
 
