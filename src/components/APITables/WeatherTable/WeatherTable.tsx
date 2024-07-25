@@ -61,7 +61,7 @@ export default function WeatherTable() {
     {
       key: 'temperature',
       label: 'Temperature',
-      value: weather?.[0]?.temperature.toPrecision(1),
+      value: weather?.[0]?.temperature.toFixed(1),
       unit: '°C',
     },
     {
