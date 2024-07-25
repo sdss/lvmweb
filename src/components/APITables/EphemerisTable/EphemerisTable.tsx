@@ -29,7 +29,7 @@ type EphemerisResponse = {
 };
 
 export default function EphemerisTable() {
-  const [ephemeris, ephemerisStatus] = useAPICall<EphemerisResponse>('/ephemeris', {
+  const [ephemeris, , noData] = useAPICall<EphemerisResponse>('/ephemeris', {
     interval: 30000,
   });
 
@@ -82,7 +82,7 @@ export default function EphemerisTable() {
     <APITable
       title="Ephemeris"
       elements={elements}
-      status={ephemerisStatus}
+      noData={noData}
       icon={<IconSunrise />}
     />
   );

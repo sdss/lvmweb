@@ -7,7 +7,6 @@
 
 'use client';
 
-import { APICallStatus } from '@/src/hooks/use-api-call';
 import {
   Box,
   Group,
@@ -44,26 +43,16 @@ function WarningIcon() {
 export default function APITable(props: {
   title: string;
   elements: Elements;
-  status: APICallStatus;
+  noData?: boolean;
   icon?: JSX.Element;
 }) {
-  const { title, elements, status, icon = <IconSettings /> } = props;
+  const { title, elements, noData = false, icon = <IconSettings /> } = props;
 
-  const [noData, setNoData] = React.useState(false);
-
-  React.useEffect(() => {
-    // Once the status changes to ERROR, do not change it back until a explicit OK.
-
-    if (status === APICallStatus.ERROR) {
-      setNoData(true);
-    } else if (status === APICallStatus.OK) {
-      setNoData(false);
-    }
-  }, [status]);
+  const [initialised, setInitialised] = React.useState(false);
 
   const getValue = React.useCallback(
     (element: Element) => {
-      if (status === APICallStatus.NODATA || element === undefined) {
+      if (!initialised && noData) {
         return <Skeleton height={10} mr={10} miw={100} />;
       }
 
@@ -87,8 +76,14 @@ export default function APITable(props: {
         </APIStatusText>
       );
     },
-    [status, noData]
+    [noData, initialised]
   );
+
+  React.useEffect(() => {
+    if (!initialised && !noData) {
+      setInitialised(true);
+    }
+  }, [noData]);
 
   const rows = elements.map((element) => (
     <Table.Tr key={element.key}>

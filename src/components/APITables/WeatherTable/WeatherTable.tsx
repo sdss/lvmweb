@@ -30,7 +30,7 @@ type WeatherResponse = {
 }[];
 
 export default function WeatherTable() {
-  const [weather, weatherStatus] = useAPICall<WeatherResponse>(
+  const [weather, , noData] = useAPICall<WeatherResponse>(
     '/weather/report?delta_time=600&last=true',
     { interval: 60000 }
   );
@@ -87,7 +87,7 @@ export default function WeatherTable() {
       label: 'Rain alert',
       value: alerts?.rain ? (
         <Pill bg="red.9">
-          <APIStatusText>Yes</APIStatusText>
+          <APIStatusText size="xs">Yes</APIStatusText>
         </Pill>
       ) : (
         'No'
@@ -104,7 +104,7 @@ export default function WeatherTable() {
     <APITable
       title="Weather"
       elements={elements}
-      status={weatherStatus}
+      noData={noData}
       icon={<IconCloudRain />}
     />
   );

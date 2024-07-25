@@ -21,9 +21,9 @@ interface UseNowParamsDate extends UseNowParams {
   asString?: false;
 }
 
-export default function useNow(params: UseNowParamsString): string;
-export default function useNow(params: UseNowParamsDate): Date;
-export default function useNow(params: UseNowParams): string | Date {
+export default function useNow(params?: UseNowParamsString): string;
+export default function useNow(params?: UseNowParamsDate): Date;
+export default function useNow(params?: UseNowParams): string | Date {
   /** Adapted from
    *  https://stackoverflow.com/questions/73019483/update-date-now-in-react-hook
    *

@@ -7,7 +7,7 @@
 
 import { AlertsContext } from '@/app/overview/page';
 import fetchFromAPI from '@/src/actions/fetchFromAPI';
-import useAPICall, { APICallStatus } from '@/src/hooks/use-api-call';
+import useAPICall from '@/src/hooks/use-api-call';
 import useTask from '@/src/hooks/use-task';
 import {
   ActionIcon,
@@ -164,8 +164,10 @@ function DomeStatus({
 
   return (
     <Group pr={4}>
-      <Pill bg={domeLabels.includes('CLOSED') ? 'green.9' : 'orange.9'}>
-        <APIStatusText nodata={noData}>{label}</APIStatusText>
+      <Pill bg={domeLabels.includes('CLOSED') ? 'lime.9' : 'orange.9'}>
+        <APIStatusText size="xs" nodata={noData}>
+          {label}
+        </APIStatusText>
       </Pill>
       {DividerElement}
       <DomeIcons moving={label === 'Moving'} />
@@ -225,7 +227,7 @@ function Lights(props: { enclosureStatus: EnclosureResponse | null; noData: bool
     <Group gap="xs">
       {lights.map((light) => (
         <Pill key={light} bg="orange.9">
-          <APIStatusText nodata={noData}>
+          <APIStatusText nodata={noData} size="xs">
             {light.toLocaleLowerCase().replace('_', ' ')}
           </APIStatusText>
         </Pill>
@@ -249,7 +251,9 @@ function DoorStatus(props: {
   if (labels.includes('DOOR_OPEN')) {
     return (
       <Pill key="door_open" bg="red.8">
-        <APIStatusText nodata={noData}>Door open</APIStatusText>
+        <APIStatusText nodata={noData} size="xs">
+          Door open
+        </APIStatusText>
       </Pill>
     );
   }
@@ -257,7 +261,9 @@ function DoorStatus(props: {
   if (labels.includes('DOOR_CLOSED') && !labels.includes('DOOR_LOCKED')) {
     return (
       <Pill key="door_unlocked" bg="yellow.8">
-        <APIStatusText nodata={noData}>Door unlocked</APIStatusText>
+        <APIStatusText size="xs" nodata={noData}>
+          Door unlocked
+        </APIStatusText>
       </Pill>
     );
   }
@@ -266,12 +272,9 @@ function DoorStatus(props: {
 }
 
 export default function EnclosureTable() {
-  const [enclosure, enclosureStatus] = useAPICall<EnclosureResponse>('/enclosure', {
+  const [enclosure, , noData] = useAPICall<EnclosureResponse>('/enclosure', {
     interval: 10000,
   });
-
-  const noData =
-    enclosureStatus === APICallStatus.ERROR || enclosureStatus === APICallStatus.NODATA;
 
   const elements = [
     {
@@ -312,7 +315,7 @@ export default function EnclosureTable() {
     <APITable
       title="Enclosure"
       elements={elements}
-      status={enclosureStatus}
+      noData={noData}
       icon={<IconBuildingWarehouse />}
     />
   );

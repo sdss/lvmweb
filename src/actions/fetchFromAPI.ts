@@ -17,7 +17,7 @@ export default async function fetchFromAPI<T>(
 
   const url = new URL(route, baseURL).toString();
 
-  const response = await fetch(url);
+  const response = await fetch(url, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error(`Failed to fetch from API: ${response.statusText}`);
   }

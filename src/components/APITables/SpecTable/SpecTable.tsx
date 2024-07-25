@@ -8,7 +8,7 @@
 'use client';
 
 import { AlertsContext } from '@/app/overview/page';
-import useAPICall, { APICallStatus } from '@/src/hooks/use-api-call';
+import useAPICall from '@/src/hooks/use-api-call';
 import { Divider, Group, Pill, Stack, Text } from '@mantine/core';
 import { IconPrismLight } from '@tabler/icons-react';
 import React from 'react';
@@ -124,20 +124,17 @@ export default function SpecTable() {
 
   const alerts = React.useContext(AlertsContext);
 
-  const [specState, specStateStatus] = useAPICall<SpecStatusResponse>(
+  const [specState, , noDataSpec] = useAPICall<SpecStatusResponse>(
     '/spectrographs/status',
     { interval: INTERVAL }
   );
 
-  const [specTemps] = useAPICall<SpecTempsResponse>(
+  const [specTemps, , noDataTemps] = useAPICall<SpecTempsResponse>(
     '/spectrographs/temperatures?start=-1m&last=true',
     { interval: INTERVAL }
   );
 
-  const noData = React.useMemo(
-    () => specStateStatus === APICallStatus.ERROR,
-    [specStateStatus]
-  );
+  const noData = noDataSpec || noDataTemps;
 
   const exposingSpecs = React.useMemo(() => {
     if (!specState) {
@@ -251,7 +248,7 @@ export default function SpecTable() {
     <APITable
       title="Spectrographs"
       elements={elements}
-      status={specStateStatus}
+      noData={noData}
       icon={<IconPrismLight />}
     />
   );

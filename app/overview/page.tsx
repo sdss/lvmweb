@@ -7,6 +7,7 @@
 
 'use client';
 
+import ActorsTable from '@/src/components/APITables/ActorsTable/ActorsTable';
 import EnclosureTable from '@/src/components/APITables/EnclosureTable/EnclosureTable';
 import EphemerisTable from '@/src/components/APITables/EphemerisTable/EphemerisTable';
 import SpecTable from '@/src/components/APITables/SpecTable/SpecTable';
@@ -22,12 +23,15 @@ export default function OverviewPage() {
 
   return (
     <AlertsContext.Provider value={alerts}>
-      <SimpleGrid cols={{ sm: 1, lg: 2, xl: 3 }} spacing="lg" verticalSpacing="lg">
+      <SimpleGrid cols={{ sm: 1, lg: 3, xl: 4 }} spacing="lg" verticalSpacing="lg">
         <Stack gap="lg">
           <SpecTable />
           <WeatherTable />
         </Stack>
-        <EnclosureTable />
+        <Stack gap="lg">
+          <EnclosureTable />
+          <ActorsTable />
+        </Stack>
         <EphemerisTable />
       </SimpleGrid>
     </AlertsContext.Provider>
