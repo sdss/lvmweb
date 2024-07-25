@@ -1,16 +1,11 @@
 'use client';
 
-import { ActionIcon, Box, Group, Image, Title, Tooltip } from '@mantine/core';
-import { IconSquareX } from '@tabler/icons-react';
+import { Box, Group, Image, Title } from '@mantine/core';
 import Link from 'next/link';
-import React from 'react';
+import ShutdownActionIcon from '../ShutdownActionIcon/ShutdownActionIcon';
 import classes from './Header.module.css';
 
 export default function Header() {
-  React.useEffect(() => {
-    console.log('loading');
-  }, []);
-
   return (
     <Box className={classes.root}>
       <Group className={classes.group}>
@@ -23,11 +18,7 @@ export default function Header() {
           </Group>
         </Link>
         <div style={{ flexGrow: 1 }} />
-        <Tooltip label="Emergency shutdown" position="bottom">
-          <ActionIcon size="lg" color="red.9">
-            <IconSquareX />
-          </ActionIcon>
-        </Tooltip>
+        <ShutdownActionIcon />
       </Group>
     </Box>
   );
