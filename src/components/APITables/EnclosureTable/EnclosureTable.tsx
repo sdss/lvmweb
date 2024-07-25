@@ -8,13 +8,12 @@
 import { AlertsContext } from '@/app/overview/page';
 import fetchFromAPI from '@/src/actions/fetchFromAPI';
 import useAPICall, { APICallStatus } from '@/src/hooks/use-api-call';
+import useTask from '@/src/hooks/use-task';
 import {
   ActionIcon,
   Box,
-  Button,
   Divider,
   Group,
-  Modal,
   Pill,
   Progress,
   Tooltip,
@@ -29,6 +28,7 @@ import {
 import React from 'react';
 import APIStatusText from '../../APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
+import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 
 type EnclosureResponse = {
   dome_status: {
@@ -51,39 +51,60 @@ function DomeIcon(props: {
   tooltip: string;
   route: string;
   color?: string;
+  disabled?: boolean;
+  taskName?: string;
+  task?: boolean;
+  setDisabled?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { icon, tooltip, route, color = 'blue' } = props;
+  const {
+    icon,
+    tooltip,
+    route,
+    color = 'blue',
+    disabled = false,
+    setDisabled,
+    taskName = 'undefined',
+    task = false,
+  } = props;
 
   const [opened, { open, close }] = useDisclosure();
+  const [runner, isRunning] = useTask({ taskName, notifyErrors: false });
 
   const handleAction = React.useCallback(() => {
     close();
-    fetchFromAPI(route).catch(() => {});
+
+    if (task) {
+      const result = runner(route);
+      setDisabled && setDisabled(isRunning);
+      result.catch(() => {});
+    } else {
+      fetchFromAPI(route)
+        .catch(() => {})
+        .finally(() => setDisabled && setDisabled(false));
+    }
   }, [route, close]);
 
   return (
     <>
       <Tooltip label={tooltip}>
-        <ActionIcon size="sm" color={color} onClick={open}>
+        <ActionIcon size="sm" color={color} onClick={open} disabled={disabled}>
           {icon}
         </ActionIcon>
       </Tooltip>
-      <Modal opened={opened} onClose={close} title={tooltip} size="sm">
-        <Box p={4}>Are you sure you want to {tooltip.toLowerCase()}?</Box>
-        <Group justify="end" pt={16}>
-          <Button color="blue" onClick={close}>
-            Cancel
-          </Button>
-          <Button color="blue" onClick={handleAction}>
-            Yes
-          </Button>
-        </Group>
-      </Modal>
+      <ConfirmationModal
+        opened={opened}
+        close={close}
+        title={tooltip}
+        handleAction={handleAction}
+        message={`Are you sure you want to ${tooltip.toLowerCase()}?`}
+      />
     </>
   );
 }
 
-function DomeIcons() {
+function DomeIcons(props: { moving?: boolean }) {
+  const [disabled, setDisabled] = React.useState(false);
+
   return (
     <>
       <Group gap={8}>
@@ -91,11 +112,19 @@ function DomeIcons() {
           icon={<IconArrowsMaximize size={18} />}
           tooltip="Open the dome"
           route="/enclosure/open/"
+          disabled={props.moving || disabled}
+          setDisabled={setDisabled}
+          taskName="open dome"
+          task
         />
         <DomeIcon
           icon={<IconArrowsMinimize size={18} />}
           tooltip="Close the dome"
           route="/enclosure/close/"
+          disabled={props.moving || disabled}
+          setDisabled={setDisabled}
+          taskName="close dome"
+          task
         />
         <DomeIcon
           icon={<IconHandStop size={18} />}
@@ -139,7 +168,7 @@ function DomeStatus({
         <APIStatusText nodata={noData}>{label}</APIStatusText>
       </Pill>
       {DividerElement}
-      <DomeIcons />
+      <DomeIcons moving={label === 'Moving'} />
     </Group>
   );
 }
