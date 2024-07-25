@@ -29,9 +29,11 @@ type SpecStatusResponse = {
 };
 
 type SpecTempsResponse = {
-  columns: string[];
-  data: [date: string, camera: Cameras, sensor: Sensor, temprature: number][];
-};
+  date: string;
+  camera: Cameras;
+  sensor: Sensor;
+  temperature: number;
+}[];
 
 function SpecStatusPills(specs: string[], nodata: boolean) {
   return (
@@ -158,15 +160,15 @@ export default function SpecTable() {
   }, [specState]);
 
   const getTemperatures = React.useCallback(
-    (sensor: Sensor) => {
+    (sens: Sensor) => {
       if (!specTemps) {
         return {};
       }
 
-      const sensorData = specTemps.data.filter(([, , s]) => s === sensor);
+      const sensorData = specTemps.filter(({ sensor }) => sens === sensor);
 
       const temps: { [k in Cameras]?: number } = {};
-      sensorData.forEach(([, camera, , temperature]) => {
+      sensorData.forEach(({ camera, temperature }) => {
         temps[camera as Cameras] = temperature;
       });
 
