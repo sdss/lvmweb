@@ -14,6 +14,7 @@ import React from 'react';
 import APIStatusText from '../../APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
+import classes from './ActorsTable.module.css';
 
 type ActorHealthResponse = {
   actor: string;
@@ -60,7 +61,13 @@ function RetartActor(props: { actor: string; refreshData: () => void }) {
   return (
     <>
       <Tooltip label="Restart actor">
-        <ActionIcon size="sm" onClick={open} disabled={isRunning}>
+        <ActionIcon
+          size="sm"
+          onClick={open}
+          disabled={isRunning}
+          color="gray"
+          className={classes.root}
+        >
           <IconRefresh size={18} />
         </ActionIcon>
       </Tooltip>

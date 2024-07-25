@@ -30,9 +30,9 @@ export default function OverviewPage() {
         </Stack>
         <Stack gap="lg">
           <EnclosureTable />
-          <ActorsTable />
+          <EphemerisTable />
         </Stack>
-        <EphemerisTable />
+        <ActorsTable />
       </SimpleGrid>
     </AlertsContext.Provider>
   );
