@@ -3,6 +3,8 @@ import { theme } from '@/src/theme';
 import '@/src/variables.css';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 
 export const metadata = {
   title: 'LVM Web',
@@ -23,11 +25,12 @@ export default function RootLayout({ children }: { children: any }) {
         <meta name="theme-color" content="#ffffff" />
         <meta
           name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
+          content="minimum-scale=1,initial-scale=1,width=device-width,user-scalable=no"
         />
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
+          <Notifications />
           <LVMAppShell>{children}</LVMAppShell>
         </MantineProvider>
       </body>
