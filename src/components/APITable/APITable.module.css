@@ -21,4 +21,12 @@
   .name_column {
     vertical-align: text-top;
   }
+
+  .refresh-button {
+    color: var(--mantine-color-gray-3);
+
+    &:hover {
+      color: var(--mantine-color-gray-6);
+    }
+  }
 }

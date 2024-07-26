@@ -28,8 +28,17 @@ type EphemerisResponse = {
   from_file: boolean;
 };
 
+function hoursToHoursMin(hours: number | undefined) {
+  if (!hours) return undefined;
+
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+
+  return `${h}:${m}`;
+}
+
 export default function EphemerisTable() {
-  const [ephemeris, , noData] = useAPICall<EphemerisResponse>('/ephemeris/', {
+  const [ephemeris, , noData, refresh] = useAPICall<EphemerisResponse>('/ephemeris/', {
     interval: 30000,
   });
 
@@ -63,13 +72,15 @@ export default function EphemerisTable() {
     },
     {
       key: 'time_to_sunset',
-      label: 'Time to Sunset (hours)',
-      value: ephemeris?.time_to_sunset,
+      label: 'Time to Sunset',
+      value: hoursToHoursMin(ephemeris?.time_to_sunset),
+      unit: ' hours',
     },
     {
       key: 'time_to_sunrise',
-      label: 'Time to Sunrise (hours)',
-      value: ephemeris?.time_to_sunrise,
+      label: 'Time to Sunrise',
+      value: hoursToHoursMin(ephemeris?.time_to_sunrise),
+      unit: ' hours',
     },
     {
       key: 'moon_illumination',
@@ -84,6 +95,7 @@ export default function EphemerisTable() {
       elements={elements}
       noData={noData}
       icon={<IconSunrise />}
+      refreshData={refresh}
     />
   );
 }

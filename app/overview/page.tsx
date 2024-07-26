@@ -23,7 +23,7 @@ export default function OverviewPage() {
 
   return (
     <AlertsContext.Provider value={alerts}>
-      <SimpleGrid cols={{ sm: 1, lg: 3, xl: 4 }} spacing="lg" verticalSpacing="lg">
+      <SimpleGrid cols={{ sm: 2, lg: 3, xl: 4 }} spacing="lg" verticalSpacing="lg">
         <Stack gap="lg">
           <SpecTable />
           <WeatherTable />

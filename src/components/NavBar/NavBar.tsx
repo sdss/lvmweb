@@ -15,7 +15,13 @@ export default function NavBar() {
   return (
     <Stack p={8} mt={2} gap="xs">
       <NavBarItem path="/overview" icon={<IconHome />} text="Overview" />
-      <NavBarItem path="/weather" icon={<IconCloudRain />} text="Weather" />
+      <NavBarItem
+        path="http://lco.cl/weather"
+        icon={<IconCloudRain />}
+        text="Weather"
+        external
+        newWindow
+      />
     </Stack>
   );
 }

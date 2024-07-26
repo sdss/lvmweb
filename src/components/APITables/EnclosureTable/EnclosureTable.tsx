@@ -220,7 +220,7 @@ function Lights(props: { enclosureStatus: EnclosureResponse | null; noData: bool
   const lights = enclosureStatus.lights_status.labels.filter((light) => light);
 
   if (lights.length === 0) {
-    return <APIStatusText nodata={noData}>No lights</APIStatusText>;
+    return <APIStatusText nodata={noData}>All off</APIStatusText>;
   }
 
   return (
@@ -272,7 +272,7 @@ function DoorStatus(props: {
 }
 
 export default function EnclosureTable() {
-  const [enclosure, , noData] = useAPICall<EnclosureResponse>('/enclosure/', {
+  const [enclosure, , noData, refresh] = useAPICall<EnclosureResponse>('/enclosure/', {
     interval: 10000,
   });
 
@@ -286,7 +286,7 @@ export default function EnclosureTable() {
     {
       key: 'dome_labels',
       label: 'Dome Status Labels',
-      value: enclosure?.dome_status.labels.join(', '),
+      value: enclosure?.dome_status.labels.join(' | '),
     },
     {
       key: 'door',
@@ -301,7 +301,7 @@ export default function EnclosureTable() {
     {
       key: 'safety_labels',
       label: 'Safety Labels',
-      value: enclosure?.safety_status.labels.join(', '),
+      value: enclosure?.safety_status.labels.join(' | '),
     },
     {
       key: 'lights',
@@ -317,6 +317,7 @@ export default function EnclosureTable() {
       elements={elements}
       noData={noData}
       icon={<IconBuildingWarehouse />}
+      refreshData={refresh}
     />
   );
 }

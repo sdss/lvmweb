@@ -38,9 +38,9 @@ function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
           {data.ping ? 'alive' : 'dead'}
         </APIStatusText>
       </Pill>
-      <Pill bg="blue">
+      <Pill bg={data.ping ? 'blue' : 'red.8'}>
         <APIStatusText size="xs" nodata={noData}>
-          Ready
+          {data.ping ? 'ready' : 'not ready'}
         </APIStatusText>
       </Pill>
     </Group>
@@ -69,6 +69,7 @@ function RetartActor(props: { actor: string; refreshData: () => void }) {
         <ActionIcon
           size="sm"
           onClick={open}
+          variant="transparent"
           disabled={isRunning}
           color="gray"
           className={classes.root}
@@ -93,7 +94,7 @@ function HealthRow(props: {
   refreshData: () => void;
 }) {
   return (
-    <Group>
+    <Group style={{ flexWrap: 'nowrap' }}>
       <HealthPills data={props.data} noData={props.noData} />
       <Box style={{ flexGrow: 1 }} />
       <RetartActor actor={props.data.actor} refreshData={props.refreshData} />
@@ -140,6 +141,7 @@ export default function ActorsTable() {
       elements={elements || []}
       noData={noData}
       icon={<IconHeartRateMonitor />}
+      refreshData={refresh}
     />
   );
 }

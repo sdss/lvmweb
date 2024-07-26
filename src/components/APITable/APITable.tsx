@@ -8,6 +8,7 @@
 'use client';
 
 import {
+  ActionIcon,
   Box,
   Group,
   Paper,
@@ -17,7 +18,7 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
-import { IconAlertTriangle, IconSettings } from '@tabler/icons-react';
+import { IconAlertTriangle, IconReload, IconSettings } from '@tabler/icons-react';
 import React from 'react';
 import APIStatusText from '../APIStatusText/APIStatusText';
 import classses from './APITable.module.css';
@@ -40,13 +41,34 @@ function WarningIcon() {
   );
 }
 
+function RefreshData(props: { onClick: () => void }) {
+  return (
+    <Tooltip label="Refresh data">
+      <ActionIcon
+        variant="transparent"
+        className={classses['refresh-button']}
+        size="sm"
+      >
+        <IconReload onClick={props.onClick} />
+      </ActionIcon>
+    </Tooltip>
+  );
+}
+
 export default function APITable(props: {
   title: string;
   elements: Elements;
   noData?: boolean;
   icon?: JSX.Element;
+  refreshData?: () => void;
 }) {
-  const { title, elements, noData = false, icon = <IconSettings /> } = props;
+  const {
+    title,
+    elements,
+    noData = false,
+    icon = <IconSettings />,
+    refreshData,
+  } = props;
 
   const [initialised, setInitialised] = React.useState(false);
 
@@ -104,6 +126,7 @@ export default function APITable(props: {
           </Title>
           <Box style={{ flexGrow: 1 }} />
           {noData && <WarningIcon />}
+          {!noData && refreshData && <RefreshData onClick={refreshData} />}
         </Group>
         <Table withRowBorders={false} horizontalSpacing="sm" mb={4}>
           <Table.Tbody>{rows}</Table.Tbody>

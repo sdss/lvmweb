@@ -124,17 +124,22 @@ export default function SpecTable() {
 
   const alerts = React.useContext(AlertsContext);
 
-  const [specState, , noDataSpec] = useAPICall<SpecStatusResponse>(
+  const [specState, , noDataSpec, refreshSpec] = useAPICall<SpecStatusResponse>(
     '/spectrographs/status',
     { interval: INTERVAL }
   );
 
-  const [specTemps, , noDataTemps] = useAPICall<SpecTempsResponse>(
+  const [specTemps, , noDataTemps, refreshTemps] = useAPICall<SpecTempsResponse>(
     '/spectrographs/temperatures?start=-1m&last=true',
     { interval: INTERVAL }
   );
 
   const noData = noDataSpec || noDataTemps;
+
+  const refresh = React.useCallback(() => {
+    refreshSpec();
+    refreshTemps();
+  }, [refreshSpec, refreshTemps]);
 
   const exposingSpecs = React.useMemo(() => {
     if (!specState) {
@@ -250,6 +255,7 @@ export default function SpecTable() {
       elements={elements}
       noData={noData}
       icon={<IconPrismLight />}
+      refreshData={refresh}
     />
   );
 }

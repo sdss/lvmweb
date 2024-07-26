@@ -8,6 +8,7 @@
 'use client';
 
 import { Box, Group, ThemeIcon, Title } from '@mantine/core';
+import { IconExternalLink } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactElement } from 'react';
@@ -17,17 +18,21 @@ type NavBarItemProps = {
   path: string;
   icon: ReactElement;
   text: string;
+  external?: boolean;
+  newWindow?: boolean;
 };
 
 export default function NavBarItem(props: NavBarItemProps) {
-  const { path, icon, text } = props;
+  const { path, icon, text, external = false, newWindow = false } = props;
 
   const pathname = usePathname();
 
   return (
     <Box
-      component={Link}
+      component={(external ? 'a' : Link) as any}
       href={path}
+      target={newWindow ? '_blank' : undefined}
+      rel={newWindow ? 'noopener noreferrer' : undefined}
       className={classes.root}
       mod={{ selected: pathname === path }}
     >
@@ -38,6 +43,12 @@ export default function NavBarItem(props: NavBarItemProps) {
         <Title order={5} className={classes.title}>
           {text}
         </Title>
+        <Box style={{ flexGrow: 1 }} />
+        {external && (
+          <ThemeIcon size="sm" variant="transparent" c="gray.3">
+            <IconExternalLink />
+          </ThemeIcon>
+        )}
       </Group>
     </Box>
   );
