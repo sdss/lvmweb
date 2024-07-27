@@ -1,0 +1,17 @@
+.header {
+  background-color: #7f3032;
+
+  h2 {
+    font-size: rem(22px);
+    font-weight: 900;
+  }
+}
+
+.content {
+  background-color: #7f3032;
+  padding-bottom: rem(16px);
+}
+
+.body {
+  padding-top: rem(8px);
+}

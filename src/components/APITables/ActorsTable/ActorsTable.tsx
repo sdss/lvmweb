@@ -5,13 +5,15 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+'use client';
+
 import useAPICall from '@/src/hooks/use-api-call';
 import useTask from '@/src/hooks/use-task';
 import { ActionIcon, Box, Group, Pill, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconHeartRateMonitor, IconRefresh } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../../APIStatusText/APIStatusText';
+import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 import classes from './ActorsTable.module.css';

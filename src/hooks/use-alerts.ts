@@ -5,7 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import useAPICall, { APICallStatus } from './use-api-call';
+import React from 'react';
+import useAPICall from './use-api-call';
 
 export type Cameras = 'b1' | 'b2' | 'b3' | 'r1' | 'r2' | 'r3' | 'z1' | 'z2' | 'z3';
 export type CameraAlerts =
@@ -39,6 +40,7 @@ export interface AlertsResponse {
 }
 
 export interface AlertsModel extends AlertsResponse {
+  global_alert: boolean;
   camera_active_alerts: CameraAlerts[];
   o2_active_alerts: O2Rooms[];
 }
@@ -46,23 +48,39 @@ export interface AlertsModel extends AlertsResponse {
 export default function useAlerts(interval: number = 15000): AlertsModel | undefined {
   /** Returns active alerts from the API. */
 
-  const [alerts, status] = useAPICall<AlertsResponse>('/alerts/', { interval });
+  const [alertsAPI, , noData] = useAPICall<AlertsResponse>('/alerts/', { interval });
 
-  if (!alerts || status === APICallStatus.ERROR || status === APICallStatus.NODATA) {
-    return undefined;
-  }
+  const [alerts, setAlerts] = React.useState<AlertsModel | undefined>(undefined);
 
-  const tempAlerts = Object.keys(alerts.camera_alerts || []).filter(
-    (alert) => alerts.camera_alerts[alert as CameraAlerts]
-  );
+  React.useEffect(() => {
+    if (!alertsAPI || noData) {
+      setAlerts(undefined);
+      return;
+    }
 
-  const o2Alerts = Object.keys(alerts.o2_room_alerts || []).filter(
-    (alert) => alerts.o2_room_alerts[alert as O2Rooms]
-  );
+    const tempAlerts = Object.keys(alertsAPI.camera_alerts || []).filter(
+      (alert) => alertsAPI.camera_alerts[alert as CameraAlerts]
+    );
 
-  return {
-    ...alerts,
-    camera_active_alerts: tempAlerts as CameraAlerts[],
-    o2_active_alerts: o2Alerts as O2Rooms[],
-  };
+    const o2Alerts = Object.keys(alertsAPI.o2_room_alerts || []).filter(
+      (alert) => alertsAPI.o2_room_alerts[alert as O2Rooms]
+    );
+
+    const newAlerts = {
+      ...alertsAPI,
+      global_alert: alertsAPI.temperature_alert || alertsAPI.rain,
+      camera_active_alerts: tempAlerts as CameraAlerts[],
+      o2_active_alerts: o2Alerts as O2Rooms[],
+    };
+
+    setAlerts((a) => {
+      // Quick check to avoid re-rendering if the alerts have not changed.
+      if (JSON.stringify(a) === JSON.stringify(newAlerts)) {
+        return a;
+      }
+      return newAlerts;
+    });
+  }, [alertsAPI, noData]);
+
+  return alerts;
 }

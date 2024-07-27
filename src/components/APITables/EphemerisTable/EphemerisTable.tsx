@@ -5,6 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+'use client';
+
 import useAPICall from '@/src/hooks/use-api-call';
 import useNow from '@/src/hooks/use-now';
 import booleanYesNo from '@/src/tools/boolean-yes-no';

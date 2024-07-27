@@ -9,9 +9,9 @@
 
 import { AppShell } from '@mantine/core';
 import React from 'react';
-import Header from '../Header/Header';
-import NavBar from '../NavBar/NavBar';
+import Header from './Header/Header';
 import classes from './LVMAppShell.module.css';
+import NavBar from './NavBar/NavBar';
 
 export default function LVMAppShell({ children }: { children: React.ReactNode }) {
   return (

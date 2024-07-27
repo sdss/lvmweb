@@ -1,4 +1,11 @@
-import LVMAppShell from '@/src/components/LVMAppShell/LVMAppShell';
+/*
+ *  @Author: José Sánchez-Gallego (gallegoj@uw.edu)
+ *  @Date: 2024-07-26
+ *  @Filename: layout.tsx
+ *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
+ */
+
+import LVMWebRoot from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { theme } from '@/src/theme';
 import '@/src/variables.css';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
@@ -30,8 +37,8 @@ export default function RootLayout({ children }: { children: any }) {
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <Notifications />
-          <LVMAppShell>{children}</LVMAppShell>
+          <Notifications position="bottom-left" />
+          <LVMWebRoot>{children}</LVMWebRoot>
         </MantineProvider>
       </body>
     </html>

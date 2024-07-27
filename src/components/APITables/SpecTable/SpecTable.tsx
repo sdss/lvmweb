@@ -7,15 +7,15 @@
 
 'use client';
 
-import { AlertsContext } from '@/app/overview/page';
+import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import { Divider, Group, Pill, Stack, Text } from '@mantine/core';
 import { IconPrismLight } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../../APIStatusText/APIStatusText';
+import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 
-const LN2_THRESHOLD = -170;
+const LN2_THRESHOLD = -160;
 const CCD_THRESHOLD = -85;
 
 type Specs = 'sp1' | 'sp2' | 'sp3';

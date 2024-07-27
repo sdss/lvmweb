@@ -1,0 +1,38 @@
+.root {
+  color: inherit;
+  text-decoration: inherit;
+  height: 100%;
+  padding-left: rem(20px);
+  padding-right: rem(20px);
+
+  &[data-alert='true'] {
+    background-color: var(--mantine-color-red-9);
+  }
+}
+
+.group {
+  height: 100%;
+}
+
+.notification {
+  background-color: var(--mantine-color-red-9);
+  min-height: rem(60px);
+  max-height: rem(80px);
+  max-width: rem(300px);
+
+  @mixin hover {
+    background-color: var(--mantine-color-red-8);
+    cursor: pointer;
+  }
+
+  .notification-description {
+    color: var(--mantine-color-white);
+    /* font-size: rem(16px); */
+  }
+
+  .notification-icon {
+    margin-inline-end: rem(16px);
+    background-color: inherit;
+    cursor: inherit;
+  }
+}

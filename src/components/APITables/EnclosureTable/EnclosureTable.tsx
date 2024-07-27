@@ -5,8 +5,10 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import { AlertsContext } from '@/app/overview/page';
+'use client';
+
 import fetchFromAPI from '@/src/actions/fetchFromAPI';
+import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import useTask from '@/src/hooks/use-task';
 import {
@@ -26,7 +28,7 @@ import {
   IconHandStop,
 } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../../APIStatusText/APIStatusText';
+import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 

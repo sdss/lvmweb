@@ -20,7 +20,7 @@ import {
 } from '@mantine/core';
 import { IconAlertTriangle, IconReload, IconSettings } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../APIStatusText/APIStatusText';
+import APIStatusText from './APIStatusText/APIStatusText';
 import classses from './APITable.module.css';
 
 type Element = {

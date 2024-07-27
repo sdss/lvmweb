@@ -5,13 +5,15 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import { AlertsContext } from '@/app/overview/page';
+'use client';
+
+import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import useNow from '@/src/hooks/use-now';
 import { Pill } from '@mantine/core';
 import { IconCloudRain } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../../APIStatusText/APIStatusText';
+import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 
 type WeatherResponse = {
