@@ -14,7 +14,7 @@ import { SimpleGrid, Stack } from '@mantine/core';
 
 export default function OverviewPage() {
   return (
-    <SimpleGrid cols={{ sm: 2, lg: 3, xl: 4 }} spacing="lg" verticalSpacing="lg">
+    <SimpleGrid cols={{ sm: 1, md: 2, xl: 3 }} spacing="lg" verticalSpacing="lg">
       <Stack gap="lg">
         <SpecTable />
         <WeatherTable />
