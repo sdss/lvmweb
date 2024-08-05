@@ -126,7 +126,7 @@ export default function APITable(props: {
           </Title>
           <Box style={{ flexGrow: 1 }} />
           {noData && <WarningIcon />}
-          {!noData && refreshData && <RefreshData onClick={refreshData} />}
+          {refreshData && <RefreshData onClick={refreshData} />}
         </Group>
         <Table withRowBorders={false} horizontalSpacing="sm" mb={4}>
           <Table.Tbody>{rows}</Table.Tbody>
