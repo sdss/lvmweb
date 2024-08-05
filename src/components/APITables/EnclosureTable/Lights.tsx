@@ -9,23 +9,40 @@
 
 import fetchFromAPI from '@/src/actions/fetchFromAPI';
 import { ActionIcon, Box, Group, Pill, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconBulbOff } from '@tabler/icons-react';
 import React from 'react';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
+import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 import { EnclosureResponse } from './types';
 
 function TurnLightsOffButton() {
+  const [opened, { open, close }] = useDisclosure();
+
   const handleClick = React.useCallback(() => {
+    close();
     fetchFromAPI('/enclosure/lights/off/all').catch(() => {});
   }, []);
 
   return (
     <>
       <Tooltip label="Turn off all lamps">
-        <ActionIcon size="sm" onClick={handleClick}>
+        <ActionIcon size="sm" onClick={open}>
           <IconBulbOff />
         </ActionIcon>
       </Tooltip>
+      <ConfirmationModal
+        opened={opened}
+        size="md"
+        title="Confirm lights off"
+        // eslint-disable-next-line max-len
+        message={
+          'Are you sure you want to turn off all lights? ' +
+          'Please confirm that nobody is currently inside the enclosure.'
+        }
+        close={close}
+        handleAction={handleClick}
+      />
     </>
   );
 }
@@ -56,10 +73,12 @@ export default function Lights(props: {
   }
 
   return (
-    <Group gap="xs" pr={4}>
-      {LightsPills}
-      <Box style={{ flexGrow: 1 }} />
-      <TurnLightsOffButton />
-    </Group>
+    <>
+      <Group gap="xs" pr={4}>
+        {LightsPills}
+        <Box style={{ flexGrow: 1 }} />
+        <TurnLightsOffButton />
+      </Group>
+    </>
   );
 }
