@@ -8,13 +8,14 @@
 'use client';
 
 import { Stack } from '@mantine/core';
-import { IconCloudRain, IconHome } from '@tabler/icons-react';
+import { IconCloudRain, IconHome, IconNotebook } from '@tabler/icons-react';
 import NavBarItem from './NavBarItem/NavBarItem';
 
 export default function NavBar() {
   return (
     <Stack p={8} mt={2} gap="xs">
       <NavBarItem path="/overview" icon={<IconHome />} text="Overview" />
+      <NavBarItem path="/log" icon={<IconNotebook />} text="GORT Log" />
       <NavBarItem
         path="http://lco.cl/weather"
         icon={<IconCloudRain />}

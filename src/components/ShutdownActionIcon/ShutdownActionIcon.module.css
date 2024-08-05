@@ -1,0 +1,5 @@
+.icon {
+  @mixin hover {
+    color: var(--mantine-color-gray-3);
+  }
+}

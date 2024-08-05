@@ -14,11 +14,15 @@
   height: 100%;
 }
 
+.title {
+  color: var(--mantine-color-white-5);
+}
+
 .notification {
   background-color: var(--mantine-color-red-9);
   min-height: rem(60px);
   max-height: rem(80px);
-  max-width: rem(300px);
+  max-width: rem(320px);
 
   @mixin hover {
     background-color: var(--mantine-color-red-8);
@@ -34,5 +38,12 @@
     margin-inline-end: rem(16px);
     background-color: inherit;
     cursor: inherit;
+  }
+
+  .notification-close-button {
+    @mixin hover {
+      background-color: transparent;
+      color: var(--mantine-color-gray-1);
+    }
   }
 }

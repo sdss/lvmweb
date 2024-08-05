@@ -20,9 +20,9 @@ export const theme = createTheme({
   },
   breakpoints: {
     xs: '30em',
-    sm: '48em',
-    md: '64em',
-    lg: '78em',
-    xl: '94em',
+    sm: '40em',
+    md: '54em',
+    lg: '68em',
+    xl: '100em',
   },
 });

@@ -1,7 +1,8 @@
 'use client';
 
+import AlertsActionIcon from '@/src/components/AlertsActionIcon/AlertsActionIcon';
 import useAlertsContext from '@/src/hooks/use-alerts-context';
-import { Box, Group, Image, rem, Title } from '@mantine/core';
+import { Box, Group, Image, rem, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconExclamationCircle } from '@tabler/icons-react';
@@ -32,19 +33,26 @@ export default function Header() {
       const func = notifID ? notifications.update : notifications.show;
       const newNotifID = func({
         title: 'There are active alerts',
-        message: 'Click here for more information.',
+        message: (
+          <Text
+            size="sm"
+            onClick={() => {
+              openAlerts();
+            }}
+          >
+            Click here for more information.
+          </Text>
+        ),
         color: 'red.9',
         icon: eIcon,
         autoClose: false,
-        withCloseButton: false,
+        withCloseButton: true,
         radius: 6,
         classNames: {
           root: classes.notification,
           description: classes['notification-description'],
           icon: classes['notification-icon'],
-        },
-        onClick: () => {
-          openAlerts();
+          closeButton: classes['notification-close-button'],
         },
       });
 
@@ -72,7 +80,10 @@ export default function Header() {
             </Group>
           </Link>
           <div style={{ flexGrow: 1 }} />
-          <ShutdownActionIcon />
+          <Group gap="xs">
+            <AlertsActionIcon />
+            <ShutdownActionIcon />
+          </Group>
         </Group>
       </Box>
       <AlertsModal opened={alertsOpened} close={closeAlerts} />
