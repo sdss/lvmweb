@@ -33,6 +33,7 @@ export default function NavBar() {
         external
         newWindow
       />
+
       <Box p={8} />
       <NavAccordion value="Telescopes" open icon={IconTelescope}>
         <NavAccordionItem value="Science" href="/telescopes/sci" />
