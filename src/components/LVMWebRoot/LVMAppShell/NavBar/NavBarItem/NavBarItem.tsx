@@ -45,7 +45,7 @@ export default function NavBarItem(props: NavBarItemProps) {
         </Title>
         <Box style={{ flexGrow: 1 }} />
         {external && (
-          <ThemeIcon size="sm" variant="transparent" c="gray.3">
+          <ThemeIcon size="sm" variant="transparent" c="dark.0">
             <IconExternalLink />
           </ThemeIcon>
         )}
