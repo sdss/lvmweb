@@ -13,4 +13,8 @@
     background-color: #1f3e5f;
     border-left: rem(1.5px) solid var(--mantine-color-gray-6);
   }
+
+  & > div {
+    font-size: inherit;
+  }
 }
