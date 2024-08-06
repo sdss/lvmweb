@@ -11,8 +11,14 @@ export default withBundleAnalyzer({
   },
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
+    serverActions: {
+      allowedForwardedHosts: ['localhost'],
+      allowedOrigins: ['localhost:8080'],
+    },
   },
-  redirects() {
+  trailingSlash: true,
+  basePath: '/lvmweb2',
+  async redirects() {
     return [
       {
         source: '/',

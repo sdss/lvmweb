@@ -1,4 +1,9 @@
-'use client';
+/*
+ *  @Author: José Sánchez-Gallego (gallegoj@uw.edu)
+ *  @Date: 2024-08-06
+ *  @Filename: Header.tsx
+ *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
+ */
 
 import AlertsActionIcon from '@/src/components/AlertsActionIcon/AlertsActionIcon';
 import useAlertsContext from '@/src/hooks/use-alerts-context';
@@ -73,7 +78,7 @@ export default function Header() {
         <Group className={classes.group}>
           <Link href="/">
             <Group>
-              <Image src="/lvm_logo.png" h={50} />
+              <Image src={`/lvmweb2/lvm_logo.png`} h={50} />
               <Title order={3} className={classes.title}>
                 LVM Web
               </Title>
