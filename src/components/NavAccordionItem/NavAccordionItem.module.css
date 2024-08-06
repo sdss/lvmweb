@@ -1,0 +1,16 @@
+.text {
+  margin-left: rem(4px);
+
+  padding-left: rem(16px);
+  padding-top: rem(6px);
+  padding-bottom: rem(6px);
+
+  border-left: 1px solid var(--mantine-color-gray-7);
+
+  font-size: rem(14px);
+
+  &[data-selected='true'] {
+    background-color: #1f3e5f;
+    border-left: rem(1.5px) solid var(--mantine-color-gray-6);
+  }
+}

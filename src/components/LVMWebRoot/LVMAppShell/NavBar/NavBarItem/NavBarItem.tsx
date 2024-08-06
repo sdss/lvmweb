@@ -29,12 +29,12 @@ export default function NavBarItem(props: NavBarItemProps) {
 
   return (
     <Box
-      component={(external ? 'a' : Link) as any}
+      component={Link}
       href={path}
       target={newWindow ? '_blank' : undefined}
       rel={newWindow ? 'noopener noreferrer' : undefined}
       className={classes.root}
-      mod={{ selected: pathname === path }}
+      mod={{ selected: pathname.includes(path) }}
     >
       <Group align="center" gap={8}>
         <ThemeIcon size="lg" className={classes.theme_icon}>
