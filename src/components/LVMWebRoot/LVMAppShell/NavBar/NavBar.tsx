@@ -27,7 +27,7 @@ export default function NavBar() {
       <NavBarItem path="/gort-log" icon={<IconNotebook />} text="GORT Log" />
       <NavBarItem path="/exposure-list" icon={<IconLogs />} text="Exposure List" />
       <NavBarItem
-        path="http://lco.cl/weather"
+        path="https://weather.lco.cl"
         icon={<IconCloudRain />}
         text="Weather"
         external
