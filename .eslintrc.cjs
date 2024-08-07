@@ -15,5 +15,6 @@ module.exports = {
     'import/extensions': 'off',
     'max-len': ['error', { code: 88 }],
     'import/order': 'off',
+    'no-constant-condition': 'off',
   },
 };
