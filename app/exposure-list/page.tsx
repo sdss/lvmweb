@@ -45,7 +45,7 @@ async function fetchMJDs(): Promise<number[]> {
   return result;
 }
 
-async function fetchNightLogData(mjd: number): Promise<ExposureData[]> {
+async function fetchExposureListData(mjd: number): Promise<ExposureData[]> {
   const response = await fetchTask<{ [k: number]: ExposureData }>(
     `/log/exposures/data/${mjd}?as_task=true`
   );
@@ -53,7 +53,7 @@ async function fetchNightLogData(mjd: number): Promise<ExposureData[]> {
   return Object.values(response);
 }
 
-function NightLogControls(props: {
+function ExposureListControls(props: {
   mjds: number[];
   forceRefresh: () => void;
   setCurrentMJD: (mjd: number) => void;
@@ -175,7 +175,7 @@ function ExposureDataTable(props: {
   );
 }
 
-export default function NightLogPage() {
+export default function ExposureListPage() {
   const [data, setData] = React.useState<ExposureData[] | undefined>(undefined);
   const [mjds, setMJDs] = React.useState<number[]>([]);
   const [currentMJD, setCurrentMJD] = React.useState<number | undefined>(undefined);
@@ -189,7 +189,7 @@ export default function NightLogPage() {
         setReloading(true);
       }
 
-      fetchNightLogData(currentMJD)
+      fetchExposureListData(currentMJD)
         .then(setData)
         .then(() => setReloading(false));
     },
@@ -211,8 +211,8 @@ export default function NightLogPage() {
     <>
       <Container size="xl">
         <Stack p={8} mt={2} gap="md">
-          <Title order={1}>Night Log</Title>
-          <NightLogControls
+          <Title order={1}>Exposure List</Title>
+          <ExposureListControls
             mjds={mjds}
             forceRefresh={forceRefresh}
             setCurrentMJD={setCurrentMJD}

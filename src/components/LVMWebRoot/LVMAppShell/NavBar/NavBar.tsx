@@ -25,7 +25,7 @@ export default function NavBar() {
     <Stack p={16} mt={2} gap="xs">
       <NavBarItem path="/overview" icon={<IconHome />} text="Overview" />
       <NavBarItem path="/gort-log" icon={<IconNotebook />} text="GORT Log" />
-      <NavBarItem path="/night-log" icon={<IconLogs />} text="Night Log" />
+      <NavBarItem path="/exposure-list" icon={<IconLogs />} text="Exposure List" />
       <NavBarItem
         path="http://lco.cl/weather"
         icon={<IconCloudRain />}
