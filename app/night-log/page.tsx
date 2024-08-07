@@ -7,7 +7,8 @@
 
 'use client';
 
-import fetchFromAPI from '@/src/actions/fetchFromAPI';
+import fetchFromAPI from '@/src/actions/fetch-from-API';
+import fetchTask from '@/src/actions/fetch-task';
 import {
   ActionIcon,
   Box,
@@ -45,23 +46,11 @@ async function fetchMJDs(): Promise<number[]> {
 }
 
 async function fetchNightLogData(mjd: number): Promise<ExposureData[]> {
-  const task_id = await fetchFromAPI<string>(`/log/exposures/data/${mjd}?as_task=true`);
+  const response = await fetchTask<{ [k: number]: ExposureData }>(
+    `/log/exposures/data/${mjd}?as_task=true`
+  );
 
-  let data: ExposureData[];
-
-  while (true) {
-    const result = await fetchFromAPI<boolean>(`/tasks/${task_id}/ready`);
-    if (result) {
-      const response = await fetchFromAPI<any>(`/tasks/${task_id}/result`);
-      data = Object.values(response.return_value);
-      break;
-    }
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-    });
-  }
-
-  return data;
+  return Object.values(response);
 }
 
 function NightLogControls(props: {
@@ -76,6 +65,7 @@ function NightLogControls(props: {
 
     if (!selected) {
       setSelected(props.mjds[props.mjds.length - 1].toString());
+      props.setCurrentMJD(props.mjds[props.mjds.length - 1]);
     }
   }, [props.mjds]);
 
@@ -142,8 +132,6 @@ function ExposureDataTable(props: {
   const Rows = !data
     ? null
     : data.map((exp) => {
-        // const lamps = exp.lamps ? exp.lamps.forEach((name, status)) : [];
-        // console.log(lamps);
         const lamps: string[] = [];
         if (exp.lamps) {
           for (const [name, status] of Object.entries(exp.lamps)) {
@@ -213,18 +201,11 @@ export default function NightLogPage() {
   }, []);
 
   React.useEffect(() => {
-    if (!currentMJD) {
-      setCurrentMJD(mjds[mjds.length - 1]);
-    }
-  }, [mjds]);
-
-  React.useEffect(forceRefresh, [currentMJD]);
-
-  React.useEffect(() => {
+    forceRefresh(false);
     const interval = setInterval(() => forceRefresh(false), 60000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentMJD]);
 
   return (
     <>
