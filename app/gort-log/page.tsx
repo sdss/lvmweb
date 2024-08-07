@@ -121,7 +121,7 @@ function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
   }, [props.reloading]);
 
   if (!props.data) {
-    return <Skeleton height={600} w="100%" />;
+    return <Skeleton height="80vh" w="100%" />;
   }
 
   return (
