@@ -7,7 +7,7 @@
 
 'use client';
 
-import fetchFromAPI from '@/src/actions/fetchFromAPI';
+import fetchFromAPI from '@/src/actions/fetch-from-API';
 import useTask from '@/src/hooks/use-task';
 import { ActionIcon, Box, Group, Pill, Progress, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';

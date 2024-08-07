@@ -1,7 +1,7 @@
 /*
  *  @Author: José Sánchez-Gallego (gallegoj@uw.edu)
  *  @Date: 2024-07-18
- *  @Filename: fetchFromAPI.ts
+ *  @Filename: fetch-from-API.ts
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 

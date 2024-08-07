@@ -7,7 +7,7 @@
 
 'use client';
 
-import fetchFromAPI from '@/src/actions/fetchFromAPI';
+import fetchFromAPI from '@/src/actions/fetch-from-API';
 import { ActionIcon, Box, Group, Pill, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconBulbOff } from '@tabler/icons-react';
