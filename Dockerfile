@@ -10,8 +10,8 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN corepack enable
-RUN yarn --frozen-lockfile
-
+RUN yarn install --immutable
+RUN ls /app
 
 # 2. Rebuild the source code only when needed
 FROM base AS builder
@@ -20,7 +20,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # This will do the trick, use the corresponding env file for each environment.
 COPY .env.production .env.production
-RUN npm run build
+RUN yarn run build
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner
@@ -45,4 +45,4 @@ EXPOSE 3005
 
 ENV PORT=3005
 
-CMD HOSTNAME=localhost node server.js
+CMD HOSTNAME="0.0.0.0" node server.js
