@@ -9,8 +9,8 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* .yarnrc.yml .nvmrc .yarn ./
-RUN ls
-RUN ls .yarn/**
+RUN ls -la
+RUN ls -la .yarn/**
 RUN corepack enable
 RUN yarn install --immutable
 
