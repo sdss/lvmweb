@@ -16,11 +16,14 @@ jobs:
       USER: sdss
       APP: lvmweb
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Corepack
+        run: corepack enable
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Set up Yarn
-        run: yarn set version latest --yarn-path
+          cache: 'yarn'
       - name: Set docker tags
         id: set-tags
         run: |
