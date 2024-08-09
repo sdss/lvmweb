@@ -12,8 +12,13 @@ export default withBundleAnalyzer({
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
     serverActions: {
-      allowedForwardedHosts: ['localhost'],
-      allowedOrigins: ['localhost:8080'],
+      allowedForwardedHosts: ['localhost', '10.8.38.21', 'lvm-hub', 'lvm-hub.lco.cl'],
+      allowedOrigins: [
+        'localhost:8080',
+        '10.8.38.21:8080',
+        'lvm-hub:8080',
+        'lvm-hub.lco.cl:8080',
+      ],
     },
   },
   trailingSlash: true,

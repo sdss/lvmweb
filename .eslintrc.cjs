@@ -8,7 +8,9 @@ module.exports = {
     },
   ],
   parserOptions: {
+    // parser: '@typescript-eslint/parser',
     project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
