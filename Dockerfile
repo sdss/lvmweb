@@ -8,9 +8,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* .yarnrc.yml .nvmrc .yarn ./
-RUN ls -la
-RUN ls -la .yarn/**
+COPY package.json yarn.lock* .yarnrc.yml .nvmrc ./
+COPY .yarn .yarn
 RUN corepack enable
 RUN yarn install --immutable
 
