@@ -18,6 +18,7 @@ export default withBundleAnalyzer({
   },
   trailingSlash: true,
   basePath: '/lvmweb2',
+  output: 'standalone',
   async redirects() {
     return [
       {
