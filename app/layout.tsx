@@ -26,22 +26,22 @@ export default function RootLayout({ children }: { children: any }) {
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/lvmweb2/apple-touch-icon.png"
+          href="/lvmweb/apple-touch-icon.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="/lvmweb2/favicon-32x32.png"
+          href="/lvmweb/favicon-32x32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/lvmweb2/favicon-16x16.png"
+          href="/lvmweb/favicon-16x16.png"
         />
-        <link rel="manifest" href="/lvmweb2/site.webmanifest" />
-        <link rel="mask-icon" href="/lvmweb2/safari-pinned-tab.svg" color="#5bbad5" />
+        <link rel="manifest" href="/lvmweb/site.webmanifest" />
+        <link rel="mask-icon" href="/lvmweb/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
         <meta
