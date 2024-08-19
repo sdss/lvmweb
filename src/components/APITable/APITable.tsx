@@ -25,7 +25,7 @@ import classses from './APITable.module.css';
 
 type Element = {
   key: string;
-  label: string;
+  label: string | undefined;
   value: any | undefined;
   unit?: string;
   valign?: string;
@@ -107,14 +107,31 @@ export default function APITable(props: {
     }
   }, [noData]);
 
-  const rows = elements.map((element) => (
-    <Table.Tr key={element.key}>
-      <Table.Td valign={(element.valign as (typeof Table.Td)['valign']) || 'top'}>
-        <Text size="sm">{element.label}</Text>
-      </Table.Td>
-      <Table.Td>{getValue(element)}</Table.Td>
-    </Table.Tr>
-  ));
+  const rows = elements.map((element) => {
+    let value = getValue(element);
+    let colspan = 1;
+    let isSpan = false;
+
+    if (!element.label) {
+      colspan = 2;
+      isSpan = true;
+      value = element.value;
+    }
+
+    return (
+      <Table.Tr key={element.key}>
+        <Table.Td
+          valign={(element.valign as (typeof Table.Td)['valign']) || 'top'}
+          colSpan={colspan}
+          ta={isSpan ? 'center' : undefined}
+          autoFocus={false}
+        >
+          <Text size="sm">{isSpan ? value : element.label}</Text>
+        </Table.Td>
+        {!isSpan && <Table.Td>{getValue(element)}</Table.Td>}
+      </Table.Tr>
+    );
+  });
 
   return (
     <>

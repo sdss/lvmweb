@@ -36,6 +36,7 @@ export default function NavBar() {
 
       <Box p={8} />
       <NavAccordion value="Telescopes" open icon={IconTelescope}>
+        <NavAccordionItem value="Position" href="/telescopes/position" />
         <NavAccordionItem value="Science" href="/telescopes/sci" />
         <NavAccordionItem value="Spec" href="/telescopes/spec" />
         <NavAccordionItem value="Sky-E" href="/telescopes/skye" />

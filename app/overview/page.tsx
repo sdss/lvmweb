@@ -11,6 +11,7 @@ import ActorsTable from '@/src/components/APITables/ActorsTable/ActorsTable';
 import EnclosureTable from '@/src/components/APITables/EnclosureTable/EnclosureTable';
 import EphemerisTable from '@/src/components/APITables/EphemerisTable/EphemerisTable';
 import SpecTable from '@/src/components/APITables/SpecTable/SpecTable';
+import TelescopesTable from '@/src/components/APITables/TelescopesTable/TelescopesTable';
 import WeatherTable from '@/src/components/APITables/WeatherTable/WeatherTable';
 import { Box, SimpleGrid, Stack, useMatches } from '@mantine/core';
 import React from 'react';
@@ -30,6 +31,7 @@ export default function OverviewPage() {
         </Stack>
         <Stack gap="lg">
           <EnclosureTable />
+          <TelescopesTable />
           <EphemerisTable />
         </Stack>
       </>
@@ -39,6 +41,7 @@ export default function OverviewPage() {
       <>
         <Stack gap="lg">
           <SpecTable />
+          <TelescopesTable />
           <WeatherTable />
         </Stack>
         <Stack gap="lg">

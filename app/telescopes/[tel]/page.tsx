@@ -7,10 +7,12 @@
 
 'use client';
 
+import TelescopePositionPlot from '@/src/components/TelescopePositionPlot/TelescopePositionPlot';
 import { Box, Stack, Title } from '@mantine/core';
 import React from 'react';
 
 export default function TelescopePage({ params }: { params: { tel: string } }) {
+  const [valid, setValid] = React.useState<boolean>(true);
   const [src, setSrc] = React.useState<string | undefined>(undefined);
   const [title, setTitle] = React.useState<string | undefined>(undefined);
 
@@ -41,10 +43,25 @@ export default function TelescopePage({ params }: { params: { tel: string } }) {
           setTitle('Sky-E telescope');
           break;
         default:
-          setTitle('Unknown telescope');
+          setValid(false);
       }
     }
   }, [tel]);
+
+  if (tel == 'position') {
+    return (
+      <Stack p={8} mt={2} gap="lg">
+        <Title order={1}>Telescope Position</Title>
+        <Box ta="center" pt={24}>
+          <TelescopePositionPlot size="large" />
+        </Box>
+      </Stack>
+    );
+  }
+
+  if (!valid) {
+    return <h1>404 - Page Not Found</h1>;
+  }
 
   return (
     <>
