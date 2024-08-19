@@ -9,7 +9,8 @@
 
 export default async function fetchFromAPI<T>(
   route: string,
-  baseURL: string | undefined = undefined
+  baseURL: string | undefined = undefined,
+  opts: RequestInit = {}
 ): Promise<T> {
   if (!baseURL) {
     baseURL = process.env.LVM_API_BASE_URL;
@@ -17,7 +18,7 @@ export default async function fetchFromAPI<T>(
 
   const url = new URL(route, baseURL).toString();
 
-  const response = await fetch(url, { cache: 'no-store' });
+  const response = await fetch(url, opts);
   if (!response.ok) {
     throw new Error(`Failed to fetch from API: ${response.statusText}`);
   }
