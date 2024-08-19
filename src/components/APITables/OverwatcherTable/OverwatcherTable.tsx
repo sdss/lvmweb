@@ -48,8 +48,12 @@ function OverwatcherPill(props: OverwatcherPillProps) {
   );
 }
 
-function EnabledGroup(props: OverwatcherPillProps) {
-  const { value, nodata } = props;
+interface EnabledGroupProps {
+  route: string;
+}
+
+function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
+  const { route, value, nodata } = props;
 
   const [isOn, setOn] = React.useState(value);
 
@@ -80,6 +84,7 @@ function EnabledGroup(props: OverwatcherPillProps) {
     </Group>
   );
 }
+
 export default function OverwatcherTable() {
   const [data, , noData, refresh] = useAPICall<OverwatcherResponse>(
     '/overwatcher/status',
@@ -95,7 +100,13 @@ export default function OverwatcherTable() {
     {
       key: 'enabled',
       label: 'Enabled',
-      value: <EnabledGroup value={data?.enabled} nodata={noData} />,
+      value: (
+        <EnabledGroup
+          route="/overwatcher/status"
+          value={data?.enabled}
+          nodata={noData}
+        />
+      ),
     },
     {
       key: 'observing',
@@ -110,7 +121,13 @@ export default function OverwatcherTable() {
     {
       key: 'allow_dome_calibrations',
       label: 'Allow dome calibrations',
-      value: <OverwatcherPill value={data?.allow_dome_calibrations} nodata={noData} />,
+      value: (
+        <EnabledGroup
+          route="/overwatcher/allow_dome_calibrations"
+          value={data?.allow_dome_calibrations}
+          nodata={noData}
+        />
+      ),
     },
   ];
 
