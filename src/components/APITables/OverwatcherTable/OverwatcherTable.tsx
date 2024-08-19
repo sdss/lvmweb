@@ -71,6 +71,7 @@ function EnabledGroup(props: OverwatcherPillProps) {
       <Box style={{ flexGrow: 1 }} />
       <Switch
         size="md"
+        pr={16}
         checked={isOn}
         onChange={handleEnabledChange}
         onLabel="ON"
