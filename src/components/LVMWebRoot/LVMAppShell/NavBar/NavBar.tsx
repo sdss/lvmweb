@@ -34,7 +34,7 @@ export default function NavBar() {
         newWindow
       />
 
-      <Box p={8} />
+      <Box pt={8} />
       <NavAccordion value="Telescopes" open icon={IconTelescope}>
         <NavAccordionItem value="Position" href="/telescopes/position" />
         <NavAccordionItem value="Science" href="/telescopes/sci" />
@@ -44,7 +44,6 @@ export default function NavBar() {
         <NavAccordionItem value="MoTAN" href="/telescopes/motan" />
       </NavAccordion>
 
-      <Box p={4} />
       <NavAccordion value="Links" icon={IconLink}>
         <NavAccordionItem value="Grafana" href="https://lvm-grafana.lco.cl" external />
         <NavAccordionItem
