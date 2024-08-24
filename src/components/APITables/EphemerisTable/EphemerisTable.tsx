@@ -34,9 +34,13 @@ function hoursToHoursMin(hours: number | undefined) {
   if (!hours) return undefined;
 
   const h = Math.floor(hours);
-  const m = Math.round((hours - h) * 60);
 
-  return `${h}:${m}`;
+  const hString = h.toString().padStart(2, '0');
+  const mString = Math.round((hours - h) * 60)
+    .toString()
+    .padStart(2, '0');
+
+  return `${hString}:${mString}`;
 }
 
 export default function EphemerisTable() {
