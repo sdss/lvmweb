@@ -1,5 +1,5 @@
 /*
- *  @Author: José Sánchez-Gallego (gallegoj@uw.edu)
+ *  @Author: Jose Sanchez-Gallego (gallegoj@uw.edu)
  *  @Date: 2024-07-25
  *  @Filename: ActorsTable.tsx
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
