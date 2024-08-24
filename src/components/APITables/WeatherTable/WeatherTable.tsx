@@ -25,6 +25,9 @@ type WeatherResponse = {
   wind_speed_min: number;
   wind_speed_avg: number;
   wind_speed_max: number;
+  wind_speed_avg_5m: number;
+  wind_dir_avg_5m: number;
+  wind_gust_5m: number;
   relative_humidity: number;
   air_pressure: number;
   rain_intensity: number;
@@ -52,7 +55,8 @@ export default function WeatherTable() {
   const timestamp = weather?.[0]?.ts
     .replace(/T/, ' ')
     .replace(/Z/, '')
-    .replace(/\.\d+/, '');
+    .replace(/\.\d+/, '')
+    .split(' ')[1];
 
   const elements = [
     {
@@ -68,14 +72,20 @@ export default function WeatherTable() {
     },
     {
       key: 'wind_speed_avg',
-      label: 'Wind Speed (avg.)',
-      value: weather?.[0]?.wind_speed_avg.toFixed(1),
+      label: 'Wind Speed (5m avg.)',
+      value: weather?.[0]?.wind_speed_avg_5m.toFixed(1),
+      unit: ' mph',
+    },
+    {
+      key: 'wind_gust',
+      label: 'Wind Gust (5m max.)',
+      value: weather?.[0]?.wind_gust_5m.toFixed(1),
       unit: ' mph',
     },
     {
       key: 'wind_dir_avg',
-      label: 'Wind Direction (avg.)',
-      value: weather?.[0]?.wind_dir_avg,
+      label: 'Wind Dir. (5m avg.)',
+      value: weather?.[0]?.wind_dir_avg_5m.toFixed(1),
       unit: ' degrees',
     },
     {
