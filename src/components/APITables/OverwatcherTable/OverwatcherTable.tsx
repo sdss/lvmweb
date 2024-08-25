@@ -63,8 +63,8 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
 
   const handleEnabledChange = React.useCallback(() => {
     // Send API request to change value
-    const route = isOn ? '/overwatcher/status/disable' : '/overwatcher/status/enable';
-    fetchFromAPI(route, undefined, { method: 'PUT' })
+    const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
+    fetchFromAPI(fullRoute, undefined, { method: 'PUT' })
       .then(() => setOn((prev) => !prev))
       .catch(() => {});
   }, [isOn]);
@@ -123,7 +123,7 @@ export default function OverwatcherTable() {
       label: 'Allow dome calibrations',
       value: (
         <EnabledGroup
-          route="/overwatcher/allow_dome_calibrations"
+          route="/overwatcher/status/allow_dome_calibrations"
           value={data?.allow_dome_calibrations}
           nodata={noData}
         />
