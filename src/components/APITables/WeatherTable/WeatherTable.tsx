@@ -62,7 +62,7 @@ export default function WeatherTable() {
     {
       key: 'ts',
       label: 'Timestamp',
-      value: timestamp ? `${timestamp} (${age} minutes ago)` : null,
+      value: timestamp ? `${timestamp} (${age} min. ago)` : null,
     },
     {
       key: 'temperature',
