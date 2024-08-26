@@ -9,7 +9,7 @@
 
 import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
-import { Divider, Group, Pill, Stack, Text } from '@mantine/core';
+import { Divider, Group, Pill, Progress, Stack, Text } from '@mantine/core';
 import { IconPrismLight } from '@tabler/icons-react';
 import React from 'react';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
@@ -26,6 +26,8 @@ type Sensor = 'ccd' | 'ln2';
 type SpecStatusResponse = {
   status: { [key in Specs]: StatusType };
   last_exposure_no: number;
+  total_exposure_time: number | null;
+  exposure_etr: number | null;
 };
 
 type SpecTempsResponse = {
@@ -39,7 +41,7 @@ function SpecStatusPills(specs: string[], nodata: boolean) {
   return (
     <Group gap="xs">
       {specs.map((spec) => (
-        <Pill key={spec} bg="dark.5">
+        <Pill key={spec} bg="blue">
           <APIStatusText nodata={nodata}>{spec}</APIStatusText>
         </Pill>
       ))}
@@ -119,19 +121,87 @@ function getAlertPills(alerts: string[], nodata: boolean = false) {
     </Group>
   );
 }
+
+type SpecProgressProps = {
+  state: SpecStatusResponse | null;
+  noData: boolean;
+};
+
+function SpecProgress(props: SpecProgressProps) {
+  const [etr, setETR] = React.useState<number | null>(null);
+  const [totalTime, setTotalTime] = React.useState<number | null>(null);
+  const [progress, setProgress] = React.useState<number | null>(null);
+
+  const { state, noData } = props;
+
+  React.useEffect(() => {
+    if (noData || !state) {
+      setProgress(null);
+      return;
+    }
+
+    if (state.exposure_etr === null || state.total_exposure_time === null) {
+      setProgress(null);
+      return;
+    }
+
+    if (state.exposure_etr === 0) {
+      setProgress(100);
+      return;
+    }
+
+    setETR(state.exposure_etr);
+    setTotalTime(state.total_exposure_time);
+    setProgress((1 - state.exposure_etr / state.total_exposure_time) * 100);
+  }, [state, noData]);
+
+  React.useEffect(() => {
+    if (etr === null || totalTime === null) {
+      setProgress(null);
+      return () => {};
+    }
+
+    const interval = 0.1;
+    const rate = 100 / totalTime;
+
+    const intervalID = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress === null) {
+          return prevProgress;
+        }
+
+        return prevProgress + interval * rate;
+      });
+    }, interval * 1000);
+
+    return () => clearInterval(intervalID);
+  }, [etr, totalTime]);
+
+  return progress ? (
+    <Progress
+      h={10}
+      value={progress}
+      style={{ flexGrow: 1 }}
+      color={progress < 100 ? 'blue' : 'gray'}
+      animated
+    />
+  ) : null;
+}
+
 export default function SpecTable() {
-  const INTERVAL = 30000;
+  const STATUS_INTERVAL = 5000;
+  const TEMPS_INTERVAL = 60000;
 
   const alerts = React.useContext(AlertsContext);
 
   const [specState, , noDataSpec, refreshSpec] = useAPICall<SpecStatusResponse>(
     '/spectrographs/status',
-    { interval: INTERVAL }
+    { interval: STATUS_INTERVAL }
   );
 
   const [specTemps, , noDataTemps, refreshTemps] = useAPICall<SpecTempsResponse>(
     '/spectrographs/temperatures?start=-1m&last=true',
-    { interval: INTERVAL }
+    { interval: TEMPS_INTERVAL }
   );
 
   const noData = noDataSpec || noDataTemps;
@@ -226,6 +296,11 @@ export default function SpecTable() {
       key: 'o2_alerts',
       label: 'O\u2082 Alerts',
       value: getAlertPills(o2Alerts, noData),
+    },
+    {
+      key: 'progress',
+      label: 'Exposure progress',
+      value: <SpecProgress state={specState} noData={noDataSpec} />,
     },
     {
       key: 'exposing',
