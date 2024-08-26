@@ -185,7 +185,9 @@ function SpecProgress(props: SpecProgressProps) {
       color={progress < 100 ? 'blue' : 'gray'}
       animated
     />
-  ) : null;
+  ) : (
+    <APIStatusText nodata={noData}>No exposure in progress</APIStatusText>
+  );
 }
 
 export default function SpecTable() {
