@@ -33,14 +33,15 @@ type EphemerisResponse = {
 function hoursToHoursMin(hours: number | undefined) {
   if (!hours) return undefined;
 
-  const h = Math.floor(hours);
+  const sign = hours < 0 ? '-' : '';
+  const h = Math.floor(Math.abs(hours));
 
   const hString = h.toString().padStart(2, '0');
-  const mString = Math.round((hours - h) * 60)
+  const mString = Math.round((Math.abs(hours) - h) * 60)
     .toString()
     .padStart(2, '0');
 
-  return `${hString}:${mString}`;
+  return `${sign}${hString}:${mString}`;
 }
 
 export default function EphemerisTable() {
