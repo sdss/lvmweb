@@ -183,7 +183,7 @@ function SpecProgress(props: SpecProgressProps) {
       value={progress}
       style={{ flexGrow: 1 }}
       color={progress < 100 ? 'blue' : 'gray'}
-      animated
+      animated={progress >= 100}
     />
   ) : (
     <APIStatusText nodata={noData}>No exposure in progress</APIStatusText>
