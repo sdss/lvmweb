@@ -42,12 +42,13 @@ async function fetchLogData(mjd: string, n_lines: number = -1): Promise<string> 
 }
 
 function LogControls(props: {
+  mjd: string | undefined;
   mjds: string[];
   forceRefresh: () => void;
   setCurrentMJD: (mjd: string) => void;
   setNLines: (nLines: number) => void;
 }) {
-  const [selected, setSelected] = React.useState<string | undefined>(undefined);
+  const [selected, setSelected] = React.useState<string | undefined>(props.mjd);
   const [nLinesSelect, setNLinesSelect] = React.useState<string>('1000');
 
   React.useEffect(() => {
@@ -140,10 +141,13 @@ function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
   );
 }
 
-export default function GortLogPage() {
+export default function GortLogPage({ params }: { params: { mjd: string[] } }) {
+  console.log(params);
   const [data, setData] = React.useState<string | undefined>(undefined);
   const [mjds, setMJDs] = React.useState<string[]>([]);
-  const [currentMJD, setCurrentMJD] = React.useState<string | undefined>(undefined);
+  const [currentMJD, setCurrentMJD] = React.useState<string | undefined>(
+    params.mjd ? params.mjd[0] : undefined
+  );
   const [nLines, setNLines] = React.useState<number>(1000);
   const [reloading, setReloading] = React.useState(false);
 
@@ -179,6 +183,7 @@ export default function GortLogPage() {
         <Stack p={8} mt={2} gap="md">
           <Title order={1}>GORT Log</Title>
           <LogControls
+            mjd={currentMJD}
             mjds={mjds}
             forceRefresh={forceRefresh}
             setCurrentMJD={setCurrentMJD}

@@ -54,11 +54,14 @@ async function fetchExposureListData(mjd: number): Promise<ExposureData[]> {
 }
 
 function ExposureListControls(props: {
+  mjd: number | undefined;
   mjds: number[];
   forceRefresh: () => void;
   setCurrentMJD: (mjd: number) => void;
 }) {
-  const [selected, setSelected] = React.useState<string | undefined>(undefined);
+  const [selected, setSelected] = React.useState<string | undefined>(
+    props.mjd?.toString()
+  );
 
   React.useEffect(() => {
     if (props.mjds.length === 0) return;
@@ -175,10 +178,12 @@ function ExposureDataTable(props: {
   );
 }
 
-export default function ExposureListPage() {
+export default function ExposureListPage({ params }: { params: { mjd: string[] } }) {
   const [data, setData] = React.useState<ExposureData[] | undefined>(undefined);
   const [mjds, setMJDs] = React.useState<number[]>([]);
-  const [currentMJD, setCurrentMJD] = React.useState<number | undefined>(undefined);
+  const [currentMJD, setCurrentMJD] = React.useState<number | undefined>(
+    params.mjd ? parseInt(params.mjd[0]) : undefined
+  );
   const [reloading, setReloading] = React.useState(false);
 
   const forceRefresh = React.useCallback(
@@ -213,6 +218,7 @@ export default function ExposureListPage() {
         <Stack p={8} mt={2} gap="md">
           <Title order={1}>Exposure List</Title>
           <ExposureListControls
+            mjd={currentMJD}
             mjds={mjds}
             forceRefresh={forceRefresh}
             setCurrentMJD={setCurrentMJD}
