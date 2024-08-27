@@ -3,7 +3,7 @@
   /* color: inherit;
   text-decoration: inherit; */
   border-radius: em(10px);
-  padding: em(6px);
+  padding: em(3px) em(6px);
   &[data-selected] {
     background-color: var(--icon-background-color);
   }
