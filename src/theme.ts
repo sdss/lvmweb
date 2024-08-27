@@ -23,7 +23,7 @@ export const theme = createTheme({
     xs: '30em',
     sm: '40em',
     md: '54em',
-    lg: '68em',
-    xl: '100em',
+    lg: '84em',
+    xl: '114em',
   },
 });

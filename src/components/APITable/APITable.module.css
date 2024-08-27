@@ -3,6 +3,9 @@
   border-left: 2px solid var(--mantine-color-dark-3);
   border-radius: rem(5px);
   height: fit-content;
+  width: em(450px);
+  max-width: em(450px);
+  min-width: em(450px);
 
   .header {
     background-color: var(--mantine-color-dark-6);
@@ -17,16 +20,11 @@
       align-content: center;
     }
   }
+}
+.refresh-button {
+  color: var(--mantine-color-gray-3);
 
-  .name_column {
-    vertical-align: text-top;
-  }
-
-  .refresh-button {
-    color: var(--mantine-color-gray-3);
-
-    &:hover {
-      color: var(--mantine-color-gray-6);
-    }
+  &:hover {
+    color: var(--mantine-color-gray-6);
   }
 }
