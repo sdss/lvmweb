@@ -117,13 +117,13 @@ function formatLine(line: string, key: number): React.ReactElement {
   let bgColor = 'inherit';
   if (line.includes('- ERROR -') || line.includes('- CRITICAL -')) {
     bgColor = 'red.9';
-  } else if (line.includes('- WARNING -')) {
-    bgColor = 'yellow.9';
   }
 
   let color = 'inherit';
   if (line.includes('- DEBUG -')) {
     color = 'gray.6';
+  } else if (line.includes('- WARNING -')) {
+    color = 'yellow.7';
   }
 
   return (
