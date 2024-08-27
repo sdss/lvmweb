@@ -20,6 +20,7 @@ import {
   ScrollArea,
   Skeleton,
   Stack,
+  Text,
   Title,
   Tooltip,
 } from '@mantine/core';
@@ -112,6 +113,26 @@ function LogControls(props: {
   );
 }
 
+function formatLine(line: string, key: number): React.ReactElement {
+  let bgColor = 'inherit';
+  if (line.includes('- ERROR -') || line.includes('- CRITICAL -')) {
+    bgColor = 'red.9';
+  } else if (line.includes('- WARNING -')) {
+    bgColor = 'yellow.9';
+  }
+
+  let color = 'inherit';
+  if (line.includes('- DEBUG -')) {
+    color = 'gray.6';
+  }
+
+  return (
+    <Text key={key} size="xs" c={color} bg={bgColor} px={16}>
+      {line}
+    </Text>
+  );
+}
+
 function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -133,8 +154,8 @@ function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <ScrollArea h="80vh" viewportRef={ref}>
-        <Code block style={{ padding: 16 }}>
-          {props.data}
+        <Code block px={0} py={16}>
+          {props.data.split('\n').map((line, index) => formatLine(line, index))}
         </Code>
       </ScrollArea>
     </Box>
@@ -142,7 +163,6 @@ function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
 }
 
 export default function GortLogPage({ params }: { params: { mjd: string[] } }) {
-  console.log(params);
   const [data, setData] = React.useState<string | undefined>(undefined);
   const [mjds, setMJDs] = React.useState<string[]>([]);
   const [currentMJD, setCurrentMJD] = React.useState<string | undefined>(
