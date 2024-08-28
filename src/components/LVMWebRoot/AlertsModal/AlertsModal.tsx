@@ -49,6 +49,10 @@ export default function AlertsModal(props: AlertsModalProps) {
       tempAlerts.push('Rain detected');
     }
 
+    if (alerts.wind_alert) {
+      tempAlerts.push('Wind is above 35 mph');
+    }
+
     setActiveAlerts(tempAlerts);
   }, [alerts]);
 
