@@ -21,16 +21,27 @@ type OverwatcherResponse = {
   observing: boolean;
   calibrating: boolean;
   allow_dome_calibrations: boolean;
+  safe: boolean;
+  night: boolean;
+  running_calibration: string | null;
 };
 
 type OverwatcherPillProps = {
   value: boolean | undefined;
   nodata: boolean;
   useErrorColour?: boolean;
+  noColor?: string;
+  yesColor?: string;
 };
 
 function OverwatcherPill(props: OverwatcherPillProps) {
-  const { value, nodata, useErrorColour = false } = props;
+  const {
+    value,
+    nodata,
+    useErrorColour = false,
+    yesColor = 'lime.9',
+    noColor = 'dark.5',
+  } = props;
 
   const text = value ? 'Yes' : 'No';
 
@@ -38,7 +49,7 @@ function OverwatcherPill(props: OverwatcherPillProps) {
   if (useErrorColour && !value) {
     colour = 'red.9';
   } else {
-    colour = value ? 'lime.9' : 'dark.5';
+    colour = value ? yesColor : noColor;
   }
 
   return (
@@ -85,6 +96,36 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
   );
 }
 
+function CalibrationGroup(props: {
+  data: OverwatcherResponse | null;
+  nodata: boolean;
+}) {
+  const { data, nodata } = props;
+
+  const tooltipText = `Running calibration: ${data?.running_calibration || ''}`;
+  return (
+    <Group gap="xs">
+      <OverwatcherPill value={true} nodata={nodata} />
+      <Box style={{ flexGrow: 1 }} />
+      <APIStatusText
+        nodata={nodata}
+        defaultTooltipText={tooltipText}
+        size="xs"
+        style={{
+          paddingRight: 16,
+          maxWidth: 190,
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          textAlign: 'right',
+        }}
+      >
+        {data?.running_calibration}
+      </APIStatusText>
+    </Group>
+  );
+}
+
 export default function OverwatcherTable() {
   const [data, , noData, refresh] = useAPICall<OverwatcherResponse>(
     '/overwatcher/status',
@@ -116,7 +157,17 @@ export default function OverwatcherTable() {
     {
       key: 'calibrating',
       label: 'Calibrating',
-      value: <OverwatcherPill value={data?.calibrating} nodata={noData} />,
+      value: <CalibrationGroup data={data} nodata={noData} />,
+    },
+    {
+      key: 'safe',
+      label: 'Safe',
+      value: <OverwatcherPill value={data?.safe} nodata={noData} noColor="red.9" />,
+    },
+    {
+      key: 'night',
+      label: 'Night',
+      value: <OverwatcherPill value={data?.night} nodata={noData} />,
     },
     {
       key: 'allow_dome_calibrations',
