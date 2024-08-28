@@ -112,7 +112,7 @@ function ExposureDataTable(props: {
   reloading: boolean;
 }) {
   if (!props.data) {
-    return <Skeleton height={600} w="100%" />;
+    return <Skeleton height="80vh" w="100%" />;
   }
 
   const { data, reloading = false } = props;
@@ -206,7 +206,7 @@ export default function ExposureListPage({ params }: { params: { mjd: string[] }
   }, []);
 
   React.useEffect(() => {
-    forceRefresh(false);
+    forceRefresh(true);
     const interval = setInterval(() => forceRefresh(false), 60000);
 
     return () => clearInterval(interval);
