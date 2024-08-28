@@ -21,17 +21,18 @@ type OverwatcherResponse = {
   observing: boolean;
   calibrating: boolean;
   allow_dome_calibrations: boolean;
-  safe: boolean;
-  night: boolean;
+  safe: boolean | null;
+  night: boolean | null;
   running_calibration: string | null;
 };
 
 type OverwatcherPillProps = {
-  value: boolean | undefined;
+  value: boolean | null | undefined;
   nodata: boolean;
   useErrorColour?: boolean;
   noColor?: string;
   yesColor?: string;
+  naColor?: string;
 };
 
 function OverwatcherPill(props: OverwatcherPillProps) {
@@ -41,13 +42,21 @@ function OverwatcherPill(props: OverwatcherPillProps) {
     useErrorColour = false,
     yesColor = 'lime.9',
     noColor = 'dark.5',
+    naColor = 'dark.5',
   } = props;
 
-  const text = value ? 'Yes' : 'No';
+  let text: string;
+  if (value === null || value === undefined) {
+    text = 'N/A';
+  } else {
+    text = value ? 'Yes' : 'No';
+  }
 
   let colour: string;
   if (useErrorColour && !value) {
     colour = 'red.9';
+  } else if (text === 'N/A') {
+    colour = naColor;
   } else {
     colour = value ? yesColor : noColor;
   }
@@ -61,15 +70,16 @@ function OverwatcherPill(props: OverwatcherPillProps) {
 
 interface EnabledGroupProps {
   route: string;
+  enabled?: boolean;
 }
 
 function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
-  const { route, value, nodata } = props;
+  const { route, value, nodata, enabled = true } = props;
 
-  const [isOn, setOn] = React.useState(value);
+  const [isOn, setOn] = React.useState(value || false);
 
   React.useEffect(() => {
-    setOn(value);
+    setOn(value || false);
   }, [value]);
 
   const handleEnabledChange = React.useCallback(() => {
@@ -91,6 +101,7 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
         onChange={handleEnabledChange}
         onLabel="ON"
         offLabel="OFF"
+        disabled={nodata || value === null || value === undefined || !enabled}
       />
     </Group>
   );
@@ -105,7 +116,7 @@ function CalibrationGroup(props: {
   const tooltipText = `Running calibration: ${data?.running_calibration || ''}`;
   return (
     <Group gap="xs">
-      <OverwatcherPill value={true} nodata={nodata} />
+      <OverwatcherPill value={data?.calibrating} nodata={nodata} />
       <Box style={{ flexGrow: 1 }} />
       <APIStatusText
         nodata={nodata}
@@ -146,6 +157,7 @@ export default function OverwatcherTable() {
           route="/overwatcher/status"
           value={data?.enabled}
           nodata={noData}
+          enabled={data?.running}
         />
       ),
     },
@@ -177,6 +189,7 @@ export default function OverwatcherTable() {
           route="/overwatcher/status/allow_dome_calibrations"
           value={data?.allow_dome_calibrations}
           nodata={noData}
+          enabled={data?.running}
         />
       ),
     },
