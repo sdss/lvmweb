@@ -16,6 +16,7 @@ type APIStatusTextProps = {
   defaultTooltipText?: string;
   children: React.ReactNode;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  color?: string;
 };
 
 export default function APIStatusText(props: APIStatusTextProps) {
@@ -26,6 +27,7 @@ export default function APIStatusText(props: APIStatusTextProps) {
     defaultTooltipText,
     children,
     size = 'sm',
+    color,
   } = props;
 
   const tooltipText = React.useMemo(() => {
@@ -48,6 +50,7 @@ export default function APIStatusText(props: APIStatusTextProps) {
         span
         data-nodata={nodata}
         data-error={error}
+        c={!nodata && !error ? color : 'undefined'}
       >
         {children}
       </Text>

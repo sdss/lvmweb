@@ -26,6 +26,7 @@ type WeatherResponse = {
   wind_speed_avg: number;
   wind_speed_max: number;
   wind_speed_avg_5m: number;
+  wind_speed_avg_30m: number;
   wind_dir_avg_5m: number;
   wind_gust_5m: number;
   relative_humidity: number;
@@ -33,6 +34,19 @@ type WeatherResponse = {
   rain_intensity: number;
   station: string;
 }[];
+
+function colourWindSpeed(speed: number | undefined) {
+  if (speed === undefined) return null;
+
+  let color: string | undefined = undefined;
+  if (speed >= 35) {
+    color = 'red.8';
+  } else if (speed >= 30) {
+    color = 'yellow.8';
+  }
+
+  return <APIStatusText color={color}>{speed.toFixed(1)} mph</APIStatusText>;
+}
 
 export default function WeatherTable() {
   const [weather, , noData, refresh] = useAPICall<WeatherResponse>(
@@ -77,9 +91,14 @@ export default function WeatherTable() {
       unit: ' mph',
     },
     {
+      key: 'wind_speed_30m',
+      label: 'Wind Speed (30m avg.)',
+      value: colourWindSpeed(weather?.[0]?.wind_speed_avg_30m),
+    },
+    {
       key: 'wind_gust',
-      label: 'Wind Gust (5m max.)',
-      value: weather?.[0]?.wind_gust_5m.toFixed(1),
+      label: 'Wind Gust (1m max.)',
+      value: weather?.[0]?.wind_speed_max.toFixed(1),
       unit: ' mph',
     },
     {
