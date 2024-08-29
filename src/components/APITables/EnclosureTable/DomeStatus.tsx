@@ -79,6 +79,9 @@ function DomeIcon(props: {
 function DomeIcons(props: { moving?: boolean }) {
   const [disabled, setDisabled] = React.useState(false);
 
+  const authStatus = React.useContext(AuthContext);
+  const notAuthed = !authStatus.logged;
+
   return (
     <>
       <Group gap={8}>
@@ -86,7 +89,7 @@ function DomeIcons(props: { moving?: boolean }) {
           icon={<IconArrowsMaximize size={18} />}
           tooltip="Open the dome"
           route="/enclosure/open/"
-          disabled={props.moving || disabled}
+          disabled={props.moving || disabled || notAuthed}
           setDisabled={setDisabled}
           taskName="open dome"
           task
@@ -95,7 +98,7 @@ function DomeIcons(props: { moving?: boolean }) {
           icon={<IconArrowsMinimize size={18} />}
           tooltip="Close the dome"
           route="/enclosure/close/"
-          disabled={props.moving || disabled}
+          disabled={props.moving || disabled || notAuthed}
           setDisabled={setDisabled}
           taskName="close dome"
           task
@@ -105,6 +108,7 @@ function DomeIcons(props: { moving?: boolean }) {
           tooltip="Stop the dome"
           route="/enclosure/stop/"
           color="red.9"
+          disabled={notAuthed}
         />
       </Group>
     </>

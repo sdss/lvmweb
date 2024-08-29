@@ -21,7 +21,8 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLock, IconLockOpen } from '@tabler/icons-react';
-import React from 'react';
+import React, { FormEvent } from 'react';
+import { AuthContext } from '../LVMWebRoot/LVMWebRoot';
 
 type AuthoriseModalProps = {
   opened: boolean;
@@ -35,29 +36,34 @@ function AuthoriseModal(props: AuthoriseModalProps) {
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState<string | null>(null);
 
-  const attemptAuth = React.useCallback(async () => {
-    const success = await authenticateAPI(password);
-    if (!success) {
-      setError('Authentication failed');
-      return;
-    }
+  const attemptAuth = React.useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    const isAuth = await testAuthentication();
-    if (!isAuth) {
-      setError('Authentication failed');
-      return;
-    }
+      const success = await authenticateAPI(password);
+      if (!success) {
+        setError('Authentication failed');
+        return;
+      }
 
-    close();
-  }, [password]);
+      const isAuth = await testAuthentication();
+      if (!isAuth) {
+        setError('Authentication failed');
+        return;
+      }
+
+      close();
+    },
+    [password, close]
+  );
 
   const doLogout = React.useCallback(async () => {
     await forgetAuth();
     close();
-  }, []);
+  }, [close]);
 
   const loginContents = (
-    <Stack>
+    <form onSubmit={attemptAuth}>
       <PasswordInput
         withAsterisk
         onChange={(event) => setPassword(event.currentTarget.value)}
@@ -68,9 +74,9 @@ function AuthoriseModal(props: AuthoriseModalProps) {
         data-autofocus
       />
       <Group justify="flex-end" mt="md">
-        <Button onClick={attemptAuth}>Submit</Button>
+        <Button type="submit">Submit</Button>
       </Group>
-    </Stack>
+    </form>
   );
 
   const logoutContents = (
@@ -99,45 +105,28 @@ function AuthoriseModal(props: AuthoriseModalProps) {
 }
 
 export default function AuthenticatedIcon() {
-  const [isAuth, setIsAuth] = React.useState(false);
-  const [trigger, setTrigger] = React.useState(1);
-
   const [modalOpened, { open, close }] = useDisclosure();
+  const authStatus = React.useContext(AuthContext);
 
   React.useEffect(() => {
-    testAuthentication().then((response) => setIsAuth(response));
-
-    const intervalID = setInterval(() => {
-      testAuthentication().then((response) => {
-        setIsAuth(response);
-      });
-    }, 10000);
-
-    return () => clearInterval(intervalID);
-  }, [trigger]);
-
-  React.useEffect(() => {
-    // Very hacky way to force a quick recheck of the authentication status
-    // after the modal closes.
-
     if (!modalOpened) {
-      setTrigger((prev) => prev + 1);
+      authStatus.check();
     }
-  }, [modalOpened]);
+  }, [modalOpened, authStatus]);
 
   return (
     <Box>
-      <Tooltip label={isAuth ? 'Authenticated' : 'Click to authenticate'}>
+      <Tooltip label={authStatus.logged ? 'Authenticated' : 'Click to authenticate'}>
         <ActionIcon
           variant="transparent"
           size="lg"
-          c={isAuth ? 'white' : 'yellow.6'}
+          c={authStatus.logged ? 'white' : 'yellow.6'}
           onClick={open}
         >
-          {isAuth ? <IconLock /> : <IconLockOpen />}
+          {authStatus.logged ? <IconLock /> : <IconLockOpen />}
         </ActionIcon>
       </Tooltip>
-      <AuthoriseModal opened={modalOpened} close={close} logout={isAuth} />
+      <AuthoriseModal opened={modalOpened} close={close} logout={authStatus.logged} />
     </Box>
   );
 }

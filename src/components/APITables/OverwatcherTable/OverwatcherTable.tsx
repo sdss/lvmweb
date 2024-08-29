@@ -77,6 +77,7 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
   const { route, value, nodata, enabled = true } = props;
 
   const [isOn, setOn] = React.useState(value || false);
+  const authStatus = React.useContext(AuthContext);
 
   React.useEffect(() => {
     setOn(value || false);
@@ -88,7 +89,7 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
     fetchFromAPI(fullRoute, { method: 'PUT' })
       .then(() => setOn((prev) => !prev))
       .catch(() => {});
-  }, [isOn]);
+  }, [isOn, route]);
 
   return (
     <Group>
@@ -101,7 +102,13 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
         onChange={handleEnabledChange}
         onLabel="ON"
         offLabel="OFF"
-        disabled={nodata || value === null || value === undefined || !enabled}
+        disabled={
+          nodata ||
+          value === null ||
+          value === undefined ||
+          !enabled ||
+          !authStatus.logged
+        }
       />
     </Group>
   );

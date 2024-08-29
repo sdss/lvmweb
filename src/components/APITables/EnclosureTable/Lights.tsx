@@ -8,6 +8,7 @@
 'use client';
 
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { ActionIcon, Box, Group, Pill, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconBulbOff } from '@tabler/icons-react';
@@ -16,18 +17,18 @@ import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 import { EnclosureResponse } from './types';
 
-function TurnLightsOffButton() {
+function TurnLightsOffButton(props: { disabled: boolean }) {
   const [opened, { open, close }] = useDisclosure();
 
   const handleClick = React.useCallback(() => {
     close();
     fetchFromAPI('/enclosure/lights/off/all').catch(() => {});
-  }, []);
+  }, [close]);
 
   return (
     <>
       <Tooltip label="Turn off all lamps">
-        <ActionIcon size="sm" onClick={open}>
+        <ActionIcon size="sm" onClick={open} disabled={props.disabled}>
           <IconBulbOff />
         </ActionIcon>
       </Tooltip>
@@ -35,10 +36,9 @@ function TurnLightsOffButton() {
         opened={opened}
         size="md"
         title="Confirm lights off"
-        // eslint-disable-next-line max-len
         message={
-          'Are you sure you want to turn off all lights? ' +
-          'Please confirm that nobody is currently inside the enclosure.'
+          'Are you sure you want to turn off all lights? Please confirm that ' +
+          'nobody is currently inside the enclosure.'
         }
         close={close}
         handleAction={handleClick}
@@ -52,6 +52,8 @@ export default function Lights(props: {
   noData: boolean;
 }) {
   const { enclosureStatus, noData } = props;
+
+  const AuthStatus = React.useContext(AuthContext);
 
   if (!enclosureStatus) {
     return null;
@@ -77,7 +79,7 @@ export default function Lights(props: {
       <Group gap="xs" pr={4}>
         {LightsPills}
         <Box style={{ flexGrow: 1 }} />
-        <TurnLightsOffButton />
+        <TurnLightsOffButton disabled={!AuthStatus.logged} />
       </Group>
     </>
   );
