@@ -3335,6 +3335,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/form@npm:^7.12.1":
+  version: 7.12.1
+  resolution: "@mantine/form@npm:7.12.1"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    klona: "npm:^2.0.6"
+  peerDependencies:
+    react: ^18.2.0
+  checksum: 10c0/d80835941b8c1d82626f2d66efbff062dba00bd88f3bff755d30d8b100312cb8b17e4aef1248207bdc97606f8d0bcb4233894c8341bc108e2b4797105260915f
+  languageName: node
+  linkType: hard
+
 "@mantine/hooks@npm:7.12.1":
   version: 7.12.1
   resolution: "@mantine/hooks@npm:7.12.1"
@@ -4794,6 +4806,13 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/0dd8fcf576e178e69cbc00d47be69d3198dca4d86734a00fc55de0df147982e0a5f34592117571c5979e92ce8f3e0596e31aa454496db8a43ab90c5ab1068f40
+  languageName: node
+  linkType: hard
+
+"@types/cookie@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@types/cookie@npm:0.6.0"
+  checksum: 10c0/5b326bd0188120fb32c0be086b141b1481fec9941b76ad537f9110e10d61ee2636beac145463319c71e4be67a17e85b81ca9e13ceb6e3bb63b93d16824d6c149
   languageName: node
   linkType: hard
 
@@ -7957,10 +7976,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:0.6.0":
+"cookie@npm:0.6.0, cookie@npm:^0.6.0":
   version: 0.6.0
   resolution: "cookie@npm:0.6.0"
   checksum: 10c0/f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
+  languageName: node
+  linkType: hard
+
+"cookies-next@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "cookies-next@npm:4.2.1"
+  dependencies:
+    "@types/cookie": "npm:^0.6.0"
+    cookie: "npm:^0.6.0"
+  checksum: 10c0/b9401feeb5614ecdc7114ea179fe24fffce7c586ac7810e57d74509a496be3d8deffc66289f5fc0ec28f34edce8dbb88567076305583e5c31f44b4c72f38a965
   languageName: node
   linkType: hard
 
@@ -12442,7 +12471,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"klona@npm:^2.0.4":
+"klona@npm:^2.0.4, klona@npm:^2.0.6":
   version: 2.0.6
   resolution: "klona@npm:2.0.6"
   checksum: 10c0/94eed2c6c2ce99f409df9186a96340558897b3e62a85afdc1ee39103954d2ebe1c1c4e9fe2b0952771771fa96d70055ede8b27962a7021406374fdb695fd4d01
@@ -12751,6 +12780,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@mantine/core": "npm:7.12.1"
+    "@mantine/form": "npm:^7.12.1"
     "@mantine/hooks": "npm:7.12.1"
     "@mantine/notifications": "npm:^7.12.1"
     "@next/bundle-analyzer": "npm:^14.2.6"
@@ -12774,6 +12804,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^7.18.0"
     "@visx/visx": "npm:^3.11.0"
     babel-loader: "npm:^9.1.3"
+    cookies-next: "npm:^4.2.1"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:19.0.4"
     eslint-config-airbnb-typescript: "npm:^18.0.0"

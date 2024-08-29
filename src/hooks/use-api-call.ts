@@ -30,7 +30,8 @@ export enum APICallStatus {
 
 export default function useAPICall<T>(
   route: string,
-  options: UseAPICallOptions
+  options: UseAPICallOptions,
+  needs_authentication: boolean = false
 ): UseAPICallResponse<T> {
   /** Performs an API call on an interval. */
 
@@ -51,12 +52,12 @@ export default function useAPICall<T>(
   }, [status]);
 
   const callback = React.useCallback(() => {
-    fetchFromAPI<T>(route, baseURL)
+    fetchFromAPI<T>(route, { baseURL }, needs_authentication)
       .then((dd) => {
         setData(dd);
         setStatus(APICallStatus.OK);
       })
-      .catch(() => {
+      .catch((err) => {
         setStatus(APICallStatus.ERROR);
       });
   }, [baseURL, route]);

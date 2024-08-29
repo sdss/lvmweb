@@ -85,7 +85,7 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
   const handleEnabledChange = React.useCallback(() => {
     // Send API request to change value
     const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
-    fetchFromAPI(fullRoute, undefined, { method: 'PUT' })
+    fetchFromAPI(fullRoute, { method: 'PUT' })
       .then(() => setOn((prev) => !prev))
       .catch(() => {});
   }, [isOn]);

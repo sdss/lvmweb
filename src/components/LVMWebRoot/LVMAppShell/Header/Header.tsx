@@ -6,6 +6,7 @@
  */
 
 import AlertsActionIcon from '@/src/components/AlertsActionIcon/AlertsActionIcon';
+import AuthenticatedIcon from '@/src/components/AuthenticatedIcon/AuthenticatedIcon';
 import useAlertsContext from '@/src/hooks/use-alerts-context';
 import { Box, Group, Image, rem, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -88,6 +89,7 @@ export default function Header() {
           <Group gap="xs">
             <AlertsActionIcon />
             <ShutdownActionIcon />
+            <AuthenticatedIcon />
           </Group>
         </Group>
       </Box>

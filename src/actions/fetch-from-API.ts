@@ -7,19 +7,41 @@
 
 'use server';
 
+import { cookies } from 'next/headers';
+import { AuthenticationError } from '../types';
+
 export default async function fetchFromAPI<T>(
   route: string,
-  baseURL: string | undefined = undefined,
-  opts: RequestInit = {}
+  opts: RequestInit & { baseURL?: string } = {},
+  needs_authentication: boolean = false
 ): Promise<T> {
-  if (!baseURL) {
-    baseURL = process.env.LVM_API_BASE_URL;
-  }
+  /** Fetches data from the API. */
+
+  let { baseURL, ...fetchOpts } = opts;
+  baseURL = baseURL || process.env.LVM_API_BASE_URL;
 
   const url = new URL(route, baseURL).toString();
 
-  const response = await fetch(url, opts);
+  if (needs_authentication) {
+    const token = cookies().get('apiToken');
+
+    if (token === undefined) {
+      throw new AuthenticationError('No API token found.');
+    }
+
+    fetchOpts.headers = {
+      ...fetchOpts.headers,
+      Authorization: `Bearer ${token.value}`,
+    };
+  }
+
+  const response = await fetch(url, fetchOpts);
   if (!response.ok) {
+    if (response.status === 401) {
+      cookies().delete('apiToken');
+      throw new AuthenticationError('Authentication error');
+    }
+
     throw new Error(`Failed to fetch from API: ${response.statusText}`);
   }
 
