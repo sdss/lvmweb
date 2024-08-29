@@ -52,6 +52,9 @@ function updateNotification(
   return notifications.show(data);
 }
 
+const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
+const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+
 export default function useTask<T>(
   options?: UseTaskOptions
 ): [(route: string) => Promise<T | undefined>, boolean] {
@@ -65,20 +68,11 @@ export default function useTask<T>(
   } = options || {};
 
   const [isRunning, setIsRunning] = React.useState(false);
-  const [taskID, setTaskID] = React.useState<string | null>(null);
-  const [notifID, setNotifID] = React.useState<string | undefined>(undefined);
+
+  const taskID = React.useRef<string | null>(null);
+  const notifID = React.useRef<string | undefined>(undefined);
 
   const { defer, deferRef } = useDeferredPromise<T | undefined>();
-
-  const xIcon = React.useMemo(
-    () => <IconX style={{ width: rem(20), height: rem(20) }} />,
-    []
-  );
-
-  const checkIcon = React.useMemo(
-    () => <IconCheck style={{ width: rem(20), height: rem(20) }} />,
-    []
-  );
 
   const failTask = React.useCallback(
     (error: unknown) => {
@@ -89,7 +83,7 @@ export default function useTask<T>(
         message = `Task ${taskName} failed.`;
       }
 
-      updateNotification(showNotifications, notifID, true, {
+      updateNotification(showNotifications, notifID.current, true, {
         title: 'Task failed',
         message,
         icon: xIcon,
@@ -99,94 +93,101 @@ export default function useTask<T>(
         withCloseButton: true,
       });
       setIsRunning(false);
-      setTaskID(null);
+      taskID.current = null;
       deferRef?.reject(new Error(message));
     },
-    [notifID, showNotifications, taskName, notifyErrors, deferRef, xIcon]
+    [showNotifications, taskName, notifyErrors, deferRef]
   );
 
   React.useEffect(() => {
     /** Monitor the running task until it's done. Resolve/fail promise and notify. */
 
-    if (!isRunning || !taskID) return () => {};
+    if (!isRunning || !taskID.current) return () => {};
+
+    let isReady = false;
+    let isGettingResult = false;
 
     const id = setInterval(() => {
-      fetchFromAPI<boolean>(`/tasks/${taskID}/ready`)
-        .then((isReady) => {
-          if (isReady) {
-            fetchFromAPI<ResultType<T>>(`/tasks/${taskID}/result`)
-              .then((result) => {
-                if (result.is_err) {
-                  failTask(result.error);
-                } else {
-                  deferRef?.resolve(result.return_value);
+      // Prevent multiple checks from running at the same time.
+      if (isGettingResult) return;
 
-                  updateNotification(showNotifications, notifID, true, {
-                    title: 'Task complete',
-                    message: `Task "${taskName}" completed.`,
-                    color: 'teal',
-                    icon: checkIcon,
-                    autoClose: 10000,
-                    withCloseButton: true,
-                    loading: false,
-                  });
-                }
-              })
-              .catch((err) => {
-                failTask(err);
-              })
-              .finally(() => {
-                setIsRunning(false);
-                setTaskID(null);
+      if (!isReady) {
+        fetchFromAPI<boolean>(`/tasks/${taskID.current}/ready`)
+          .then((response) => {
+            isReady = response;
+          })
+          .catch((err) => {
+            failTask(err);
+            setIsRunning(false);
+            taskID.current = null;
+          });
+      } else {
+        isGettingResult = true;
+
+        fetchFromAPI<ResultType<T>>(`/tasks/${taskID.current}/result`)
+          .then((result) => {
+            if (result.is_err) {
+              failTask(result.error);
+            } else {
+              deferRef?.resolve(result.return_value);
+
+              updateNotification(showNotifications, notifID.current, true, {
+                title: 'Task complete',
+                message: `Task "${taskName}" completed.`,
+                color: 'teal',
+                icon: checkIcon,
+                autoClose: 10000,
+                withCloseButton: true,
+                loading: false,
               });
-          }
-        })
-        .catch((err) => {
-          failTask(err);
-        });
+            }
+          })
+          .catch((err) => {
+            failTask(err);
+          })
+          .finally(() => {
+            setIsRunning(false);
+            taskID.current = null;
+          });
+      }
     }, checkInterval);
 
-    return () => clearInterval(id);
-  }, [
-    isRunning,
-    taskID,
-    checkInterval,
-    showNotifications,
-    notifID,
-    taskName,
-    deferRef,
-    failTask,
-    checkIcon,
-  ]);
+    return () => {
+      return clearInterval(id);
+    };
+  }, [isRunning, checkInterval, showNotifications, taskName, deferRef, failTask]);
 
   const runner = React.useCallback(
     (route: string) => {
       /** Call the task API route and schedule the task for completion.
-       * This should return quickly with the task ID.
+       *  This should return quickly with the task ID.
        */
-
-      setIsRunning(true);
 
       fetchFromAPI<string>(route)
         .then((tid) => {
-          setTaskID(tid);
+          taskID.current = tid;
+          notifID.current = updateNotification(
+            showNotifications,
+            notifID.current,
+            false,
+            {
+              title: 'Task started',
+              message: `Task "${taskName || tid}" has started running.`,
+              loading: true,
+              autoClose: false,
+              withCloseButton: false,
+            }
+          );
 
-          const _nID = updateNotification(showNotifications, notifID, false, {
-            title: 'Task started',
-            message: `Task "${taskName || tid}" has started running.`,
-            loading: true,
-            autoClose: false,
-            withCloseButton: false,
-          });
-          setNotifID(_nID);
+          setIsRunning(true);
         })
         .catch(() => {
           deferRef?.reject(new Error('Task failed to start.'));
 
           setIsRunning(false);
-          setTaskID(null);
+          taskID.current = null;
 
-          updateNotification(showNotifications, notifID, false, {
+          updateNotification(showNotifications, notifID.current, false, {
             title: 'Task failed',
             message: `Task "${taskName}" failed while being scheduled.`,
             loading: false,
@@ -198,7 +199,7 @@ export default function useTask<T>(
 
       return defer().promise;
     },
-    [defer, deferRef, notifID, showNotifications, taskName, xIcon]
+    [defer, deferRef, showNotifications, taskName]
   );
 
   return [runner, isRunning];
