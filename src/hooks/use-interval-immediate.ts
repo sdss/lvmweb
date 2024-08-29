@@ -8,14 +8,16 @@
 import React from 'react';
 import { useInterval } from 'react-use';
 
-export default function useIntervalImmediate(callback: Function, delay: number) {
+export default function useIntervalImmediate(callback: () => unknown, delay: number) {
   /** A simple wrapper around useInterval that runs the callback once initially. */
+
+  const refCB = React.useRef(callback);
 
   // Initial call
   React.useEffect(() => {
-    callback();
+    refCB.current();
   }, []);
 
   // Subsequent calls. The first call starts after delay ms.
-  useInterval(callback, delay);
+  useInterval(refCB.current, delay);
 }

@@ -27,8 +27,8 @@ export default async function authenticateAPI(password: string) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     cookies().set('apiToken', response.access_token, { httpOnly: true });
-  } catch (error: any) {
-    console.error(`Failed to get API token: ${error.message}`);
+  } catch (error) {
+    console.error(`Failed to get API token: ${(error as Error).message}`);
     return false;
   }
 
@@ -40,7 +40,7 @@ export async function testAuthentication() {
 
   try {
     await fetchFromAPI('/auth/test', {}, true);
-  } catch (error: any) {
+  } catch (error) {
     return false;
   }
 

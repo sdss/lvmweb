@@ -59,7 +59,7 @@ export default function AlertsModal(props: AlertsModalProps) {
   const shutDown = React.useCallback(() => {
     close();
     runner('/macros/shutdown/').catch(() => {});
-  }, []);
+  }, [close, runner]);
 
   return (
     <Modal

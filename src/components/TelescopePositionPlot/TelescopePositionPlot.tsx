@@ -98,13 +98,13 @@ export default function TelescopePositionPlot(props: TelescopePositionPlotProps)
       const { x, y } = polar_to_cartesian(28.5, values[i]);
       return [x, y, tick];
     });
-  }, [padding]);
+  }, [polar_to_cartesian]);
 
   const telCoordinates = React.useMemo(() => {
     if (!coordinates) return {};
 
     const valid = Object.fromEntries(
-      Object.entries(coordinates).filter(([tel, value]) => value.alt > 30)
+      Object.entries(coordinates).filter(([, value]) => value.alt > 30)
     );
 
     return Object.fromEntries(
@@ -113,7 +113,7 @@ export default function TelescopePositionPlot(props: TelescopePositionPlotProps)
         polar_to_cartesian(value.alt, value.az),
       ])
     );
-  }, [coordinates]);
+  }, [coordinates, polar_to_cartesian]);
 
   // Set the scale for the figure size and reverse it for the grid.
   yScale.range([0, height / 2 - padding]);

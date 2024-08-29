@@ -8,13 +8,13 @@
 'use client';
 
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
+import ConfirmationModal from '@/src/components/ConfirmationModal/ConfirmationModal';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { ActionIcon, Box, Group, Pill, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconBulbOff } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
-import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 import { EnclosureResponse } from './types';
 
 function TurnLightsOffButton(props: { disabled: boolean }) {

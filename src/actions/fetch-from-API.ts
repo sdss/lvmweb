@@ -17,8 +17,8 @@ export default async function fetchFromAPI<T>(
 ): Promise<T> {
   /** Fetches data from the API. */
 
-  let { baseURL, ...fetchOpts } = opts;
-  baseURL = baseURL || process.env.LVM_API_BASE_URL;
+  const baseURL = opts.baseURL || process.env.LVM_API_BASE_URL;
+  delete opts.baseURL;
 
   const url = new URL(route, baseURL).toString();
 
@@ -29,13 +29,13 @@ export default async function fetchFromAPI<T>(
       throw new AuthenticationError('No API token found.');
     }
 
-    fetchOpts.headers = {
-      ...fetchOpts.headers,
+    opts.headers = {
+      ...opts.headers,
       Authorization: `Bearer ${token.value}`,
     };
   }
 
-  const response = await fetch(url, fetchOpts);
+  const response = await fetch(url, opts);
   if (!response.ok) {
     if (response.status === 401) {
       cookies().delete('apiToken');

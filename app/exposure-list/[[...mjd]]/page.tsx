@@ -63,16 +63,18 @@ function ExposureListControls(props: {
     props.mjd?.toString()
   );
 
+  const { mjds, setCurrentMJD, forceRefresh } = props;
+
   React.useEffect(() => {
-    if (props.mjds.length === 0) return;
+    if (mjds.length === 0) return;
 
     if (!selected) {
-      setSelected(props.mjds[props.mjds.length - 1].toString());
-      props.setCurrentMJD(props.mjds[props.mjds.length - 1]);
+      setSelected(mjds[mjds.length - 1].toString());
+      setCurrentMJD(mjds[mjds.length - 1]);
     }
-  }, [props.mjds]);
+  }, [mjds, selected, setCurrentMJD]);
 
-  if (props.mjds.length === 0) {
+  if (mjds.length === 0) {
     return (
       <Group justify="flex-end" gap="lg">
         <Skeleton width={100} height={36} />
@@ -87,9 +89,9 @@ function ExposureListControls(props: {
         value={selected}
         onChange={(event) => {
           setSelected(event.currentTarget.value);
-          props.setCurrentMJD(parseInt(event.currentTarget.value, 10));
+          setCurrentMJD(parseInt(event.currentTarget.value, 10));
         }}
-        data={props.mjds.map((m) => m.toString())}
+        data={mjds.map((m) => m.toString())}
         h={36}
       />
       <Tooltip label="Refresh" position="right">
@@ -98,7 +100,7 @@ function ExposureListControls(props: {
           w={36}
           variant="transparent"
           color="dark.0"
-          onClick={props.forceRefresh}
+          onClick={forceRefresh}
         >
           <IconRefresh />
         </ActionIcon>
@@ -210,7 +212,7 @@ export default function ExposureListPage({ params }: { params: { mjd: string[] }
     const interval = setInterval(() => forceRefresh(false), 60000);
 
     return () => clearInterval(interval);
-  }, [currentMJD]);
+  }, [currentMJD, forceRefresh]);
 
   return (
     <>

@@ -73,7 +73,7 @@ function SpecTemperatures(
         </React.Fragment>
       );
     },
-    [specs, nodata]
+    [specs, nodata, threshold]
   );
 
   return (

@@ -8,6 +8,9 @@
 'use client';
 
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
+import ConfirmationModal from '@/src/components/ConfirmationModal/ConfirmationModal';
+import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useTask from '@/src/hooks/use-task';
 import { ActionIcon, Box, Group, Pill, Progress, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -17,8 +20,6 @@ import {
   IconHandStop,
 } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
-import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 
 function DomeIcon(props: {
   icon: React.ReactNode;
@@ -56,7 +57,7 @@ function DomeIcon(props: {
         .catch(() => {})
         .finally(() => setDisabled && setDisabled(false));
     }
-  }, [route, close]);
+  }, [route, close, isRunning, runner, setDisabled, task]);
 
   return (
     <>

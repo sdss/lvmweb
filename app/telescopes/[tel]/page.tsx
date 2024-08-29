@@ -19,8 +19,6 @@ export default function TelescopePage({ params }: { params: { tel: string } }) {
   const { tel } = params;
   const BASE_URL = 'http://localhost:8080/';
 
-  if (!tel) return null;
-
   React.useEffect(() => {
     if (tel === 'motan') {
       setSrc(`${BASE_URL}/motan/default`);
@@ -47,6 +45,8 @@ export default function TelescopePage({ params }: { params: { tel: string } }) {
       }
     }
   }, [tel]);
+
+  if (!tel) return null;
 
   if (tel == 'position') {
     return (

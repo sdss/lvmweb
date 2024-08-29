@@ -57,10 +57,10 @@ export default function useAPICall<T>(
         setData(dd);
         setStatus(APICallStatus.OK);
       })
-      .catch((err) => {
+      .catch(() => {
         setStatus(APICallStatus.ERROR);
       });
-  }, [baseURL, route]);
+  }, [baseURL, route, needs_authentication]);
 
   useIntervalImmediate(() => {
     setStatus(APICallStatus.FETCHING);

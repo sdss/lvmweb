@@ -63,7 +63,7 @@ function RetartActor(props: { actor: string; refreshData: () => void }) {
     runner(`/actors/restart/${actor}`)
       .catch(() => {})
       .finally(refreshData);
-  }, [actor]);
+  }, [actor, close, refreshData, runner]);
 
   return (
     <>

@@ -9,22 +9,32 @@ import fetchFromAPI from './fetch-from-API';
 
 export default async function fetchTask<T>(
   route: string,
-  checkInterval: number = 1000
+  checkInterval: number = 1000,
+  timeout: number = 60000
 ): Promise<T> {
   const task_id = await fetchFromAPI<T>(route);
 
-  let data: T;
+  let data: T | undefined = undefined;
+  let elapsedTime = 0;
 
-  while (true) {
+  while (elapsedTime < timeout) {
     const result = await fetchFromAPI<boolean>(`/tasks/${task_id}/ready`);
     if (result) {
-      const response = await fetchFromAPI<any>(`/tasks/${task_id}/result`);
+      const response = await fetchFromAPI<{ return_value: T }>(
+        `/tasks/${task_id}/result`
+      );
       data = response.return_value;
       break;
     }
     await new Promise((resolve) => {
       setTimeout(resolve, checkInterval);
     });
+
+    elapsedTime += checkInterval;
+  }
+
+  if (data === undefined) {
+    throw new Error('Task timed out.');
   }
 
   return data;

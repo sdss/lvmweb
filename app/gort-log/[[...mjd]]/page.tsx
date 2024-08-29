@@ -52,17 +52,19 @@ function LogControls(props: {
   const [selected, setSelected] = React.useState<string | undefined>(props.mjd);
   const [nLinesSelect, setNLinesSelect] = React.useState<string>('1000');
 
+  const { mjds, setCurrentMJD, setNLines, forceRefresh } = props;
+
   React.useEffect(() => {
-    if (props.mjds.length === 0) return;
+    if (mjds.length === 0) return;
 
     if (!selected) {
-      setSelected(props.mjds[props.mjds.length - 1].toString());
-      props.setCurrentMJD(props.mjds[props.mjds.length - 1]);
-      props.setNLines(1000);
+      setSelected(mjds[mjds.length - 1].toString());
+      setCurrentMJD(mjds[mjds.length - 1]);
+      setNLines(1000);
     }
-  }, [props.mjds]);
+  }, [mjds, selected, setCurrentMJD, setNLines]);
 
-  if (props.mjds.length === 0) {
+  if (mjds.length === 0) {
     return (
       <Group justify="flex-end" gap="lg">
         <Skeleton width={100} height={36} />
@@ -78,16 +80,16 @@ function LogControls(props: {
         value={selected}
         onChange={(event) => {
           setSelected(event.currentTarget.value);
-          props.setCurrentMJD(event.currentTarget.value);
+          setCurrentMJD(event.currentTarget.value);
         }}
-        data={props.mjds.map((m) => m.toString())}
+        data={mjds.map((m) => m.toString())}
         h={36}
       />
       <NativeSelect
         value={nLinesSelect}
         onChange={(event) => {
           setNLinesSelect(event.currentTarget.value);
-          props.setNLines(parseInt(event.currentTarget.value, 10));
+          setNLines(parseInt(event.currentTarget.value, 10));
         }}
         data={[
           { label: '100', value: '100' },
@@ -104,7 +106,7 @@ function LogControls(props: {
           w={36}
           variant="transparent"
           color="dark.0"
-          onClick={props.forceRefresh}
+          onClick={forceRefresh}
         >
           <IconRefresh />
         </ActionIcon>
@@ -195,7 +197,7 @@ export default function GortLogPage({ params }: { params: { mjd: string[] } }) {
     const interval = setInterval(forceRefresh, 60000);
 
     return () => clearInterval(interval);
-  }, [currentMJD, nLines]);
+  }, [currentMJD, nLines, forceRefresh]);
 
   return (
     <>

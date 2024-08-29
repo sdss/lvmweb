@@ -8,12 +8,13 @@
 'use client';
 
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
+import APITable from '@/src/components/APITable/APITable';
+import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import { Box, Group, Pill, Switch } from '@mantine/core';
 import { IconRobot } from '@tabler/icons-react';
 import React from 'react';
-import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
-import APITable from '../../APITable/APITable';
 
 type OverwatcherResponse = {
   running: boolean;

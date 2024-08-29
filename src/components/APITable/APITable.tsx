@@ -23,10 +23,12 @@ import React from 'react';
 import APIStatusText from './APIStatusText/APIStatusText';
 import classses from './APITable.module.css';
 
+type ValueType = React.JSX.Element | number | string | null | undefined;
+
 type Element = {
   key: string;
   label: string | undefined;
-  value: any | undefined;
+  value: ValueType;
   unit?: string;
   valign?: string;
 };
@@ -102,13 +104,16 @@ export default function APITable(props: {
   );
 
   React.useEffect(() => {
-    if (!initialised && !noData) {
-      setInitialised(true);
-    }
+    setInitialised((prevValue) => {
+      if (!prevValue && !noData) {
+        return true;
+      }
+      return prevValue;
+    });
   }, [noData]);
 
   const rows = elements.map((element) => {
-    let value = getValue(element);
+    let value: ValueType = getValue(element);
     let colspan = 1;
     let isSpan = false;
 

@@ -1,28 +1,17 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
 module.exports = {
-  extends: ['mantine', 'plugin:@next/next/recommended', 'plugin:jest/recommended'],
-  plugins: ['testing-library', 'jest'],
-  overrides: [
-    {
-      files: ['**/?(*.)+(spec|test).[jt]s?(x)'],
-      extends: ['plugin:testing-library/react'],
-    },
+  extends: [
+    'next/core-web-vitals',
+    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
-  parserOptions: {
-    // parser: '@typescript-eslint/parser',
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
-  },
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  root: true,
   rules: {
-    'react/react-in-jsx-scope': 'off',
-    'import/extensions': 'off',
-    'max-len': ['error', { code: 88 }],
-    'import/order': 'off',
-    'no-constant-condition': 'off',
+    'max-len': [
+      'error',
+      { code: 88, ignorePattern: '^import\\s.+\\sfrom\\s.+;$', ignoreUrls: true },
+    ],
   },
 };

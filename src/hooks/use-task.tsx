@@ -52,9 +52,9 @@ function updateNotification(
   return notifications.show(data);
 }
 
-export default function useTask<T = any>(
+export default function useTask<T>(
   options?: UseTaskOptions
-): [Function, boolean] {
+): [(route: string) => Promise<T | undefined>, boolean] {
   /** Starts a task and returns a promise that resolves when the task is complete. */
 
   const {
@@ -70,11 +70,18 @@ export default function useTask<T = any>(
 
   const { defer, deferRef } = useDeferredPromise<T | undefined>();
 
-  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
-  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
+  const xIcon = React.useMemo(
+    () => <IconX style={{ width: rem(20), height: rem(20) }} />,
+    []
+  );
+
+  const checkIcon = React.useMemo(
+    () => <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+    []
+  );
 
   const failTask = React.useCallback(
-    (error: any) => {
+    (error: unknown) => {
       let message: string;
       if (notifyErrors && error) {
         message = `Task ${taskName} failed with error: ${error}`;
@@ -95,7 +102,7 @@ export default function useTask<T = any>(
       setTaskID(null);
       deferRef?.reject(new Error(message));
     },
-    [notifID, showNotifications]
+    [notifID, showNotifications, taskName, notifyErrors, deferRef, xIcon]
   );
 
   React.useEffect(() => {
@@ -140,46 +147,59 @@ export default function useTask<T = any>(
     }, checkInterval);
 
     return () => clearInterval(id);
-  }, [isRunning, taskID]);
+  }, [
+    isRunning,
+    taskID,
+    checkInterval,
+    showNotifications,
+    notifID,
+    taskName,
+    deferRef,
+    failTask,
+    checkIcon,
+  ]);
 
-  const runner = React.useCallback((route: string) => {
-    /** Call the task API route and schedule the task for completion.
-     * This should return quickly with the task ID.
-     */
+  const runner = React.useCallback(
+    (route: string) => {
+      /** Call the task API route and schedule the task for completion.
+       * This should return quickly with the task ID.
+       */
 
-    setIsRunning(true);
+      setIsRunning(true);
 
-    fetchFromAPI<string>(route)
-      .then((tid) => {
-        setTaskID(tid);
+      fetchFromAPI<string>(route)
+        .then((tid) => {
+          setTaskID(tid);
 
-        const _nID = updateNotification(showNotifications, notifID, false, {
-          title: 'Task started',
-          message: `Task "${taskName || tid}" has started running.`,
-          loading: true,
-          autoClose: false,
-          withCloseButton: false,
+          const _nID = updateNotification(showNotifications, notifID, false, {
+            title: 'Task started',
+            message: `Task "${taskName || tid}" has started running.`,
+            loading: true,
+            autoClose: false,
+            withCloseButton: false,
+          });
+          setNotifID(_nID);
+        })
+        .catch(() => {
+          deferRef?.reject(new Error('Task failed to start.'));
+
+          setIsRunning(false);
+          setTaskID(null);
+
+          updateNotification(showNotifications, notifID, false, {
+            title: 'Task failed',
+            message: `Task "${taskName}" failed while being scheduled.`,
+            loading: false,
+            icon: xIcon,
+            color: 'red',
+            autoClose: 10000,
+          });
         });
-        setNotifID(_nID);
-      })
-      .catch(() => {
-        deferRef?.reject(new Error('Task failed to start.'));
 
-        setIsRunning(false);
-        setTaskID(null);
-
-        updateNotification(showNotifications, notifID, false, {
-          title: 'Task failed',
-          message: `Task "${taskName}" failed while being scheduled.`,
-          loading: false,
-          icon: xIcon,
-          color: 'red',
-          autoClose: 10000,
-        });
-      });
-
-    return defer().promise;
-  }, []);
+      return defer().promise;
+    },
+    [defer, deferRef, notifID, showNotifications, taskName, xIcon]
+  );
 
   return [runner, isRunning];
 }

@@ -22,11 +22,15 @@ export default function Header() {
   const alerts = useAlertsContext();
 
   const [isAlert, setIsAlert] = React.useState(false);
-  const [notifID, setNotifID] = React.useState<string | undefined>(undefined);
+
+  const notifID = React.useRef<string | undefined>(undefined);
 
   const [alertsOpened, { open: openAlerts, close: closeAlerts }] = useDisclosure(false);
 
-  const eIcon = <IconExclamationCircle style={{ width: rem(24), height: rem(24) }} />;
+  const eIcon = React.useMemo(
+    () => <IconExclamationCircle style={{ width: rem(24), height: rem(24) }} />,
+    []
+  );
 
   React.useEffect(() => {
     if (!alerts) return;
@@ -36,7 +40,7 @@ export default function Header() {
 
   React.useEffect(() => {
     if (isAlert) {
-      const func = notifID ? notifications.update : notifications.show;
+      const func = notifID.current ? notifications.update : notifications.show;
       const newNotifID = func({
         title: 'There are active alerts',
         message: (
@@ -62,16 +66,16 @@ export default function Header() {
         },
       });
 
-      if (!notifID) {
+      if (!notifID.current) {
         openAlerts();
       }
 
-      setNotifID(newNotifID);
-    } else if (notifID) {
-      notifications.hide(notifID);
-      setNotifID(undefined);
+      notifID.current = newNotifID;
+    } else if (notifID.current) {
+      notifications.hide(notifID.current);
+      notifID.current = undefined;
     }
-  }, [isAlert]);
+  }, [isAlert, openAlerts, eIcon]);
 
   return (
     <>
@@ -79,7 +83,7 @@ export default function Header() {
         <Group className={classes.group}>
           <Link href="/">
             <Group>
-              <Image src="/lvmweb/lvm_logo.png" h={44} />
+              <Image src="/lvmweb/lvm_logo.png" h={44} alt="LVM logo" />
               <Title order={3} className={classes.title}>
                 LVM Web
               </Title>
