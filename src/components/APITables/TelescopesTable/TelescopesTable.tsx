@@ -48,7 +48,7 @@ function ParkButton() {
 function TelescopeParked(props: TelescopeParkedProps) {
   const { data } = props;
 
-  const Pills = TELESCOPES.map((tel) => {
+  let Pills = TELESCOPES.map((tel) => {
     const telData = data?.[tel];
     const parked = telData?.is_parked;
 
@@ -62,8 +62,7 @@ function TelescopeParked(props: TelescopeParkedProps) {
       color = 'blue';
       tooltip = 'Parked';
     } else {
-      color = 'orange.9';
-      tooltip = 'Not parked';
+      return null; // No pill for unparked telescopes
     }
 
     return (
@@ -76,6 +75,10 @@ function TelescopeParked(props: TelescopeParkedProps) {
       </Tooltip>
     );
   });
+
+  if (Pills.filter((p) => p !== null).length === 0) {
+    Pills = [<APIStatusText key="no-parked">No parked telescopes</APIStatusText>];
+  }
 
   return (
     <Group gap="xs" pr={4}>
