@@ -31,7 +31,7 @@ export type CameraAlerts =
 export type O2Rooms = 'o2_util_room' | 'o2_spec_room';
 
 export interface AlertsResponse {
-  temperature_alert: boolean;
+  camera_temperature_alert: boolean;
   camera_alerts: { [key in CameraAlerts]: boolean };
   o2_alert: boolean;
   o2_room_alerts: { [key in O2Rooms]: boolean };
@@ -72,7 +72,11 @@ export default function useAlerts(interval: number = 15000): AlertsModel | undef
     const newAlerts = {
       ...alertsAPI,
       global_alert:
-        alertsAPI.temperature_alert || alertsAPI.rain || alertsAPI.wind_alert,
+        alertsAPI.camera_temperature_alert === true ||
+        alertsAPI.rain === true ||
+        alertsAPI.wind_alert === true ||
+        alertsAPI.dew_point_alert === true ||
+        alertsAPI.humidity_alert === true,
       camera_active_alerts: tempAlerts as CameraAlerts[],
       o2_active_alerts: o2Alerts as O2Rooms[],
     };

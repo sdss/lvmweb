@@ -34,23 +34,27 @@ export default function AlertsModal(props: AlertsModalProps) {
     }
 
     alerts.camera_active_alerts.forEach((camera) => {
-      tempAlerts.push(`Camera ${camera} alert`);
+      tempAlerts.push(`Camera ${camera} alert.`);
     });
 
     if (alerts.o2_active_alerts.includes('o2_util_room')) {
-      tempAlerts.push('Oxygen utility room alert');
+      tempAlerts.push('Oxygen utility room alert.');
     }
 
     if (alerts.o2_active_alerts.includes('o2_spec_room')) {
-      tempAlerts.push('Oxygen spectrograph room alert');
+      tempAlerts.push('Oxygen spectrograph room alert.');
     }
 
     if (alerts.rain) {
-      tempAlerts.push('Rain detected');
+      tempAlerts.push('Rain detected.');
+    } else if (alerts.humidity_alert) {
+      tempAlerts.push('Humidity is above 80%.');
+    } else if (alerts.dew_point_alert) {
+      tempAlerts.push('Ambient temperature is below dew point. Risk of condensation.');
     }
 
     if (alerts.wind_alert) {
-      tempAlerts.push('Wind is above 35 mph');
+      tempAlerts.push('Wind levels are unsafe.');
     }
 
     setActiveAlerts(tempAlerts);
