@@ -18,6 +18,8 @@ import ShutdownActionIcon from '../../../ShutdownActionIcon/ShutdownActionIcon';
 import AlertsModal from '../../AlertsModal/AlertsModal';
 import classes from './Header.module.css';
 
+const eIcon = <IconExclamationCircle style={{ width: rem(24), height: rem(24) }} />;
+
 export default function Header() {
   const alerts = useAlertsContext();
 
@@ -26,11 +28,6 @@ export default function Header() {
   const notifID = React.useRef<string | undefined>(undefined);
 
   const [alertsOpened, { open: openAlerts, close: closeAlerts }] = useDisclosure(false);
-
-  const eIcon = React.useMemo(
-    () => <IconExclamationCircle style={{ width: rem(24), height: rem(24) }} />,
-    []
-  );
 
   React.useEffect(() => {
     if (!alerts) return;
@@ -74,8 +71,9 @@ export default function Header() {
     } else if (notifID.current) {
       notifications.hide(notifID.current);
       notifID.current = undefined;
+      closeAlerts();
     }
-  }, [isAlert, openAlerts, eIcon]);
+  }, [isAlert, openAlerts, closeAlerts]);
 
   return (
     <>
