@@ -62,7 +62,7 @@ function TelescopeParked(props: TelescopeParkedProps) {
       color = 'blue';
       tooltip = 'Parked';
     } else {
-      color = 'yellow.9';
+      color = 'orange.9';
       tooltip = 'Not parked';
     }
 
