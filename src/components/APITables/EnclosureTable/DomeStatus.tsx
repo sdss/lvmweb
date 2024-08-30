@@ -61,7 +61,7 @@ function DomeIcon(props: {
 
   return (
     <>
-      <Tooltip label={tooltip}>
+      <Tooltip label={!disabled || isRunning ? tooltip : 'Authentication needed'}>
         <ActionIcon size="sm" color={color} onClick={open} disabled={disabled}>
           {icon}
         </ActionIcon>

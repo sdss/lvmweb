@@ -19,7 +19,7 @@ export default async function authenticateAPI(password: string) {
   /** Gets a bearer token from the API and stores it as an HTTP-only cookie. */
 
   let response: APIResponse;
-  console.log(password);
+
   try {
     response = await fetchFromAPI('/auth/login', {
       method: 'POST',

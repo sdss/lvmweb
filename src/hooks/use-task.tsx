@@ -57,7 +57,7 @@ const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 export default function useTask<T>(
   options?: UseTaskOptions
-): [(route: string) => Promise<T | undefined>, boolean] {
+): [(route: string, needs_auth?: boolean) => Promise<T | undefined>, boolean] {
   /** Starts a task and returns a promise that resolves when the task is complete. */
 
   const {
@@ -158,12 +158,12 @@ export default function useTask<T>(
   }, [isRunning, checkInterval, showNotifications, taskName, deferRef, failTask]);
 
   const runner = React.useCallback(
-    (route: string) => {
+    (route: string, needs_auth: boolean = false) => {
       /** Call the task API route and schedule the task for completion.
        *  This should return quickly with the task ID.
        */
 
-      fetchFromAPI<string>(route)
+      fetchFromAPI<string>(route, {}, needs_auth)
         .then((tid) => {
           taskID.current = tid;
           notifID.current = updateNotification(

@@ -27,7 +27,7 @@ function TurnLightsOffButton(props: { disabled: boolean }) {
 
   return (
     <>
-      <Tooltip label="Turn off all lamps">
+      <Tooltip label={props.disabled ? 'Authentication needed' : 'Turn off all lamps'}>
         <ActionIcon size="sm" onClick={open} disabled={props.disabled}>
           <IconBulbOff />
         </ActionIcon>
