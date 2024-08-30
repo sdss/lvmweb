@@ -32,20 +32,35 @@ type WeatherResponse = {
   relative_humidity: number;
   air_pressure: number;
   rain_intensity: number;
+  dew_point: number;
   station: string;
 }[];
 
-function colourWindSpeed(speed: number | undefined) {
-  if (speed === undefined) return null;
-
+function colourValue(
+  speed: number | undefined,
+  alert: boolean | null | undefined,
+  unit: string | null = null
+) {
   let color: string | undefined = undefined;
-  if (speed >= 35) {
-    color = 'red.8';
-  } else if (speed >= 30) {
+  let tooltip: string | undefined = undefined;
+  let speedText: string;
+  if (alert === null || speed === undefined) {
     color = 'yellow.8';
+    tooltip = 'Alert status unknown';
+    speedText = speed === undefined ? '?' : `${speed.toFixed(1)} ${unit}`;
+  } else if (alert) {
+    color = 'red.9';
+    tooltip = 'Alert!';
+    speedText = `${speed.toFixed(1)} ${unit}`;
+  } else {
+    speedText = `${speed.toFixed(1)} ${unit}`;
   }
 
-  return <APIStatusText color={color}>{speed.toFixed(1)} mph</APIStatusText>;
+  return (
+    <APIStatusText color={color} defaultTooltipText={tooltip}>
+      {speedText}
+    </APIStatusText>
+  );
 }
 
 export default function WeatherTable() {
@@ -93,7 +108,7 @@ export default function WeatherTable() {
     {
       key: 'wind_speed_30m',
       label: 'Wind Speed (30m avg.)',
-      value: colourWindSpeed(weather?.[0]?.wind_speed_avg_30m),
+      value: colourValue(weather?.[0]?.wind_speed_avg_30m, alerts?.wind_alert, 'mph'),
     },
     {
       key: 'wind_gust',
@@ -110,8 +125,12 @@ export default function WeatherTable() {
     {
       key: 'relative_humidity',
       label: 'Relative Humidity',
-      value: weather?.[0]?.relative_humidity,
-      unit: '%',
+      value: colourValue(weather?.[0]?.relative_humidity, alerts?.humidity_alert, '%'),
+    },
+    {
+      key: 'dew_point',
+      label: 'Dew Point',
+      value: colourValue(weather?.[0]?.dew_point, alerts?.dew_point_alert, '°C'),
     },
     {
       key: 'rain_alert',

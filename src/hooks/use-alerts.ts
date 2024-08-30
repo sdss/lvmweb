@@ -35,7 +35,9 @@ export interface AlertsResponse {
   camera_alerts: { [key in CameraAlerts]: boolean };
   o2_alert: boolean;
   o2_room_alerts: { [key in O2Rooms]: boolean };
-  wind_alert: boolean;
+  wind_alert: boolean | null;
+  humidity_alert: boolean | null;
+  dew_point_alert: boolean | null;
   rain: boolean;
   door_alert: boolean;
 }
