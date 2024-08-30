@@ -153,7 +153,13 @@ export default function APITable(props: {
           {noData && <WarningIcon />}
           {refreshData && <RefreshData onClick={refreshData} />}
         </Group>
-        <Table withRowBorders={false} horizontalSpacing="sm" mb={4}>
+        <Table
+          withRowBorders={false}
+          horizontalSpacing="sm"
+          verticalSpacing={5}
+          mt={4}
+          mb={4}
+        >
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
       </Paper>
