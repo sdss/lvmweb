@@ -53,7 +53,7 @@ function DomeIcon(props: {
       setDisabled && setDisabled(isRunning);
       result.catch(() => {});
     } else {
-      fetchFromAPI(route)
+      fetchFromAPI(route, {}, true)
         .catch(() => {})
         .finally(() => setDisabled && setDisabled(false));
     }

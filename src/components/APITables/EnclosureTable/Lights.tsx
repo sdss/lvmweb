@@ -22,7 +22,7 @@ function TurnLightsOffButton(props: { disabled: boolean }) {
 
   const handleClick = React.useCallback(() => {
     close();
-    fetchFromAPI('/enclosure/lights/off/all').catch(() => {});
+    fetchFromAPI('/enclosure/lights/off/all', {}, true).catch(() => {});
   }, [close]);
 
   return (

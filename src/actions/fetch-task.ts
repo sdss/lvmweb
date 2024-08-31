@@ -5,6 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+'use server';
+
 import fetchFromAPI from './fetch-from-API';
 
 export default async function fetchTask<T>(

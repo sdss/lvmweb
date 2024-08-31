@@ -26,7 +26,15 @@ export default async function authenticateAPI(password: string) {
       body: new URLSearchParams({ username: 'any', password }),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
-    cookies().set('apiToken', response.access_token, { httpOnly: true });
+
+    cookies().set({
+      name: 'apiToken',
+      value: response.access_token,
+      secure: true,
+      maxAge: 31104000,
+      path: '/',
+      sameSite: 'lax',
+    });
   } catch (error) {
     console.error(`Failed to get API token: ${(error as Error).message}`);
     return false;

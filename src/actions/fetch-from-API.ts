@@ -37,7 +37,7 @@ export default async function fetchFromAPI<T>(
 
   const response = await fetch(url, opts);
   if (!response.ok) {
-    if (response.status === 401) {
+    if (response.status === 401 && needs_authentication) {
       cookies().delete('apiToken');
       throw new AuthenticationError('Authentication error');
     }

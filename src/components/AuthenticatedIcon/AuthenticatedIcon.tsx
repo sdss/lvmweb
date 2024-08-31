@@ -34,36 +34,48 @@ function AuthoriseModal(props: AuthoriseModalProps) {
   const { opened, close, logout = false } = props;
 
   const [password, setPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
+  const authStatus = React.useContext(AuthContext);
+  const { check: checkAuth } = authStatus;
+
   const attemptAuth = React.useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
+    async (event: FormEvent<HTMLFormElement>, password: string) => {
       event.preventDefault();
 
+      setLoading(true);
       const success = await authenticateAPI(password);
       if (!success) {
         setError('Authentication failed');
+        setLoading(false);
         return;
       }
 
       const isAuth = await testAuthentication();
       if (!isAuth) {
         setError('Authentication failed');
+        setLoading(false);
         return;
       }
 
+      await checkAuth();
+      setLoading(false);
       close();
     },
-    [password, close]
+    [checkAuth, close]
   );
 
   const doLogout = React.useCallback(async () => {
     await forgetAuth();
+    await checkAuth();
+
+    setLoading(false);
     close();
-  }, [close]);
+  }, [close, checkAuth]);
 
   const loginContents = (
-    <form onSubmit={attemptAuth}>
+    <form onSubmit={(event) => attemptAuth(event, password)}>
       <PasswordInput
         withAsterisk
         onChange={(event) => setPassword(event.currentTarget.value)}
@@ -74,7 +86,9 @@ function AuthoriseModal(props: AuthoriseModalProps) {
         data-autofocus
       />
       <Group justify="flex-end" mt="md">
-        <Button type="submit">Submit</Button>
+        <Button type="submit" loading={loading}>
+          Submit
+        </Button>
       </Group>
     </form>
   );
@@ -85,7 +99,9 @@ function AuthoriseModal(props: AuthoriseModalProps) {
         <Button onClick={close} variant="default">
           Cancel
         </Button>
-        <Button onClick={doLogout}>Log out</Button>
+        <Button onClick={doLogout} loading={loading}>
+          Log out
+        </Button>
       </Group>
     </Stack>
   );
@@ -107,12 +123,6 @@ function AuthoriseModal(props: AuthoriseModalProps) {
 export default function AuthenticatedIcon() {
   const [modalOpened, { open, close }] = useDisclosure();
   const authStatus = React.useContext(AuthContext);
-
-  React.useEffect(() => {
-    if (!modalOpened) {
-      authStatus.check();
-    }
-  }, [modalOpened, authStatus]);
 
   return (
     <Box>
