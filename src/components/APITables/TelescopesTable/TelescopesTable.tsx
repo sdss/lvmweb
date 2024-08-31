@@ -7,6 +7,7 @@
 
 'use client';
 
+import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import APITable from '@/src/components/APITable/APITable';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
@@ -19,15 +20,17 @@ import React from 'react';
 
 type TelescopeStatusResponse = {
   is_parked: boolean | null;
+  is_connected: boolean | null;
 };
 
-type TelescopeParkedProps = {
+type TelescopeStatusProps = {
   data: { [tel: string]: TelescopeStatusResponse } | null;
+  refresh: () => void;
 };
 
 const TELESCOPES = ['sci', 'spec', 'skye', 'skyw'];
 
-function ParkButton() {
+function ParkButton(props: { refresh: () => void }) {
   const authStatus = React.useContext(AuthContext);
   const [runner, parking] = useTask<boolean>({ taskName: 'park_telescopes' });
 
@@ -37,15 +40,15 @@ function ParkButton() {
         size="compact-xs"
         variant="light"
         disabled={!authStatus.logged || parking}
-        onClick={() => runner('/telescopes/park', true)}
+        onClick={() => runner('/telescopes/park', true).then(props.refresh)}
       >
-        Go to Park
+        Park
       </Button>
     </Tooltip>
   );
 }
 
-function TelescopeParked(props: TelescopeParkedProps) {
+function TelescopeParked(props: TelescopeStatusProps) {
   const { data } = props;
 
   let Pills = TELESCOPES.map((tel) => {
@@ -84,11 +87,88 @@ function TelescopeParked(props: TelescopeParkedProps) {
     <Group gap="xs" pr={4}>
       {Pills}
       <Box style={{ flexGrow: 1 }} />
-      <ParkButton />
+      <ParkButton refresh={props.refresh} />
     </Group>
   );
 }
 
+function ConnectButton(props: { refresh: () => void }) {
+  const authStatus = React.useContext(AuthContext);
+  const [running, setRunning] = React.useState(false);
+
+  const { refresh } = props;
+
+  const connect = React.useCallback(() => {
+    setRunning(true);
+    fetchFromAPI('/telescopes/connect', {}, true)
+      .finally(() => setRunning(false))
+      .finally(refresh);
+  }, [refresh]);
+
+  return (
+    <Button
+      size="compact-xs"
+      variant="light"
+      disabled={!authStatus.logged || running}
+      onClick={connect}
+    >
+      Connect
+    </Button>
+  );
+}
+
+function TelescopeConnected(props: TelescopeStatusProps) {
+  const { data } = props;
+
+  const [Pills, setPills] = React.useState<React.ReactNode[]>([]);
+  const [allConnected, setAllConnected] = React.useState(false);
+
+  React.useEffect(() => {
+    setAllConnected(true);
+    const tmpPills: React.ReactNode[] = [];
+
+    TELESCOPES.map((tel) => {
+      const telData = data?.[tel];
+      const is_connected = telData?.is_connected;
+
+      let color: string;
+      let tooltip: string;
+
+      if (is_connected === null) {
+        color = 'dark.5';
+        tooltip = 'Unknown status';
+        setAllConnected(false);
+      } else if (is_connected) {
+        color = 'blue';
+        tooltip = 'Connected';
+      } else {
+        color = 'orange.9';
+        tooltip = 'Not connected';
+        setAllConnected(false);
+      }
+
+      tmpPills.push(
+        <Tooltip key={tel} label={tooltip}>
+          <Pill key={tel} bg={color}>
+            <APIStatusText nodata={data === null} size="xs">
+              {tel}
+            </APIStatusText>
+          </Pill>
+        </Tooltip>
+      );
+    });
+
+    setPills(tmpPills);
+  }, [data]);
+
+  return (
+    <Group gap="xs" pr={4}>
+      {Pills}
+      <Box style={{ flexGrow: 1 }} />
+      {!allConnected && <ConnectButton refresh={props.refresh} />}
+    </Group>
+  );
+}
 export default function TelescopesTable() {
   const [data, , noData, refresh] = useAPICall<{
     [tel: string]: TelescopeStatusResponse;
@@ -98,7 +178,12 @@ export default function TelescopesTable() {
     {
       key: 'parked',
       label: 'Parked',
-      value: <TelescopeParked data={noData ? null : data} />,
+      value: <TelescopeParked data={noData ? null : data} refresh={refresh} />,
+    },
+    {
+      key: 'connected',
+      label: 'Connected',
+      value: <TelescopeConnected data={noData ? null : data} refresh={refresh} />,
     },
     {
       key: 'position',
