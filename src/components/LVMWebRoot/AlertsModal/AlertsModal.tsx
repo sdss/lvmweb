@@ -29,7 +29,7 @@ export default function AlertsModal(props: AlertsModalProps) {
 
     const tempAlerts: string[] = [];
 
-    if (alerts.temperature_alert) {
+    if (alerts.camera_temperature_alert) {
       tempAlerts.push('Spectrograph temperature alert');
     }
 
