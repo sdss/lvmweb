@@ -9,6 +9,7 @@
 
 import { cookies } from 'next/headers';
 import { AuthenticationError } from '../types';
+import { getAuthCookieName } from './authenticate-api';
 
 export default async function fetchFromAPI<T>(
   route: string,
@@ -21,9 +22,10 @@ export default async function fetchFromAPI<T>(
   delete opts.baseURL;
 
   const url = new URL(route, baseURL).toString();
+  const tokenName = await getAuthCookieName();
 
   if (needs_authentication) {
-    const token = cookies().get('apiToken');
+    const token = cookies().get(tokenName);
 
     if (token === undefined) {
       throw new AuthenticationError('No API token found.');
@@ -38,7 +40,7 @@ export default async function fetchFromAPI<T>(
   const response = await fetch(url, opts);
   if (!response.ok) {
     if (response.status === 401 && needs_authentication) {
-      cookies().delete('apiToken');
+      cookies().delete(tokenName);
       throw new AuthenticationError('Authentication error');
     }
 
