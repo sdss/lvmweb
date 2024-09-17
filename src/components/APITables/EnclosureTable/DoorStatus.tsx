@@ -35,7 +35,7 @@ export default function DoorStatus(props: {
 
   if (labels.includes('DOOR_CLOSED') && !labels.includes('DOOR_LOCKED')) {
     return (
-      <Pill key="door_unlocked" bg="yellow.8">
+      <Pill key="door_unlocked" bg="yellow.8" c="dark.4">
         <APIStatusText size="xs" nodata={noData}>
           Door unlocked
         </APIStatusText>
