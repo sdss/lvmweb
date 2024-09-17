@@ -7,8 +7,8 @@
 
 'use client';
 
-import fetchFromAPI from '@/src/actions/fetch-from-API';
-import fetchTask from '@/src/actions/fetch-task';
+import React from 'react';
+import { IconRefresh } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -17,15 +17,17 @@ import {
   Group,
   LoadingOverlay,
   NativeSelect,
+  rem,
   ScrollArea,
   Skeleton,
   Stack,
+  Switch,
   Text,
   Title,
   Tooltip,
 } from '@mantine/core';
-import { IconRefresh } from '@tabler/icons-react';
-import React from 'react';
+import fetchFromAPI from '@/src/actions/fetch-from-API';
+import fetchTask from '@/src/actions/fetch-task';
 
 async function fetchMJDs(): Promise<string[]> {
   const result = await fetchFromAPI<string[]>('/overwatcher/logs');
@@ -45,17 +47,22 @@ async function fetchLogData(mjd: string, n_lines: number = -1): Promise<string> 
 function LogControls(props: {
   mjd: string | undefined;
   mjds: string[];
+  autorefresh: boolean;
   forceRefresh: () => void;
   setCurrentMJD: (mjd: string) => void;
+  setAutorefresh: (autorefresh: boolean) => void;
   setNLines: (nLines: number) => void;
 }) {
   const [selected, setSelected] = React.useState<string | undefined>(props.mjd);
   const [nLinesSelect, setNLinesSelect] = React.useState<string>('1000');
 
-  const { mjds, setCurrentMJD, setNLines, forceRefresh } = props;
+  const { mjds, autorefresh, setCurrentMJD, setAutorefresh, setNLines, forceRefresh } =
+    props;
 
   React.useEffect(() => {
-    if (mjds.length === 0) return;
+    if (mjds.length === 0) {
+      return;
+    }
 
     if (!selected) {
       setSelected(mjds[mjds.length - 1].toString());
@@ -75,7 +82,17 @@ function LogControls(props: {
   }
 
   return (
-    <Group justify="flex-end" gap="lg">
+    <Group justify="flex-start" gap="lg">
+      <Tooltip label="Enable/disable autorefresh" position="top">
+        <Switch
+          label={autorefresh ? 'Auto-refresh ON' : 'Auto-refresh OFF'}
+          style={{ top: rem(8) }}
+          size="md"
+          checked={autorefresh}
+          onChange={(event) => setAutorefresh(event.currentTarget.checked)}
+        />
+      </Tooltip>
+      <Box style={{ flexGrow: 1 }} />
       <NativeSelect
         value={selected}
         onChange={(event) => {
@@ -172,10 +189,13 @@ export default function GortLogPage({ params }: { params: { mjd: string[] } }) {
   );
   const [nLines, setNLines] = React.useState<number>(1000);
   const [reloading, setReloading] = React.useState(false);
+  const [autorefresh, setAutorefresh] = React.useState(true);
 
   const forceRefresh = React.useCallback(
     (showReloading: boolean = true) => {
-      if (!currentMJD) return;
+      if (!currentMJD) {
+        return;
+      }
 
       if (showReloading) {
         setReloading(true);
@@ -193,11 +213,15 @@ export default function GortLogPage({ params }: { params: { mjd: string[] } }) {
   }, []);
 
   React.useEffect(() => {
+    if (!autorefresh) {
+      return () => {};
+    }
+
     forceRefresh();
     const interval = setInterval(forceRefresh, 60000);
 
     return () => clearInterval(interval);
-  }, [currentMJD, nLines, forceRefresh]);
+  }, [currentMJD, nLines, forceRefresh, autorefresh]);
 
   return (
     <>
@@ -207,8 +231,10 @@ export default function GortLogPage({ params }: { params: { mjd: string[] } }) {
           <LogControls
             mjd={currentMJD}
             mjds={mjds}
+            autorefresh={autorefresh}
             forceRefresh={forceRefresh}
             setCurrentMJD={setCurrentMJD}
+            setAutorefresh={setAutorefresh}
             setNLines={setNLines}
           />
           <LogDisplay data={data} reloading={reloading} />
