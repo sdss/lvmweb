@@ -7,14 +7,14 @@
 
 'use client';
 
+import React from 'react';
+import { IconBulbOff } from '@tabler/icons-react';
+import { ActionIcon, Box, Group, Pill, rem, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import ConfirmationModal from '@/src/components/ConfirmationModal/ConfirmationModal';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
-import { ActionIcon, Box, Group, Pill, Tooltip } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconBulbOff } from '@tabler/icons-react';
-import React from 'react';
 import { EnclosureResponse } from './types';
 
 function TurnLightsOffButton(props: { disabled: boolean }) {
@@ -66,7 +66,7 @@ export default function Lights(props: {
     LightsPills = <APIStatusText nodata={noData}>All off</APIStatusText>;
   } else {
     LightsPills = lights.map((light) => (
-      <Pill key={light} bg="orange.9">
+      <Pill key={light} bg="orange.9" component="div">
         <APIStatusText nodata={noData} size="xs">
           {light.toLocaleLowerCase().replace('_', ' ')}
         </APIStatusText>
@@ -77,7 +77,9 @@ export default function Lights(props: {
   return (
     <>
       <Group gap="xs" pr={4}>
-        {LightsPills}
+        <Group gap="xs" maw={rem(200)}>
+          <Box>{LightsPills}</Box>
+        </Group>
         <Box style={{ flexGrow: 1 }} />
         <TurnLightsOffButton disabled={!AuthStatus.logged} />
       </Group>
