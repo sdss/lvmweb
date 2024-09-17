@@ -7,11 +7,20 @@
 
 'use client';
 
+import React from 'react';
+import { IconPrismLight } from '@tabler/icons-react';
+import {
+  Box,
+  Divider,
+  Group,
+  Pill,
+  Progress,
+  Stack,
+  Text,
+  Transition,
+} from '@mantine/core';
 import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
-import { Divider, Group, Pill, Progress, Stack, Text } from '@mantine/core';
-import { IconPrismLight } from '@tabler/icons-react';
-import React from 'react';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 
@@ -190,9 +199,35 @@ function SpecProgress(props: SpecProgressProps) {
   );
 }
 
+function FillPill(props: { active: boolean }) {
+  const [opened, setOpened] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!props.active) {
+      return () => {};
+    }
+
+    const id = setInterval(() => setOpened((old) => !old), 1500);
+
+    return () => clearInterval(id);
+  }, [props.active]);
+
+  return (
+    <Transition mounted={opened} transition="fade" duration={500} timingFunction="ease">
+      {(styles) => (
+        <Box style={styles}>
+          <Pill bg="yellow.8" c="dark.6" size="lg">
+            Filling
+          </Pill>
+        </Box>
+      )}
+    </Transition>
+  );
+}
 export default function SpecTable() {
   const STATUS_INTERVAL = 5000;
   const TEMPS_INTERVAL = 60000;
+  const FILLING_INTERVAL = 3000;
 
   const alerts = React.useContext(AlertsContext);
 
@@ -204,6 +239,11 @@ export default function SpecTable() {
   const [specTemps, , noDataTemps, refreshTemps] = useAPICall<SpecTempsResponse>(
     '/spectrographs/temperatures?start=-1m&last=true',
     { interval: TEMPS_INTERVAL }
+  );
+
+  const [filling, , noDataFilling] = useAPICall<boolean>(
+    '/spectrographs/fills/running',
+    { interval: FILLING_INTERVAL }
   );
 
   const noData = noDataSpec || noDataTemps;
@@ -329,6 +369,7 @@ export default function SpecTable() {
   return (
     <APITable
       title="Spectrographs"
+      midsection={filling && !noDataFilling && <FillPill active={filling} />}
       elements={elements}
       noData={noData}
       icon={<IconPrismLight />}

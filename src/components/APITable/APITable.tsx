@@ -7,6 +7,8 @@
 
 'use client';
 
+import React from 'react';
+import { IconAlertTriangle, IconReload, IconSettings } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -18,8 +20,6 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
-import { IconAlertTriangle, IconReload, IconSettings } from '@tabler/icons-react';
-import React from 'react';
 import APIStatusText from './APIStatusText/APIStatusText';
 import classses from './APITable.module.css';
 
@@ -60,6 +60,7 @@ function RefreshData(props: { onClick: () => void }) {
 export default function APITable(props: {
   title: string;
   elements: Elements;
+  midsection?: React.ReactNode;
   noData?: boolean;
   icon?: JSX.Element;
   refreshData?: () => void;
@@ -67,6 +68,7 @@ export default function APITable(props: {
   const {
     title,
     elements,
+    midsection,
     noData = false,
     icon = <IconSettings />,
     refreshData,
@@ -149,7 +151,7 @@ export default function APITable(props: {
           <Title order={4} className={classses.title}>
             {title}
           </Title>
-          <Box style={{ flexGrow: 1 }} />
+          <Box style={{ flexGrow: 1, textAlign: 'center' }}>{midsection}</Box>
           {noData && <WarningIcon />}
           {refreshData && <RefreshData onClick={refreshData} />}
         </Group>
