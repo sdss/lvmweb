@@ -132,7 +132,7 @@ function LogControls(props: {
   );
 }
 
-export function formatLine(line: string, key: number): React.ReactElement {
+function formatLine(line: string, key: number): React.ReactElement {
   let bgColor = 'inherit';
   if (line.includes('- ERROR -') || line.includes('- CRITICAL -')) {
     bgColor = 'red.9';
