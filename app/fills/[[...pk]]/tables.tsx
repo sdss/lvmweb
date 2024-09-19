@@ -70,6 +70,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
     open_time: string | null;
     close_time: string | null;
     elapsed: string | null;
+    timeout: string | null;
   }[] = [];
 
   for (const cam of ['purge', 'b1', 'r1', 'z1', 'b2', 'r2', 'z2', 'b3', 'r3', 'z3']) {
@@ -85,6 +86,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
           open_time: toTime(open_time),
           close_time: toTime(close_time),
           elapsed: elapsed.toFixed(1),
+          timeout: props.valve_times[cam].timed_out ? 'Y' : '',
         });
       }
     }
@@ -96,6 +98,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
       <Table.Td>{element.open_time}</Table.Td>
       <Table.Td>{element.close_time}</Table.Td>
       <Table.Td ta="right">{element.elapsed}</Table.Td>
+      <Table.Td ta="center">{element.timeout}</Table.Td>
     </Table.Tr>
   ));
 
@@ -116,6 +119,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
               <Table.Th>Open</Table.Th>
               <Table.Th>Close</Table.Th>
               <Table.Th ta="right">Elapsed (s)</Table.Th>
+              <Table.Th ta="center">Timeout?</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

@@ -8,7 +8,11 @@
 export type FillListType = Map<number, string>;
 
 export type ValveTimesType = {
-  [key: string]: { open_time: string | null; close_time: string | null };
+  [key: string]: {
+    open_time: string | null;
+    close_time: string | null;
+    timed_out: boolean | null;
+  };
 };
 
 export type FillMetadataType = {
