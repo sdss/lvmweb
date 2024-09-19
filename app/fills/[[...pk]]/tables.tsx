@@ -89,7 +89,10 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
           close_time: toTime(close_time),
           elapsed: elapsed.toFixed(1),
           timeout: props.valve_times[cam].timed_out ? (
-            <IconCheck style={{ verticalAlign: 'middle' }} />
+            <IconCheck
+              style={{ verticalAlign: 'middle' }}
+              color="var(--mantine-color-red-9)"
+            />
           ) : null,
         });
       }
