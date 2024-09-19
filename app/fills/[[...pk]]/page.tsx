@@ -21,7 +21,7 @@ function DataSkeleton() {
   return (
     <Stack gap="md">
       <Skeleton h="20vh" />
-      <Skeleton h="50vh" />
+      <Skeleton h="80vh" />
     </Stack>
   );
 }
