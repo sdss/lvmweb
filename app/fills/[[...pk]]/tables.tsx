@@ -35,9 +35,15 @@ export function EventTimesTable(props: {
     { name: 'Purge complete', value: toTime(props.purge_complete) },
     { name: 'Fill start', value: toTime(props.fill_start) },
     { name: 'Fill complete', value: toTime(props.fill_complete) },
-    { name: 'Fail time', value: toTime(props.fail_time) },
-    { name: 'Abort time', value: toTime(props.abort_time) },
   ];
+
+  if (props.fail_time) {
+    elements.push({ name: 'Fail time', value: toTime(props.fail_time) });
+  }
+
+  if (props.abort_time) {
+    elements.push({ name: 'Abort time', value: toTime(props.abort_time) });
+  }
 
   const rows = elements.map((element) => (
     <Table.Tr key={element.name}>
