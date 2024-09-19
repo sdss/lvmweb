@@ -5,6 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+import React from 'react';
+import { IconCheck } from '@tabler/icons-react';
 import { Box, Stack, Table, Title } from '@mantine/core';
 import { ValveTimesType } from './types';
 
@@ -70,7 +72,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
     open_time: string | null;
     close_time: string | null;
     elapsed: string | null;
-    timeout: string | null;
+    timeout: React.ReactElement | null;
   }[] = [];
 
   for (const cam of ['purge', 'b1', 'r1', 'z1', 'b2', 'r2', 'z2', 'b3', 'r3', 'z3']) {
@@ -86,7 +88,9 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
           open_time: toTime(open_time),
           close_time: toTime(close_time),
           elapsed: elapsed.toFixed(1),
-          timeout: props.valve_times[cam].timed_out ? 'Y' : '',
+          timeout: props.valve_times[cam].timed_out ? (
+            <IconCheck style={{ verticalAlign: 'middle' }} />
+          ) : null,
         });
       }
     }
