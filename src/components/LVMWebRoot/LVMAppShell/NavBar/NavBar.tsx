@@ -7,9 +7,6 @@
 
 'use client';
 
-import NavAccordion from '@/src/components/NavAccordion/NavAccordion';
-import NavAccordionItem from '@/src/components/NavAccordionItem/NavAccordionItem';
-import { Box, ScrollArea, Stack } from '@mantine/core';
 import {
   IconCloudRain,
   IconDeviceComputerCamera,
@@ -17,8 +14,12 @@ import {
   IconLink,
   IconLogs,
   IconNotebook,
+  IconSnowflake,
   IconTelescope,
 } from '@tabler/icons-react';
+import { Box, ScrollArea, Stack } from '@mantine/core';
+import NavAccordion from '@/src/components/NavAccordion/NavAccordion';
+import NavAccordionItem from '@/src/components/NavAccordionItem/NavAccordionItem';
 import NavBarItem from './NavBarItem/NavBarItem';
 
 export default function NavBar() {
@@ -28,6 +29,7 @@ export default function NavBar() {
         <NavBarItem path="/overview" icon={<IconHome />} text="Overview" />
         <NavBarItem path="/gort-log" icon={<IconNotebook />} text="GORT Log" />
         <NavBarItem path="/exposure-list" icon={<IconLogs />} text="Exposure List" />
+        <NavBarItem path="/fills" icon={<IconSnowflake />} text="LN₂ fills" />
         <NavBarItem
           path="https://localhost:18888/"
           icon={<IconDeviceComputerCamera />}
