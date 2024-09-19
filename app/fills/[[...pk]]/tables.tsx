@@ -93,7 +93,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
           valve: cam,
           open_time: toTime(open_time),
           close_time: toTime(close_time),
-          elapsed: elapsed.toFixed(1),
+          elapsed: elapsed.toFixed(0),
           timeout: props.valve_times[cam].timed_out ? (
             <IconCheck
               style={{ verticalAlign: 'middle' }}
