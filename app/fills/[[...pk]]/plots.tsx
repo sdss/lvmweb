@@ -17,14 +17,14 @@ function Plot(props: { data: string }) {
 }
 
 export function Plots(props: { plot_data: { [key: string]: string } | null }) {
-  if (!props.plot_data) {
+  if (!props.plot_data || Object.keys(props.plot_data).length === 0) {
     return;
   }
 
   return (
     <Stack gap="sm">
       <Title order={2} c="dark.2">
-        Plots{' '}
+        Plots
       </Title>
       <Stack gap="md">
         {Object.keys(props.plot_data).map((key) => {
