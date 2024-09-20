@@ -20,7 +20,6 @@ export default withBundleAnalyzer({
         'lvm-hub.lco.cl:8080',
       ],
     },
-    webpackMemoryOptimizations: true,
   },
   trailingSlash: true,
   basePath: '/lvmweb',
