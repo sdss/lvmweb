@@ -9,6 +9,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Box, Container, rem, SimpleGrid, Skeleton, Stack, Title } from '@mantine/core';
 import { fetchFillData, fetchFillList } from './fetchData';
 import { Header } from './header';
@@ -62,6 +63,8 @@ export default function FillPage({ params }: { params: { pk: string[] } }) {
 
   const [notFound, setNotFound] = React.useState<boolean>(false);
 
+  const router = useRouter();
+
   React.useEffect(() => {
     if (pks.length === 0) {
       fetchFillList().then((response) => {
@@ -72,7 +75,7 @@ export default function FillPage({ params }: { params: { pk: string[] } }) {
     }
 
     if (!params.pk || params.pk.length === 0) {
-      setPK(pks[pks.length - 1]);
+      router.push(`/fills/${pks[pks.length - 1]}`);
       return;
     }
 
@@ -129,7 +132,6 @@ export default function FillPage({ params }: { params: { pk: string[] } }) {
         <Header
           pk={pk}
           records={records}
-          setPK={setPK}
           status={!fillData ? null : !fillData.failed && !fillData.aborted}
         />
         {!fillData ? <DataSkeleton /> : <FillData data={fillData} />}

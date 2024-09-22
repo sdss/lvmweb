@@ -6,16 +6,18 @@
  */
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Box, Group, Loader, NativeSelect, Title } from '@mantine/core';
 import { FillListType } from './types';
 
 export function Header(props: {
   pk: number | null;
   records: FillListType;
-  setPK: (pk: number) => void;
   status: boolean | null;
 }) {
   const [data, setData] = React.useState<{ label: string; value: string }[]>([]);
+
+  const router = useRouter();
 
   React.useEffect(() => {
     if (props.records.size === 0) {
@@ -45,7 +47,7 @@ export function Header(props: {
       <NativeSelect
         value={(props.pk || 0).toString()}
         onChange={(event) => {
-          props.setPK(parseInt(event.currentTarget.value, 10));
+          router.push(`/fills/${parseInt(event.currentTarget.value, 10)}`);
         }}
         data={data}
         h={36}
