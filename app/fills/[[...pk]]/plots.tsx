@@ -5,13 +5,30 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+import React from 'react';
 import { Box, Image, Paper, Stack, Title } from '@mantine/core';
+import getSystemFile from '@/src/actions/get-system-image';
 
-function Plot(props: { data: string }) {
-  const image = `data:image/png;base64,${props.data}`;
+function Plot(props: { file: string }) {
+  const [imageData, setImageData] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    getSystemFile(props.file)
+      .then((data) => {
+        setImageData(data);
+      })
+      .catch(() => {
+        setImageData(null);
+      });
+  }, [props.file]);
+
+  if (!imageData) {
+    return null;
+  }
+
   return (
     <Paper withBorder radius={5} bg="var(--dark-background)" shadow="sm">
-      <Image src={image} />
+      <Image src={`data:image/png;base64,${imageData}`} />
     </Paper>
   );
 }
@@ -30,7 +47,7 @@ export function Plots(props: { plot_data: { [key: string]: string } | null }) {
         {Object.keys(props.plot_data).map((key) => {
           return (
             <Box key={key}>
-              <Plot data={props.plot_data![key]} />
+              <Plot file={props.plot_data![key]} />
             </Box>
           );
         })}
