@@ -22,7 +22,7 @@ export default withBundleAnalyzer({
     },
   },
   trailingSlash: true,
-  basePath: '/',
+  basePath: '',
   output: 'standalone',
   async redirects() {
     return [
