@@ -68,7 +68,7 @@ export default function NavBar() {
           />
           <NavAccordionItem
             value="RabbitMQ"
-            href="http://localhost:8080/rabbitmq"
+            href="http://localhost:8090/rabbitmq"
             external
           />
           <NavAccordionItem

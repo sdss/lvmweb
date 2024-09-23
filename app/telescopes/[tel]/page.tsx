@@ -7,9 +7,9 @@
 
 'use client';
 
-import TelescopePositionPlot from '@/src/components/TelescopePositionPlot/TelescopePositionPlot';
-import { Box, Stack, Title } from '@mantine/core';
 import React from 'react';
+import { Box, Stack, Title } from '@mantine/core';
+import TelescopePositionPlot from '@/src/components/TelescopePositionPlot/TelescopePositionPlot';
 
 export default function TelescopePage({ params }: { params: { tel: string } }) {
   const [valid, setValid] = React.useState<boolean>(true);
@@ -17,7 +17,7 @@ export default function TelescopePage({ params }: { params: { tel: string } }) {
   const [title, setTitle] = React.useState<string | undefined>(undefined);
 
   const { tel } = params;
-  const BASE_URL = 'http://localhost:8080/';
+  const BASE_URL = 'http://localhost:8090/';
 
   React.useEffect(() => {
     if (tel === 'motan') {
