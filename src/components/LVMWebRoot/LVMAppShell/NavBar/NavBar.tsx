@@ -74,7 +74,7 @@ export default function NavBar() {
           />
           <NavAccordionItem
             value="Obs. guide"
-            href="https://lvmgort.readthedocs.io/en/latest/"
+            href="https://sdss-wiki.atlassian.net/wiki/x/xajc"
             external
           />
           <NavAccordionItem
