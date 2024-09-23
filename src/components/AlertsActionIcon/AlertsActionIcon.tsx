@@ -41,7 +41,7 @@ function AllesIstGutModal(props: AllesIstGutModalProps) {
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
     >
       <Stack gap="lg">
-        <Text pb={10}></Text>
+        <Text pb={10} />
         <Text style={{ fontSize: 100 }} ta="center">
           😌
         </Text>
