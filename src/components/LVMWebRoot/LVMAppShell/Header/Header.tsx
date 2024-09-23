@@ -5,15 +5,15 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import AlertsActionIcon from '@/src/components/AlertsActionIcon/AlertsActionIcon';
-import AuthenticatedIcon from '@/src/components/AuthenticatedIcon/AuthenticatedIcon';
-import useAlertsContext from '@/src/hooks/use-alerts-context';
+import React from 'react';
+import Link from 'next/link';
+import { IconExclamationCircle } from '@tabler/icons-react';
 import { Box, Group, Image, rem, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconExclamationCircle } from '@tabler/icons-react';
-import Link from 'next/link';
-import React from 'react';
+import AlertsActionIcon from '@/src/components/AlertsActionIcon/AlertsActionIcon';
+import AuthenticatedIcon from '@/src/components/AuthenticatedIcon/AuthenticatedIcon';
+import useAlertsContext from '@/src/hooks/use-alerts-context';
 import ShutdownActionIcon from '../../../ShutdownActionIcon/ShutdownActionIcon';
 import AlertsModal from '../../AlertsModal/AlertsModal';
 import classes from './Header.module.css';
@@ -81,7 +81,7 @@ export default function Header() {
         <Group className={classes.group}>
           <Link href="/">
             <Group>
-              <Image src="/lvmweb/lvm_logo.png" h={44} alt="LVM logo" />
+              <Image src="/lvm_logo.png" h={44} alt="LVM logo" />
               <Title order={3} className={classes.title}>
                 LVM Web
               </Title>

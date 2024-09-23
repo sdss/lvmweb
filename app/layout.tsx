@@ -7,10 +7,15 @@
 
 import LVMWebRoot from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { theme } from '@/src/theme';
+
 import '@/src/variables.css';
+
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+
 import '@mantine/core/styles.css';
+
 import { Notifications } from '@mantine/notifications';
+
 import '@mantine/notifications/styles.css';
 
 export const metadata = {
@@ -23,25 +28,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <ColorSchemeScript defaultColorScheme="dark" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/lvmweb/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/lvmweb/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/lvmweb/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/lvmweb/site.webmanifest" />
-        <link rel="mask-icon" href="/lvmweb/safari-pinned-tab.svg" color="#5bbad5" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
         <meta
