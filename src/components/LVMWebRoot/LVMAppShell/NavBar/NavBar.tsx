@@ -56,7 +56,7 @@ export default function NavBar() {
         </NavAccordion>
 
         <NavAccordion value="Links" icon={IconLink}>
-          <NavAccordionItem value="QA pages" href="'https://lvm-web.lco.cl/qa/" />
+          <NavAccordionItem value="QA pages" href="https://lvm-web.lco.cl/qa/" />
           <NavAccordionItem
             value="Grafana"
             href="https://lvm-grafana.lco.cl"
@@ -74,17 +74,17 @@ export default function NavBar() {
           />
           <NavAccordionItem
             value="Obs. guide"
-            href="'https://lvmgort.readthedocs.io/en/latest/"
+            href="https://lvmgort.readthedocs.io/en/latest/"
             external
           />
           <NavAccordionItem
             value="Ops. manual"
-            href="'https://sdss-wiki.atlassian.net/wiki/x/pKfc"
+            href="https://sdss-wiki.atlassian.net/wiki/x/pKfc"
             external
           />
           <NavAccordionItem
             value="GORT docs"
-            href="'https://lvmgort.readthedocs.io/en/latest/"
+            href="https://lvmgort.readthedocs.io/en/latest/"
             external
           />
         </NavAccordion>
