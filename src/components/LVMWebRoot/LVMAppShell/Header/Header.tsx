@@ -30,7 +30,9 @@ export default function Header() {
   const [alertsOpened, { open: openAlerts, close: closeAlerts }] = useDisclosure(false);
 
   React.useEffect(() => {
-    if (!alerts) return;
+    if (!alerts) {
+      return;
+    }
 
     setIsAlert(alerts.global_alert);
   }, [alerts]);
