@@ -46,6 +46,7 @@ export interface AlertsModel extends AlertsResponse {
   global_alert: boolean;
   camera_active_alerts: CameraAlerts[];
   o2_active_alerts: O2Rooms[];
+  test_alert: boolean;
 }
 
 export default function useAlerts(interval: number = 15000): AlertsModel | undefined {
@@ -69,6 +70,8 @@ export default function useAlerts(interval: number = 15000): AlertsModel | undef
       (alert) => alertsAPI.o2_room_alerts[alert as O2Rooms]
     );
 
+    const test_alert: boolean = false; // Just for testing.
+
     const newAlerts = {
       ...alertsAPI,
       global_alert:
@@ -76,9 +79,11 @@ export default function useAlerts(interval: number = 15000): AlertsModel | undef
         alertsAPI.rain === true ||
         alertsAPI.wind_alert === true ||
         alertsAPI.dew_point_alert === true ||
-        alertsAPI.humidity_alert === true,
+        alertsAPI.humidity_alert === true ||
+        test_alert,
       camera_active_alerts: tempAlerts as CameraAlerts[],
       o2_active_alerts: o2Alerts as O2Rooms[],
+      test_alert,
     };
 
     setAlerts((a) => {

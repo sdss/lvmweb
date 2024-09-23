@@ -5,10 +5,10 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+import React from 'react';
+import { Box, Button, Group, List, Modal, Stack, Text } from '@mantine/core';
 import useAlertsContext from '@/src/hooks/use-alerts-context';
 import useTask from '@/src/hooks/use-task';
-import { Box, Button, Group, List, Modal, Stack, Text } from '@mantine/core';
-import React from 'react';
 import classes from './AlertModal.module.css';
 
 export type AlertsModalProps = {
@@ -25,7 +25,9 @@ export default function AlertsModal(props: AlertsModalProps) {
   const [runner] = useTask();
 
   React.useEffect(() => {
-    if (!alerts) return;
+    if (!alerts) {
+      return;
+    }
 
     const tempAlerts: string[] = [];
 
@@ -55,6 +57,10 @@ export default function AlertsModal(props: AlertsModalProps) {
 
     if (alerts.wind_alert) {
       tempAlerts.push('Wind levels are unsafe.');
+    }
+
+    if (alerts.test_alert) {
+      tempAlerts.push('Test alert.');
     }
 
     setActiveAlerts(tempAlerts);

@@ -7,11 +7,11 @@
 
 'use client';
 
-import useTask from '@/src/hooks/use-task';
-import { ActionIcon, Loader, Tooltip } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconArrowBarLeft } from '@tabler/icons-react';
 import React from 'react';
+import { IconArrowBarLeft } from '@tabler/icons-react';
+import { ActionIcon, Group, Loader, Text, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import useTask from '@/src/hooks/use-task';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import classes from './ShutdownActionIcon.module.css';
 
@@ -29,20 +29,30 @@ export default function ShutdownActionIcon() {
   return (
     <>
       <Tooltip label={label} position="bottom">
-        <ActionIcon
-          size="lg"
-          color="white"
-          classNames={{ icon: classes.icon }}
+        <Group
+          gap={0}
           onClick={open}
-          disabled={isRunning}
-          variant="transparent"
+          style={{ cursor: 'pointer' }}
+          className={classes.icon}
         >
-          {isRunning ? (
-            <Loader type="bars" size="xs" color="gray.2" />
-          ) : (
-            <IconArrowBarLeft />
-          )}
-        </ActionIcon>
+          <ActionIcon
+            size="lg"
+            color="white"
+            classNames={{ icon: classes.icon }}
+            onClick={open}
+            disabled={isRunning}
+            variant="transparent"
+          >
+            {isRunning ? (
+              <Loader type="bars" size="xs" color="gray.2" />
+            ) : (
+              <IconArrowBarLeft />
+            )}
+          </ActionIcon>
+          <Text size="sm" c="gray.2">
+            Shutdown
+          </Text>
+        </Group>
       </Tooltip>
       <ConfirmationModal
         opened={isOpen}
