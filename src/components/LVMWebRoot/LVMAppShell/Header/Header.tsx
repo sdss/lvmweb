@@ -89,7 +89,7 @@ export default function Header() {
               </Title>
             </Group>
           </Link>
-          <div style={{ flexGrow: 1 }} />
+          <Box style={{ flexGrow: 1 }} />
           <Group gap="xs">
             <AlertsActionIcon />
             <ShutdownActionIcon />
