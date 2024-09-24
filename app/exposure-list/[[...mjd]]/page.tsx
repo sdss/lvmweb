@@ -41,13 +41,13 @@ type ExposureData = {
 };
 
 async function fetchMJDs(): Promise<number[]> {
-  const result = await fetchFromAPI<number[]>('/log/exposures/mjds');
+  const result = await fetchFromAPI<number[]>('/logs/exposures/mjds');
   return result;
 }
 
 async function fetchExposureListData(mjd: number): Promise<ExposureData[]> {
   const response = await fetchTask<{ [k: number]: ExposureData }>(
-    `/log/exposures/data/${mjd}?as_task=true`
+    `/logs/exposures/data/${mjd}?as_task=true`
   );
 
   return Object.values(response);
@@ -66,7 +66,9 @@ function ExposureListControls(props: {
   const { mjds, setCurrentMJD, forceRefresh } = props;
 
   React.useEffect(() => {
-    if (mjds.length === 0) return;
+    if (mjds.length === 0) {
+      return;
+    }
 
     if (!selected) {
       setSelected(mjds[mjds.length - 1].toString());
@@ -184,13 +186,15 @@ export default function ExposureListPage({ params }: { params: { mjd: string[] }
   const [data, setData] = React.useState<ExposureData[] | undefined>(undefined);
   const [mjds, setMJDs] = React.useState<number[]>([]);
   const [currentMJD, setCurrentMJD] = React.useState<number | undefined>(
-    params.mjd ? parseInt(params.mjd[0]) : undefined
+    params.mjd ? parseInt(params.mjd[0], 10) : undefined
   );
   const [reloading, setReloading] = React.useState(false);
 
   const forceRefresh = React.useCallback(
     (showReloading: boolean = true) => {
-      if (!currentMJD) return;
+      if (!currentMJD) {
+        return;
+      }
 
       if (showReloading) {
         setReloading(true);
