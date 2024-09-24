@@ -155,7 +155,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
                   <IconQuestionMark
                     size={16}
                     style={{
-                      verticalAlign: 'middle',
+                      verticalAlign: 'baseline',
                       color: 'var(--mantine-color-gray-6)',
                     }}
                   />
@@ -167,7 +167,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
                   <IconQuestionMark
                     size={16}
                     style={{
-                      verticalAlign: 'middle',
+                      verticalAlign: 'baseline',
                       color: 'var(--mantine-color-gray-6)',
                     }}
                   />
