@@ -49,7 +49,7 @@ export default function ShutdownActionIcon() {
               <IconArrowBarLeft />
             )}
           </ActionIcon>
-          <Text size="sm" c="gray.2" hiddenFrom="sm">
+          <Text size="sm" c="gray.2" visibleFrom="sm">
             Shutdown
           </Text>
         </Group>

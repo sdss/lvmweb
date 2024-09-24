@@ -84,7 +84,7 @@ export default function Header() {
           <Link href="/">
             <Group>
               <Image src="/lvm_logo.png" h={44} alt="LVM logo" />
-              <Title order={3} className={classes.title} hiddenFrom="sm">
+              <Title order={3} className={classes.title} visibleFrom="sm">
                 LVM Web
               </Title>
             </Group>
