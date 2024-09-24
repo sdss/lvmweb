@@ -4,6 +4,7 @@
   height: 100%;
   padding-left: rem(20px);
   padding-right: rem(20px);
+  align-content: center;
 
   &[data-alert='true'] {
     background-color: var(--mantine-color-red-9);
