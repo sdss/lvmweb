@@ -11,6 +11,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Box, Container, Group, rem, Skeleton, Stack, Title } from '@mantine/core';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+import Exposures from './exposures';
 import Header from './header';
 import Observers from './observers';
 import Sections from './sections';
@@ -34,6 +35,7 @@ export type NightLogData = {
     weather: NightLogComment[];
     other: NightLogComment[];
   };
+  exposure_table: string | null;
 };
 
 async function fetchNightLogMJDs() {
@@ -155,14 +157,19 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
           <Header mjds={mjds} mjd={mjd} mode={mode} setMode={setMode} setMJD={setMJD} />
         </Group>
         <Observers data={data} mjd={mjd} current={data !== null && data.current} />
-        {data && (
-          <Sections
-            data={data}
-            mjd={mjd}
-            refresh={refresh}
-            current={data !== null && data.current}
-          />
-        )}
+        <Stack gap={50}>
+          {data && (
+            <>
+              <Sections
+                data={data}
+                mjd={mjd}
+                refresh={refresh}
+                current={data !== null && data.current}
+              />
+              <Exposures exposure_data={data.exposure_table} />
+            </>
+          )}
+        </Stack>
       </Stack>
     </Container>
   );
