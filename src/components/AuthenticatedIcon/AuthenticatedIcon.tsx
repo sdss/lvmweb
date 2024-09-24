@@ -5,10 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import authenticateAPI, {
-  forgetAuth,
-  testAuthentication,
-} from '@/src/actions/authenticate-api';
+import React, { FormEvent } from 'react';
+import { IconLock, IconLockOpen } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -20,8 +18,10 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconLock, IconLockOpen } from '@tabler/icons-react';
-import React, { FormEvent } from 'react';
+import authenticateAPI, {
+  forgetAuth,
+  testAuthentication,
+} from '@/src/actions/authenticate-api';
 import { AuthContext } from '../LVMWebRoot/LVMWebRoot';
 
 type AuthoriseModalProps = {
@@ -126,7 +126,10 @@ export default function AuthenticatedIcon() {
 
   return (
     <Box>
-      <Tooltip label={authStatus.logged ? 'Authenticated' : 'Click to authenticate'}>
+      <Tooltip
+        label={authStatus.logged ? 'Authenticated' : 'Click to authenticate'}
+        visibleFrom="sm"
+      >
         <ActionIcon
           variant="transparent"
           size="lg"

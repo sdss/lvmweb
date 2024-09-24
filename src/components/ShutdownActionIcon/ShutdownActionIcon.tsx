@@ -28,7 +28,7 @@ export default function ShutdownActionIcon() {
 
   return (
     <>
-      <Tooltip label={label} position="bottom">
+      <Tooltip label={label} position="bottom" visibleFrom="sm">
         <Group
           gap={0}
           onClick={open}

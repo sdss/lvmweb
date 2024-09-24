@@ -80,7 +80,7 @@ export default function AlertsActionIcon() {
 
   return (
     <>
-      <Tooltip label={label} position="bottom">
+      <Tooltip label={label} position="bottom" visibleFrom="sm">
         <ActionIcon
           size="lg"
           variant="transparent"
