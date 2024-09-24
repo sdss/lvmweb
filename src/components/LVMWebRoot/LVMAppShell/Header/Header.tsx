@@ -80,9 +80,14 @@ export default function Header() {
   return (
     <>
       <Box className={classes.root} bg={isAlert ? 'red.9' : undefined}>
-        <Group className={classes.group} w="100%">
+        <Group w="100%">
           <Box component={Link} href="/">
-            <Image src="/lvm_logo.png" h={44} alt="LVM logo" />
+            <Image
+              src="/lvm_logo.png"
+              alt="LVM logo"
+              w={44}
+              style={{ objectFit: 'contain' }}
+            />
           </Box>
           <Box component={Link} href="/" visibleFrom="sm">
             <Title order={3} className={classes.title}>
