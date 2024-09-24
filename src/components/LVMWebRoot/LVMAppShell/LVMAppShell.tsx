@@ -8,7 +8,7 @@
 'use client';
 
 import React from 'react';
-import { ActionIcon, Affix, AppShell, Burger, Drawer } from '@mantine/core';
+import { Affix, AppShell, Box, Burger, Drawer } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Header from './Header/Header';
 import NavBar from './NavBar/NavBar';
@@ -39,9 +39,9 @@ export default function LVMAppShell({ children }: { children: React.ReactNode })
         <NavBar />
       </Drawer>
       <Affix position={{ bottom: 30, right: 30 }} hiddenFrom="sm">
-        <ActionIcon radius="xl" size="xl" variant="filled">
+        <Box className={classes.burger}>
           <Burger opened={drawerOpened} onClick={toggle} lineSize={3} />
-        </ActionIcon>
+        </Box>
       </Affix>
     </>
   );
