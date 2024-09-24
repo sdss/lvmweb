@@ -6,8 +6,8 @@
  */
 
 import React from 'react';
-import { IconCheck } from '@tabler/icons-react';
-import { Box, Stack, Table, Title } from '@mantine/core';
+import { IconCheck, IconQuestionMark } from '@tabler/icons-react';
+import { Box, Stack, Table, Title, Tooltip } from '@mantine/core';
 import { ValveTimesType } from './types';
 
 function toTime(date: string | null) {
@@ -16,6 +16,17 @@ function toTime(date: string | null) {
   }
 
   return date.split('T')[1].split('.')[0];
+}
+
+function deltaSec(data1: string | null, data2: string | null) {
+  if (!data1 || !data2) {
+    return null;
+  }
+
+  const date1 = new Date(data1);
+  const date2 = new Date(data2);
+
+  return (Number(date2) - Number(date1)) / 1000;
 }
 
 export function EventTimesTable(props: {
@@ -78,6 +89,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
     open_time: string | null;
     close_time: string | null;
     elapsed: string | null;
+    thermistor_elapsed: string | null;
     timeout: React.ReactElement | null;
   }[] = [];
 
@@ -89,11 +101,16 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
         const open_time_date = new Date(open_time);
         const close_time_date = new Date(close_time);
         const elapsed = (Number(close_time_date) - Number(open_time_date)) / 1000;
+
+        const thermistor_first_active = props.valve_times[cam].thermistor_first_active;
+        const thermistor_elapsed = deltaSec(open_time, thermistor_first_active);
+
         elements.push({
           valve: cam,
           open_time: toTime(open_time),
           close_time: toTime(close_time),
           elapsed: elapsed.toFixed(0),
+          thermistor_elapsed: thermistor_elapsed ? thermistor_elapsed.toFixed(0) : null,
           timeout: props.valve_times[cam].timed_out ? (
             <IconCheck
               style={{ verticalAlign: 'middle' }}
@@ -111,6 +128,7 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
       <Table.Td>{element.open_time}</Table.Td>
       <Table.Td>{element.close_time}</Table.Td>
       <Table.Td ta="right">{element.elapsed}</Table.Td>
+      <Table.Td ta="right">{element.thermistor_elapsed}</Table.Td>
       <Table.Td ta="center">{element.timeout}</Table.Td>
     </Table.Tr>
   ));
@@ -131,7 +149,30 @@ export function OpenTimesTable(props: { valve_times: ValveTimesType | null }) {
               <Table.Th>Valve</Table.Th>
               <Table.Th>Open</Table.Th>
               <Table.Th>Close</Table.Th>
-              <Table.Th ta="right">Elapsed (s)</Table.Th>
+              <Table.Th ta="right">
+                Elapsed (s)
+                <Tooltip label="Total time the valve stayed open">
+                  <IconQuestionMark
+                    size={16}
+                    style={{
+                      verticalAlign: 'middle',
+                      color: 'var(--mantine-color-gray-6)',
+                    }}
+                  />
+                </Tooltip>
+              </Table.Th>
+              <Table.Th ta="right">
+                Thermistor (s)
+                <Tooltip label="Seconds after the valve opened when the thermistor became active">
+                  <IconQuestionMark
+                    size={16}
+                    style={{
+                      verticalAlign: 'middle',
+                      color: 'var(--mantine-color-gray-6)',
+                    }}
+                  />
+                </Tooltip>
+              </Table.Th>
               <Table.Th ta="center">Timeout?</Table.Th>
             </Table.Tr>
           </Table.Thead>

@@ -10,7 +10,16 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Box, Container, rem, SimpleGrid, Skeleton, Stack, Title } from '@mantine/core';
+import {
+  Box,
+  Container,
+  Grid,
+  rem,
+  Skeleton,
+  Stack,
+  Title,
+  useMatches,
+} from '@mantine/core';
 import { fetchFillData, fetchFillList } from './fetchData';
 import { Header } from './header';
 import { LogDisplay } from './log';
@@ -28,25 +37,30 @@ function DataSkeleton() {
 }
 
 function FillData(props: { data: FillMetadataType }) {
+  const twoCol = useMatches({
+    md: false,
+    lg: true,
+  });
+
   return (
-    <Stack gap="md" pt={24}>
-      <SimpleGrid
-        spacing={{ md: 'lg', lg: 100 }}
-        verticalSpacing="lg"
-        cols={{ md: 1, lg: 2 }}
-      >
-        <EventTimesTable
-          start_time={props.data.start_time}
-          end_time={props.data.end_time}
-          purge_start={props.data.purge_start}
-          purge_complete={props.data.purge_complete}
-          fill_start={props.data.fill_start}
-          fill_complete={props.data.fill_complete}
-          fail_time={props.data.fail_time}
-          abort_time={props.data.abort_time}
-        />
-        <OpenTimesTable valve_times={props.data.valve_times} />
-      </SimpleGrid>
+    <Stack gap="md" pt={12}>
+      <Grid>
+        <Grid.Col span={twoCol ? 5 : 12} px={12}>
+          <EventTimesTable
+            start_time={props.data.start_time}
+            end_time={props.data.end_time}
+            purge_start={props.data.purge_start}
+            purge_complete={props.data.purge_complete}
+            fill_start={props.data.fill_start}
+            fill_complete={props.data.fill_complete}
+            fail_time={props.data.fail_time}
+            abort_time={props.data.abort_time}
+          />
+        </Grid.Col>
+        <Grid.Col span={twoCol ? 7 : 12} pt={twoCol ? 0 : 12} px={12}>
+          <OpenTimesTable valve_times={props.data.valve_times} />
+        </Grid.Col>
+      </Grid>
       <LogDisplay data={props.data.log_data} />
       <Plots plot_data={props.data.plot_data} />
     </Stack>

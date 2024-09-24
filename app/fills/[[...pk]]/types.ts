@@ -12,6 +12,7 @@ export type ValveTimesType = {
     open_time: string | null;
     close_time: string | null;
     timed_out: boolean | null;
+    thermistor_first_active: string | null;
   };
 };
 
