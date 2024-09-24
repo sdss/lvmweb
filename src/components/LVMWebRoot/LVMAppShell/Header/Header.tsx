@@ -80,17 +80,19 @@ export default function Header() {
   return (
     <>
       <Box className={classes.root} bg={isAlert ? 'red.9' : undefined}>
-        <Group className={classes.group}>
+        <Group className={classes.group} w="100%">
+          {/* <Link href="/"> */}
+          {/* <Box> */}
           <Link href="/">
-            <Group>
-              <Image src="/lvm_logo.png" h={44} alt="LVM logo" />
-              <Title order={3} className={classes.title} visibleFrom="sm">
-                LVM Web
-              </Title>
-            </Group>
+            <Image src="/lvm_logo.png" h={44} alt="LVM logo" />
           </Link>
-          <Box style={{ flexGrow: 1 }} />
-          <Group gap="xs">
+          <Link href="/">
+            <Title order={3} className={classes.title} visibleFrom="sm">
+              LVM Web
+            </Title>
+          </Link>
+          <Box style={{ flex: 1 }} />
+          <Group gap="xs" align="flex-end">
             <AlertsActionIcon />
             <ShutdownActionIcon />
             <AuthenticatedIcon />
