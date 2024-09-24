@@ -9,7 +9,18 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Box, Container, Group, rem, Skeleton, Stack, Title } from '@mantine/core';
+import { usePathname } from 'next/navigation';
+import { IconExclamationCircle, IconInfoCircle } from '@tabler/icons-react';
+import {
+  Alert,
+  Box,
+  Container,
+  Group,
+  rem,
+  Skeleton,
+  Stack,
+  Title,
+} from '@mantine/core';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import Exposures from './exposures';
 import Header from './header';
@@ -54,65 +65,77 @@ async function getMJDData(mjd: number | null) {
   }
 
   const data = await fetchFromAPI<NightLogData>(`/logs/night-logs/${mjd}`);
+
   return data;
 }
 
 export default function NightLogsPage({ params }: { params: { mjd: string[] } }) {
   const [mjd, setMJD] = React.useState<number | null>(null);
-  const [mjds, setMJDs] = React.useState<number[]>([]);
   const [data, setData] = React.useState<NightLogData | null>(null);
+
+  const mjds = React.useRef<number[]>([]);
 
   const [mode, setMode] = React.useState<NightLogMode | null>(null);
   const [notFound, setNotFound] = React.useState<boolean>(false);
+
+  const [mjdsLoading, setMJDsLoading] = React.useState<boolean>(true);
   const [pageLoading, setPageLoading] = React.useState<boolean>(true);
   const [dataLoading, setDataLoading] = React.useState<boolean>(true);
 
-  React.useEffect(() => {
-    fetchNightLogMJDs().then((mjds) => setMJDs(mjds));
+  const pathname = usePathname();
 
+  React.useEffect(() => {
+    fetchNightLogMJDs().then((newMJDs) => {
+      mjds.current = newMJDs;
+      setMJDsLoading(false);
+    });
+  }, []);
+
+  React.useEffect(() => {
     if (params.mjd && params.mjd.length > 0) {
-      setMJD(parseInt(params.mjd[0], 10));
-      setMode('history');
-    } else {
-      setMode('tonight');
+      const newMJD = Number(params.mjd[0]);
+      setMJD(newMJD);
     }
   }, [params.mjd]);
 
   React.useEffect(() => {
-    if (mjd && mjds.length > 0 && mjds.indexOf(mjd) === -1) {
+    if (mjdsLoading || !mjd) {
+      return;
+    }
+
+    if (mjd && mjds.current.length > 0 && mjds.current.indexOf(mjd) === -1) {
       setNotFound(true);
+      return;
     }
 
-    if (mjds.length > 0 && mjd !== null) {
-      setPageLoading(false);
-    }
-  }, [mjds, mjd]);
+    setPageLoading(false);
 
-  React.useEffect(() => {
+    if (!pathname.startsWith(`/night-logs/${mjd}`)) {
+      window.history.pushState(null, '', `/night-logs/${mjd}`);
+    }
+
     getMJDData(mjd)
       .then((data) => {
         setData(data);
+        if (data !== null && data.current) {
+          setMode('tonight');
+        } else {
+          setMode('history');
+        }
         return data !== null;
       })
       .then((result) => setDataLoading(!result));
-  }, [mjd]);
+  }, [mjdsLoading, mjd]);
 
   React.useEffect(() => {
-    if (!mode) {
+    if (mjdsLoading) {
       return;
     }
 
     if (mode === 'tonight') {
-      ensureMJD()
-        .then((mjd) => setMJD(mjd))
-        .then(() => fetchNightLogMJDs().then((mjds) => setMJDs(mjds)));
-      return;
+      setMJD(mjds.current[mjds.current.length - 1]);
     }
-
-    if (!mjd && mjds) {
-      setMJD(mjds[mjds.length - 1]);
-    }
-  }, [mode, mjd]);
+  }, [mjdsLoading, mode]);
 
   if (notFound && !pageLoading && mjd) {
     return (
@@ -141,6 +164,7 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
         <Stack gap="xl" p={8} mt={2}>
           <Skeleton height={40} />
           <Skeleton height={40} />
+          <Skeleton height={40} />
           <Skeleton height={400} />
           <Skeleton height="80vh" />
         </Stack>
@@ -151,10 +175,26 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
   return (
     <Container size="xl">
       <Stack p={8} mt={2} gap="xl">
+        <Alert
+          variant="light"
+          color={data && data.sent ? 'blue.6' : 'yellow.8'}
+          icon={data && data.sent ? <IconInfoCircle /> : <IconExclamationCircle />}
+        >
+          {data && data.sent
+            ? 'This night log has already been emailed.'
+            : 'This night log has not been emailed yet.'}
+        </Alert>
+
         <Group>
           <Title order={1}>Night log for {mjd}</Title>
           <Box style={{ flexGrow: 1 }} />
-          <Header mjds={mjds} mjd={mjd} mode={mode} setMode={setMode} setMJD={setMJD} />
+          <Header
+            mjds={mjds.current}
+            mjd={mjd}
+            mode={mode}
+            setMode={setMode}
+            setMJD={setMJD}
+          />
         </Group>
         <Observers data={data} mjd={mjd} current={data !== null && data.current} />
         <Stack gap={50}>

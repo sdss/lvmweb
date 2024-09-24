@@ -22,7 +22,9 @@ export default function Exposures(props: ExposuresProps) {
         <hr className={classes.line} />
       </Box>
       {exposure_data ? (
-        <Code block>{exposure_data}</Code>
+        <Code block p={24}>
+          {exposure_data}
+        </Code>
       ) : (
         <Text size="sm" fs="italic">
           No exposures yet.

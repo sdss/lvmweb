@@ -104,7 +104,14 @@ function Comment(props: CommentProps) {
             </Tooltip>
           )}
         </Group>
-        <Text>{text}</Text>
+        <Text
+          size="sm"
+          component="div"
+          style={{ whiteSpace: 'pre-line' }}
+          ff="monospace"
+        >
+          {text}
+        </Text>
       </Paper>
       <DeleteCommentModal pk={pk} opened={opened} close={close} />
     </>
@@ -163,6 +170,7 @@ function AddCommentModal(props: AddCommentModalProps) {
       >
         <Textarea
           placeholder="Enter comment"
+          resize="vertical"
           error={error}
           ref={ref}
           onChange={() => setError(null)}
@@ -202,16 +210,18 @@ function Section(props: SectionProps) {
           <Group>
             <Title order={3}>{title}</Title>
             <Box style={{ flexGrow: 1 }} />
-            <Tooltip label="Add comment">
-              <ActionIcon
-                radius="xl"
-                variant="light"
-                className={classes['add-icon']}
-                onClick={open}
-              >
-                <IconPlus />
-              </ActionIcon>
-            </Tooltip>
+            {current && (
+              <Tooltip label="Add comment">
+                <ActionIcon
+                  radius="xl"
+                  variant="light"
+                  className={classes['add-icon']}
+                  onClick={open}
+                >
+                  <IconPlus />
+                </ActionIcon>
+              </Tooltip>
+            )}
           </Group>
           <hr className={classes.line} />
         </Box>
