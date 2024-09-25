@@ -22,6 +22,7 @@ import {
   Title,
 } from '@mantine/core';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+import CopySend, { EmailButton } from './copy-send';
 import Exposures from './exposures';
 import Header from './header';
 import Observers from './observers';
@@ -54,7 +55,7 @@ async function fetchNightLogMJDs() {
   return mjds;
 }
 
-async function ensureMJD() {
+async function createMJD() {
   const current_mjd = await fetchFromAPI<number>('/logs/night-logs/create');
   return current_mjd;
 }
@@ -99,7 +100,12 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
   }, [params.mjd]);
 
   React.useEffect(() => {
-    if (mjdsLoading || !mjd) {
+    if (mjdsLoading) {
+      return;
+    }
+
+    if (!mjd) {
+      createMJD().then((newMJD) => setMJD(newMJD));
       return;
     }
 
@@ -180,9 +186,17 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
           color={data && data.sent ? 'blue.6' : 'yellow.8'}
           icon={data && data.sent ? <IconInfoCircle /> : <IconExclamationCircle />}
         >
-          {data && data.sent
-            ? 'This night log has already been emailed.'
-            : 'This night log has not been emailed yet.'}
+          <Group>
+            <Box>
+              {data && data.sent
+                ? 'This night log has already been emailed.'
+                : 'This night log has not been emailed yet.'}
+            </Box>
+            <Box style={{ flexGrow: 1 }} />
+            {data && !data.sent && (
+              <EmailButton mjd={mjd} variant="subtle" label="Email" />
+            )}
+          </Group>
         </Alert>
 
         <Group>
@@ -210,6 +224,7 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
             </>
           )}
         </Stack>
+        <CopySend mjd={mjd} />
       </Stack>
     </Container>
   );

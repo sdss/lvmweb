@@ -7,11 +7,11 @@
 
 'use client';
 
+import { IconSunrise } from '@tabler/icons-react';
 import useAPICall from '@/src/hooks/use-api-call';
 import useNow from '@/src/hooks/use-now';
 import booleanYesNo from '@/src/tools/boolean-yes-no';
 import JDToISO from '@/src/tools/jd-to-iso';
-import { IconSunrise } from '@tabler/icons-react';
 import APITable from '../../APITable/APITable';
 
 type EphemerisResponse = {
@@ -31,7 +31,9 @@ type EphemerisResponse = {
 };
 
 function hoursToHoursMin(hours: number | undefined) {
-  if (!hours) return undefined;
+  if (!hours) {
+    return undefined;
+  }
 
   const sign = hours < 0 ? '-' : '';
   const h = Math.floor(Math.abs(hours));
@@ -45,9 +47,12 @@ function hoursToHoursMin(hours: number | undefined) {
 }
 
 export default function EphemerisTable() {
-  const [ephemeris, , noData, refresh] = useAPICall<EphemerisResponse>('/ephemeris/', {
-    interval: 30000,
-  });
+  const [ephemeris, , noData, refresh] = useAPICall<EphemerisResponse>(
+    '/ephemeris/summary',
+    {
+      interval: 30000,
+    }
+  );
 
   const now = useNow();
 

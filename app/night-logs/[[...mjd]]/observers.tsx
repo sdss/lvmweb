@@ -6,9 +6,12 @@
  */
 
 import React from 'react';
+import Link from 'next/link';
 import { IconCheck } from '@tabler/icons-react';
 import {
   ActionIcon,
+  Box,
+  Button,
   CloseButton,
   Group,
   Input,
@@ -18,6 +21,7 @@ import {
 } from '@mantine/core';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import { NightLogData } from './page';
+import classes from './night-logs.module.css';
 
 type ObserverProps = {
   mjd: number | null;
@@ -73,7 +77,7 @@ export default function Observers(props: ObserverProps) {
   );
 
   return (
-    <Group gap="xs">
+    <Group gap="xs" my={15}>
       <Title order={3}>Observers:</Title>
       <form
         onSubmit={(event) => {
@@ -112,6 +116,15 @@ export default function Observers(props: ObserverProps) {
         ) : (
           <Loader size="sm" color="#B8B8B8" />
         ))}
+      <Box style={{ flexGrow: 1 }} />
+      <Button
+        component={Link}
+        href={`/gort-log/${mjd}`}
+        variant="outline"
+        classNames={{ root: classes['gort-button'] }}
+      >
+        Go to GORT log
+      </Button>
     </Group>
   );
 }

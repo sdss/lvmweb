@@ -28,3 +28,23 @@
   padding-left: rem(16px);
   padding-right: rem(16px);
 }
+
+.gort-button {
+  background: var(--mantine-color-dark-8);
+  border-color: var(--mantine-color-dark-4);
+  color: var(--mantine-color-dark-1);
+  &:hover {
+    background: var(--mantine-color-dark-8);
+    color: var(--mantine-color-gray-1);
+  }
+}
+
+.email-button {
+  &[data-variant='subtle'] {
+    color: var(--mantine-color-dark-1);
+    background: transparent;
+    & :hover {
+      color: var(--mantine-color-gray-1);
+    }
+  }
+}
