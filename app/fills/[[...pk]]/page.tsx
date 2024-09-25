@@ -146,7 +146,9 @@ export default function FillPage({ params }: { params: { pk: string[] } }) {
         <Header
           pk={pk}
           records={records}
-          status={!fillData ? null : !fillData.failed && !fillData.aborted}
+          status={
+            !fillData ? null : !fillData.failed && !fillData.aborted && !fillData.error
+          }
         />
         {!fillData ? <DataSkeleton /> : <FillData data={fillData} />}
       </Stack>
