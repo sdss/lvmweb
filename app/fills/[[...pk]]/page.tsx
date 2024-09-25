@@ -147,7 +147,9 @@ export default function FillPage({ params }: { params: { pk: string[] } }) {
           pk={pk}
           records={records}
           status={
-            !fillData ? null : !fillData.failed && !fillData.aborted && !fillData.error
+            !fillData
+              ? null
+              : !fillData.failed && !fillData.aborted && fillData.error !== null
           }
         />
         {!fillData ? <DataSkeleton /> : <FillData data={fillData} />}
