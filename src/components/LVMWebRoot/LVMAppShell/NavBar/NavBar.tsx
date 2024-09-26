@@ -14,6 +14,7 @@ import {
   IconLink,
   IconLogs,
   IconNotebook,
+  IconPencil,
   IconSnowflake,
   IconTelescope,
 } from '@tabler/icons-react';
@@ -27,6 +28,7 @@ export default function NavBar() {
     <ScrollArea type="never">
       <Stack p={16} mt={2} gap="xs">
         <NavBarItem path="/overview" icon={<IconHome />} text="Overview" />
+        <NavBarItem path="/night-logs" icon={<IconPencil />} text="Night Log" />
         <NavBarItem path="/gort-log" icon={<IconNotebook />} text="GORT Log" />
         <NavBarItem path="/exposure-list" icon={<IconLogs />} text="Exposure List" />
         <NavBarItem path="/fills" icon={<IconSnowflake />} text="LN₂ fills" />
