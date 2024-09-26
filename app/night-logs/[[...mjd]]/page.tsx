@@ -105,7 +105,10 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
     }
 
     if (!mjd) {
-      createMJD().then((newMJD) => setMJD(newMJD));
+      createMJD().then((newMJD) => {
+        setMJD(newMJD);
+        mjds.current.push(newMJD);
+      });
       return;
     }
 
@@ -160,7 +163,7 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
     );
   }
 
-  const refresh = React.useCallback(() => {
+  const refresh = React.useCallback(async () => {
     getMJDData(mjd).then((data) => setData(data));
   }, [mjd]);
 
@@ -194,7 +197,7 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
             </Box>
             <Box style={{ flexGrow: 1 }} />
             {data && !data.sent && (
-              <EmailButton mjd={mjd} variant="subtle" label="Email" />
+              <EmailButton mjd={mjd} variant="subtle" label="Email" refresh={refresh} />
             )}
           </Group>
         </Alert>
@@ -224,7 +227,7 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
             </>
           )}
         </Stack>
-        <CopySend mjd={mjd} />
+        <CopySend mjd={mjd} refresh={refresh} sent={data !== null && data.sent} />
       </Stack>
     </Container>
   );

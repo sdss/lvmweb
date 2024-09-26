@@ -17,11 +17,20 @@ type EmailButtonProps = {
   mjd: number | null;
   variant?: ButtonProps['variant'];
   label?: string;
+  refresh?: () => Promise<void>;
+  disabled?: boolean;
 };
 
 export function EmailButton(props: EmailButtonProps) {
-  const { mjd, variant = 'filled', label = 'Send email' } = props;
+  const {
+    mjd,
+    variant = 'filled',
+    label = 'Send email',
+    refresh,
+    disabled = false,
+  } = props;
 
+  const [labelState, setLabelState] = React.useState(label);
   const [loading, setLoading] = React.useState(false);
 
   const sendEmail = React.useCallback(() => {
@@ -37,6 +46,14 @@ export function EmailButton(props: EmailButtonProps) {
           style: { width: rem(200), height: rem(60) },
         });
       })
+      .then(() => {
+        if (refresh) {
+          refresh();
+        }
+
+        setLabelState('Email sent!');
+        setTimeout(() => setLabelState(label), 3000);
+      })
       .finally(() => setLoading(false));
   }, [mjd]);
 
@@ -50,19 +67,22 @@ export function EmailButton(props: EmailButtonProps) {
       leftSection={<IconSend />}
       onClick={sendEmail}
       loading={loading}
+      disabled={disabled}
       classNames={{ root: classes['email-button'] }}
     >
-      {label}
+      {labelState}
     </Button>
   );
 }
 
 type CopySendProps = {
   mjd: number | null;
+  refresh?: () => Promise<void>;
+  sent?: boolean;
 };
 
 export default function CopySend(props: CopySendProps) {
-  const { mjd } = props;
+  const { mjd, sent = false, refresh } = props;
 
   const [loading, setLoading] = React.useState(false);
   const clipboard = useClipboard({ timeout: 2000 });
@@ -97,7 +117,7 @@ export default function CopySend(props: CopySendProps) {
       <Button variant="default" w={160} onClick={copyToClipboard} loading={loading}>
         {clipboard.copied ? 'Copied!' : 'Copy to clipboard'}
       </Button>
-      <EmailButton mjd={mjd} />
+      <EmailButton mjd={mjd} refresh={refresh} disabled={sent} />
     </Group>
   );
 }
