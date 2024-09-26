@@ -7,14 +7,14 @@
 
 // Adapted from https://airbnb.io/visx/lineradial
 
-import useAPICall from '@/src/hooks/use-api-call';
-import { Tooltip } from '@mantine/core';
+import React from 'react';
 import { AxisLeft } from '@visx/axis';
 import { LinearGradient } from '@visx/gradient';
 import { GridAngle, GridRadial } from '@visx/grid';
 import { Group } from '@visx/group';
 import { scaleLinear } from '@visx/scale';
-import React from 'react';
+import { Tooltip } from '@mantine/core';
+import useAPICall from '@/src/hooks/use-api-call';
 
 const green = '#e5fd3d';
 export const blue = '#aeeef8';
@@ -50,7 +50,7 @@ const defaultSizes = {
 };
 
 const telescopeEmojis: { [tel in Telescopes]: string } = {
-  sci: '🔭',
+  sci: '👩🏽‍🔬',
   spec: '⭐️',
   skye: '⚫️',
   skyw: '⬛️',
