@@ -107,7 +107,9 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
     if (!mjd) {
       createMJD().then((newMJD) => {
         setMJD(newMJD);
-        mjds.current.push(newMJD);
+        if (mjds.current.length > 0 && mjds.current.indexOf(newMJD) === -1) {
+          mjds.current.push(newMJD);
+        }
       });
       return;
     }
