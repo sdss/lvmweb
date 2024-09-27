@@ -58,7 +58,7 @@ export default function EphemerisTable() {
 
   const elements = [
     { key: 'sjd', label: 'SJD', value: ephemeris?.SJD },
-    { key: 'request_jd', label: 'Request JD', value: ephemeris?.request_jd },
+    { key: 'request_jd', label: 'Request JD', value: ephemeris?.request_jd.toFixed(5) },
     { key: 'iso_date', label: 'ISO Date', value: now },
     { key: 'sunset', label: 'Sunset', value: JDToISO(ephemeris?.sunset) },
     {
