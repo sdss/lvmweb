@@ -7,14 +7,14 @@
 
 'use client';
 
+import React from 'react';
+import { IconRobot } from '@tabler/icons-react';
+import { Box, Group, Pill, Switch } from '@mantine/core';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import APITable from '@/src/components/APITable/APITable';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
-import { Box, Group, Pill, Switch } from '@mantine/core';
-import { IconRobot } from '@tabler/icons-react';
-import React from 'react';
 
 type OverwatcherResponse = {
   running: boolean;
@@ -87,7 +87,7 @@ function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
   const handleEnabledChange = React.useCallback(() => {
     // Send API request to change value
     const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
-    fetchFromAPI(fullRoute, { method: 'PUT' })
+    fetchFromAPI(fullRoute, { method: 'PUT' }, true)
       .then(() => setOn((prev) => !prev))
       .catch(() => {});
   }, [isOn, route]);
