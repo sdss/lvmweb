@@ -20,6 +20,7 @@ import {
   Title,
   useMatches,
 } from '@mantine/core';
+import ErrorAlert from './error-alert';
 import { fetchFillData, fetchFillList } from './fetchData';
 import { Header } from './header';
 import { LogDisplay } from './log';
@@ -44,6 +45,7 @@ function FillData(props: { data: FillMetadataType }) {
 
   return (
     <Stack gap="md" pt={12}>
+      <ErrorAlert error={props.data.error} />
       <Grid>
         <Grid.Col span={twoCol ? 5 : 12} px={12}>
           <EventTimesTable
@@ -57,7 +59,7 @@ function FillData(props: { data: FillMetadataType }) {
             abort_time={props.data.abort_time}
           />
         </Grid.Col>
-        <Grid.Col span={twoCol ? 7 : 12} pt={twoCol ? 0 : 12} px={12}>
+        <Grid.Col span={twoCol ? 7 : 12} pt={twoCol ? undefined : 12} px={12}>
           <OpenTimesTable valve_times={props.data.valve_times} />
         </Grid.Col>
       </Grid>
