@@ -43,13 +43,21 @@ function ImageFile(props: { path: string | null }) {
   );
 }
 
-export default function FilePath() {
+function FilePath() {
   const params = useSearchParams();
 
   const type = params.get('type');
   const path = params.get('path');
 
+  if (type === 'image') {
+    return <ImageFile path={path} />;
+  }
+
+  return null;
+}
+
+export default function FilePage() {
   <Suspense fallback={<div>Loading...</div>}>
-    {type === 'image' && <ImageFile path={path} />}
+    <FilePath />
   </Suspense>;
 }
