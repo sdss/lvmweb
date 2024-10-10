@@ -7,7 +7,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Image } from '@mantine/core';
 import getSystemFile from '@/src/actions/get-system-image';
@@ -50,7 +50,11 @@ export default function FilePath() {
   const path = params.get('path');
 
   if (type === 'image') {
-    return <ImageFile path={path} />;
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ImageFile path={path} />;
+      </Suspense>
+    );
   }
 
   return null;
