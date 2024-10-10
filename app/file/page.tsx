@@ -57,7 +57,9 @@ function FilePath() {
 }
 
 export default function FilePage() {
-  <Suspense fallback={<div>Loading...</div>}>
-    <FilePath />
-  </Suspense>;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FilePath />
+    </Suspense>
+  );
 }
