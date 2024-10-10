@@ -49,13 +49,7 @@ export default function FilePath() {
   const type = params.get('type');
   const path = params.get('path');
 
-  if (type === 'image') {
-    return (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ImageFile path={path} />;
-      </Suspense>
-    );
-  }
-
-  return null;
+  <Suspense fallback={<div>Loading...</div>}>
+    {type === 'image' && <ImageFile path={path} />}
+  </Suspense>;
 }
