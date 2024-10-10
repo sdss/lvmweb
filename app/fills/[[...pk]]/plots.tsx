@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import Link from 'next/link';
 import { Box, Image, Paper, Stack, Title } from '@mantine/core';
 import getSystemFile from '@/src/actions/get-system-image';
 
@@ -28,7 +29,12 @@ function Plot(props: { file: string }) {
 
   return (
     <Paper withBorder radius={5} bg="var(--dark-background)" shadow="sm">
-      <Image src={`data:image/png;base64,${imageData}`} />
+      <Link
+        href={{ pathname: '/file', query: { type: 'image', path: props.file } }}
+        target="_blank"
+      >
+        <Image src={`data:image/png;base64,${imageData}`} />
+      </Link>
     </Paper>
   );
 }
