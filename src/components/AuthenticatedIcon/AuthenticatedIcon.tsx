@@ -54,7 +54,7 @@ function AuthoriseModal(props: AuthoriseModalProps) {
 
       const isAuth = await testAuthentication();
       if (!isAuth) {
-        setError('Authentication failed');
+        setError('Failed testing authentication');
         setLoading(false);
         return;
       }
@@ -71,8 +71,16 @@ function AuthoriseModal(props: AuthoriseModalProps) {
     await checkAuth();
 
     setLoading(false);
+    setError(null);
     close();
   }, [close, checkAuth]);
+
+  React.useEffect(() => {
+    if (opened) {
+      setError(null);
+      setLoading(false);
+    }
+  }, [opened]);
 
   const loginContents = (
     <form onSubmit={(event) => attemptAuth(event, password)}>
