@@ -39,6 +39,8 @@ export default async function authenticateAPI(password: string) {
       value: response.access_token,
       secure: true,
       maxAge: 31104000,
+      path: '/',
+      sameSite: 'lax',
     });
   } catch (error) {
     console.error(`Failed to get API token: ${(error as Error).message}`);
