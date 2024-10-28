@@ -181,11 +181,17 @@ function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
   );
 }
 
-export default function GortLogPage({ params }: { params: { mjd: string[] } }) {
+export default function GortLogPage({
+  params,
+}: {
+  params: React.Usable<{ mjd: string[] }>;
+}) {
+  const paramsUse = React.use(params);
+
   const [data, setData] = React.useState<string | undefined>(undefined);
   const [mjds, setMJDs] = React.useState<string[]>([]);
   const [currentMJD, setCurrentMJD] = React.useState<string | undefined>(
-    params.mjd ? params.mjd[0] : undefined
+    paramsUse.mjd ? paramsUse.mjd[0] : undefined
   );
   const [nLines, setNLines] = React.useState<number>(1000);
   const [reloading, setReloading] = React.useState(false);

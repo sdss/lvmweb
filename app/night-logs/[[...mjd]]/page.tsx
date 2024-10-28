@@ -70,7 +70,13 @@ async function getMJDData(mjd: number | null) {
   return data;
 }
 
-export default function NightLogsPage({ params }: { params: { mjd: string[] } }) {
+type NightLogsPageProps = {
+  params: React.Usable<{ mjd: string[] }>;
+};
+
+export default function NightLogsPage(props: NightLogsPageProps) {
+  const paramsUse = React.use(props.params);
+
   const [mjd, setMJD] = React.useState<number | null>(null);
   const [data, setData] = React.useState<NightLogData | null>(null);
 
@@ -93,11 +99,11 @@ export default function NightLogsPage({ params }: { params: { mjd: string[] } })
   }, []);
 
   React.useEffect(() => {
-    if (params.mjd && params.mjd.length > 0) {
-      const newMJD = Number(params.mjd[0]);
+    if (paramsUse.mjd && paramsUse.mjd.length > 0) {
+      const newMJD = Number(paramsUse.mjd[0]);
       setMJD(newMJD);
     }
-  }, [params.mjd]);
+  }, [paramsUse.mjd]);
 
   React.useEffect(() => {
     if (mjdsLoading) {

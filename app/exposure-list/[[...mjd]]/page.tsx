@@ -182,11 +182,17 @@ function ExposureDataTable(props: {
   );
 }
 
-export default function ExposureListPage({ params }: { params: { mjd: string[] } }) {
+type ExposureListPageProps = {
+  params: React.Usable<{ mjd: string[] }>;
+};
+
+export default function ExposureListPage(props: ExposureListPageProps) {
+  const paramsUse = React.use(props.params);
+
   const [data, setData] = React.useState<ExposureData[] | undefined>(undefined);
   const [mjds, setMJDs] = React.useState<number[]>([]);
   const [currentMJD, setCurrentMJD] = React.useState<number | undefined>(
-    params.mjd ? parseInt(params.mjd[0], 10) : undefined
+    paramsUse.mjd ? parseInt(paramsUse.mjd[0], 10) : undefined
   );
   const [reloading, setReloading] = React.useState(false);
 
