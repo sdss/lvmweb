@@ -34,7 +34,8 @@ export default async function authenticateAPI(password: string) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
 
-    cookies().set({
+    const cookieStore = await cookies();
+    cookieStore.set({
       name: cookieName,
       value: response.access_token,
       secure: true,
@@ -66,5 +67,6 @@ export async function forgetAuth() {
   /** Logs out the user. */
 
   const cookieName = await getAuthCookieName();
-  cookies().delete(cookieName);
+  const cookieStore = await cookies();
+  cookieStore.delete(cookieName);
 }

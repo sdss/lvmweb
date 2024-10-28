@@ -24,8 +24,10 @@ export default async function fetchFromAPI<T>(
   const url = new URL(route, baseURL).toString();
   const tokenName = await getAuthCookieName();
 
+  const cookieStore = await cookies();
+
   if (needs_authentication) {
-    const token = cookies().get(tokenName);
+    const token = cookieStore.get(tokenName);
 
     if (token === undefined) {
       throw new AuthenticationError('No API token found.');
@@ -40,7 +42,7 @@ export default async function fetchFromAPI<T>(
   const response = await fetch(url, opts);
   if (!response.ok) {
     if (response.status === 401 && needs_authentication) {
-      cookies().delete(tokenName);
+      cookieStore.delete(tokenName);
       throw new AuthenticationError('Authentication error');
     }
 
