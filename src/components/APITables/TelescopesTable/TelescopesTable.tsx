@@ -7,6 +7,9 @@
 
 'use client';
 
+import React from 'react';
+import { IconTelescope } from '@tabler/icons-react';
+import { Box, Button, Group, Pill, Tooltip } from '@mantine/core';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import APITable from '@/src/components/APITable/APITable';
@@ -14,9 +17,6 @@ import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import TelescopePositionPlot from '@/src/components/TelescopePositionPlot/TelescopePositionPlot';
 import useAPICall from '@/src/hooks/use-api-call';
 import useTask from '@/src/hooks/use-task';
-import { Box, Button, Group, Pill, Tooltip } from '@mantine/core';
-import { IconTelescope } from '@tabler/icons-react';
-import React from 'react';
 
 type TelescopeStatusResponse = {
   is_parked: boolean | null;
@@ -156,6 +156,8 @@ function TelescopeConnected(props: TelescopeStatusProps) {
           </Pill>
         </Tooltip>
       );
+
+      return null;
     });
 
     setPills(tmpPills);
