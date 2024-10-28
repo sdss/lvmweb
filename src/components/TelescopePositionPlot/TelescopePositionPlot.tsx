@@ -8,6 +8,7 @@
 // Adapted from https://airbnb.io/visx/lineradial
 
 import React from 'react';
+import Link from 'next/link';
 import { AxisLeft } from '@visx/axis';
 import { LinearGradient } from '@visx/gradient';
 import { GridAngle, GridRadial } from '@visx/grid';
@@ -65,10 +66,11 @@ const telescopeToName: { [tel in Telescopes]: string } = {
 
 type TelescopePositionPlotProps = {
   size?: 'large' | 'small';
+  link?: string;
 };
 
 export default function TelescopePositionPlot(props: TelescopePositionPlotProps) {
-  const { size = 'large' } = props;
+  const { size = 'large', link } = props;
   const [width, height, padding] = defaultSizes[size];
 
   const [coordinates, , , refresh] = useAPICall<TelescopesCoordinates>(
@@ -101,7 +103,9 @@ export default function TelescopePositionPlot(props: TelescopePositionPlotProps)
   }, [polar_to_cartesian]);
 
   const telCoordinates = React.useMemo(() => {
-    if (!coordinates) return {};
+    if (!coordinates) {
+      return {};
+    }
 
     const valid = Object.fromEntries(
       Object.entries(coordinates).filter(([, value]) => value.alt > 30)
@@ -119,7 +123,7 @@ export default function TelescopePositionPlot(props: TelescopePositionPlotProps)
   yScale.range([0, height / 2 - padding]);
   const reverseYScale = yScale.copy().range(yScale.range().reverse());
 
-  return (
+  const Plot = (
     <svg width={width} height={height} onClick={refresh}>
       <LinearGradient from={green} to={blue} id="line-gradient" />
       <rect width={width} height={height} fill="transparent" rx={14} />
@@ -215,4 +219,6 @@ export default function TelescopePositionPlot(props: TelescopePositionPlotProps)
       </Group>
     </svg>
   );
+
+  return link ? <Link href={link}>{Plot}</Link> : Plot;
 }

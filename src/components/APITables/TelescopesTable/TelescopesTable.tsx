@@ -190,7 +190,7 @@ export default function TelescopesTable() {
     {
       key: 'position',
       label: undefined,
-      value: <TelescopePositionPlot size="small" />,
+      value: <TelescopePositionPlot size="small" link="/telescopes/position" />,
     },
   ];
 
