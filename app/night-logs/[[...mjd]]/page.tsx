@@ -71,7 +71,7 @@ async function getMJDData(mjd: number | null) {
 }
 
 type NightLogsPageProps = {
-  params: React.Usable<{ mjd: string[] }>;
+  params: Promise<{ mjd: string[] }>;
 };
 
 export default function NightLogsPage(props: NightLogsPageProps) {

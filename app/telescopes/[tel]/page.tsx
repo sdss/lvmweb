@@ -11,12 +11,18 @@ import React from 'react';
 import { Box, Stack, Title } from '@mantine/core';
 import TelescopePositionPlot from '@/src/components/TelescopePositionPlot/TelescopePositionPlot';
 
-export default function TelescopePage({ params }: { params: { tel: string } }) {
+type TelescopePageProps = {
+  params: Promise<{ tel: string }>;
+};
+
+export default function TelescopePage(props: TelescopePageProps) {
+  const paramsUse = React.use(props.params);
+
   const [valid, setValid] = React.useState<boolean>(true);
   const [src, setSrc] = React.useState<string | undefined>(undefined);
   const [title, setTitle] = React.useState<string | undefined>(undefined);
 
-  const { tel } = params;
+  const { tel } = paramsUse;
   const BASE_URL = 'http://localhost:8090/';
 
   React.useEffect(() => {
@@ -46,9 +52,11 @@ export default function TelescopePage({ params }: { params: { tel: string } }) {
     }
   }, [tel]);
 
-  if (!tel) return null;
+  if (!tel) {
+    return null;
+  }
 
-  if (tel == 'position') {
+  if (tel === 'position') {
     return (
       <Stack p={8} mt={2} gap="lg">
         <Title order={1}>Telescope Position</Title>

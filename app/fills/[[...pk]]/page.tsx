@@ -69,7 +69,13 @@ function FillData(props: { data: FillMetadataType }) {
   );
 }
 
-export default function FillPage({ params }: { params: { pk: string[] } }) {
+type FillPageProps = {
+  params: Promise<{ pk: string[] }>;
+};
+
+export default function FillPage(props: FillPageProps) {
+  const paramsUse = React.use(props.params);
+
   const [pk, setPK] = React.useState<number | null>(null);
 
   const [pks, setPKs] = React.useState<number[]>([]);
@@ -90,12 +96,12 @@ export default function FillPage({ params }: { params: { pk: string[] } }) {
       return;
     }
 
-    if (!params.pk || params.pk.length === 0) {
+    if (!paramsUse.pk || paramsUse.pk.length === 0) {
       router.push(`/fills/${pks[pks.length - 1]}`);
       return;
     }
 
-    const paramPK = Number(params.pk[0]);
+    const paramPK = Number(paramsUse.pk[0]);
     if (!pks.includes(paramPK)) {
       setNotFound(true);
       setPK(paramPK);
@@ -104,7 +110,7 @@ export default function FillPage({ params }: { params: { pk: string[] } }) {
 
     setPK(paramPK);
     setNotFound(false);
-  }, [params.pk, pks]);
+  }, [paramsUse.pk, pks]);
 
   React.useEffect(() => {
     if (pk === null || notFound) {

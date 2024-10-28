@@ -183,7 +183,7 @@ function ExposureDataTable(props: {
 }
 
 type ExposureListPageProps = {
-  params: React.Usable<{ mjd: string[] }>;
+  params: Promise<{ mjd: string[] }>;
 };
 
 export default function ExposureListPage(props: ExposureListPageProps) {

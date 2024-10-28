@@ -184,7 +184,7 @@ function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
 export default function GortLogPage({
   params,
 }: {
-  params: React.Usable<{ mjd: string[] }>;
+  params: Promise<{ mjd: string[] }>;
 }) {
   const paramsUse = React.use(params);
 
