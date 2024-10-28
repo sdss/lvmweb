@@ -9,7 +9,8 @@
 
 import React from 'react';
 import { IconRobot } from '@tabler/icons-react';
-import { Box, Group, Pill, Switch } from '@mantine/core';
+import { Box, Button, Divider, Group, Modal, Pill, Switch } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import APITable from '@/src/components/APITable/APITable';
@@ -20,20 +21,26 @@ type OverwatcherResponse = {
   running: boolean;
   enabled: boolean;
   observing: boolean;
+  cancelling: boolean;
   calibrating: boolean;
   allow_dome_calibrations: boolean;
   safe: boolean | null;
   night: boolean | null;
   running_calibration: string | null;
+  tile_id: number | null;
+  dither_position: number | null;
+  stage: string | null;
+  standard_no: number | null;
 };
 
 type OverwatcherPillProps = {
-  value: boolean | null | undefined;
+  value: boolean | string | null | undefined;
   nodata: boolean;
   useErrorColour?: boolean;
   noColor?: string;
   yesColor?: string;
   naColor?: string;
+  customColour?: string;
 };
 
 function OverwatcherPill(props: OverwatcherPillProps) {
@@ -44,11 +51,14 @@ function OverwatcherPill(props: OverwatcherPillProps) {
     yesColor = 'lime.9',
     noColor = 'dark.5',
     naColor = 'dark.5',
+    customColour,
   } = props;
 
   let text: string;
   if (value === null || value === undefined) {
     text = 'N/A';
+  } else if (typeof value === 'string') {
+    text = value;
   } else {
     text = value ? 'Yes' : 'No';
   }
@@ -58,6 +68,8 @@ function OverwatcherPill(props: OverwatcherPillProps) {
     colour = 'red.9';
   } else if (text === 'N/A') {
     colour = naColor;
+  } else if (customColour) {
+    colour = customColour;
   } else {
     colour = value ? yesColor : noColor;
   }
@@ -70,44 +82,174 @@ function OverwatcherPill(props: OverwatcherPillProps) {
 }
 
 interface EnabledGroupProps {
-  route: string;
+  nodata: boolean;
   enabled?: boolean;
+  cancelling?: boolean;
+  running?: boolean;
+  refreshData?: () => void;
 }
 
-function EnabledGroup(props: EnabledGroupProps & OverwatcherPillProps) {
-  const { route, value, nodata, enabled = true } = props;
+function EnabledGroup(props: EnabledGroupProps) {
+  const { nodata, enabled, cancelling = false, running = true } = props;
 
-  const [isOn, setOn] = React.useState(value || false);
+  const [isOn, setOn] = React.useState(enabled || false);
   const authStatus = React.useContext(AuthContext);
 
+  const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure();
+
   React.useEffect(() => {
-    setOn(value || false);
-  }, [value]);
+    setOn(enabled || false);
+  }, [enabled]);
 
   const handleEnabledChange = React.useCallback(() => {
-    // Send API request to change value
-    const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
-    fetchFromAPI(fullRoute, { method: 'PUT' }, true)
-      .then(() => setOn((prev) => !prev))
-      .catch(() => {});
-  }, [isOn, route]);
+    if (!isOn) {
+      // Send API request to change value to enabled.
+      const route = '/overwatcher/status';
+      const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
+      fetchFromAPI(fullRoute, { method: 'PUT' }, true)
+        .then(() => setOn((prev) => !prev))
+        .catch(() => {})
+        .finally(props.refreshData);
+    } else {
+      // Use modal to confirm disabling.
+      openModal();
+    }
+  }, [isOn]);
 
   return (
     <Group>
-      <OverwatcherPill value={value} nodata={nodata} />
+      <OverwatcherPill
+        value={cancelling ? 'Cancelling' : enabled}
+        nodata={nodata}
+        customColour={cancelling ? 'orange.9' : undefined}
+      />
       <Box style={{ flexGrow: 1 }} />
       <Switch
         size="md"
         pr={16}
-        checked={isOn}
+        checked={isOn === true}
         onChange={handleEnabledChange}
         onLabel="ON"
         offLabel="OFF"
         disabled={
           nodata ||
-          value === null ||
-          value === undefined ||
-          !enabled ||
+          enabled === null ||
+          enabled === undefined ||
+          !running ||
+          !authStatus.logged
+        }
+      />
+      <DisableModal
+        opened={modalOpened}
+        close={closeModal}
+        refreshData={props.refreshData}
+      />
+    </Group>
+  );
+}
+
+function DisableModal(props: {
+  opened: boolean;
+  close: () => void;
+  refreshData?: () => void;
+}) {
+  const { opened, close, refreshData } = props;
+  const [isDisabling, setDisabling] = React.useState(false);
+
+  const handleDisable = React.useCallback(
+    (now: boolean) => {
+      setDisabling(true);
+      fetchFromAPI(`/overwatcher/status/disable?now=${now}`, { method: 'PUT' }, true)
+        .catch(() => {})
+        .finally(() => {
+          setDisabling(false);
+          close();
+          refreshData?.();
+        });
+    },
+    [close]
+  );
+
+  return (
+    <Modal
+      opened={opened}
+      onClose={close}
+      title="Are you sure that you want to disable the Overwatcher?"
+      size="lg"
+    >
+      <Group justify="end" pt={16}>
+        <Button
+          variant="default"
+          onClick={props.close}
+          disabled={isDisabling}
+          style={{ cursor: isDisabling ? 'no-drop' : undefined }}
+        >
+          Cancel
+        </Button>
+        <Button
+          color="blue"
+          onClick={() => handleDisable(false)}
+          disabled={isDisabling}
+          style={{ cursor: isDisabling ? 'no-drop' : undefined }}
+        >
+          After this tile
+        </Button>
+        <Button
+          color="red"
+          onClick={() => handleDisable(true)}
+          disabled={isDisabling}
+          style={{ cursor: isDisabling ? 'no-drop' : undefined }}
+        >
+          Immediately
+        </Button>
+      </Group>
+    </Modal>
+  );
+}
+
+interface DomeCalibrationsGroupProps {
+  nodata: boolean;
+  allow?: boolean;
+  running?: boolean;
+  refreshData: () => void;
+}
+
+function DomeCalibrationsGroup(props: DomeCalibrationsGroupProps) {
+  const { nodata, allow, running = true } = props;
+
+  const [isOn, setOn] = React.useState(allow || false);
+  const authStatus = React.useContext(AuthContext);
+
+  React.useEffect(() => {
+    setOn(allow || false);
+  }, [allow]);
+
+  const handleAllowChange = React.useCallback(() => {
+    // Send API request to change value
+    const route = '/overwatcher/status/allow_dome_calibrations';
+    const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
+    fetchFromAPI(fullRoute, { method: 'PUT' }, true)
+      .then(() => setOn((prev) => !prev))
+      .catch(() => {})
+      .finally(props.refreshData);
+  }, [isOn]);
+
+  return (
+    <Group>
+      <OverwatcherPill value={allow} nodata={nodata} />
+      <Box style={{ flexGrow: 1 }} />
+      <Switch
+        size="md"
+        pr={16}
+        checked={isOn === true}
+        onChange={handleAllowChange}
+        onLabel="ON"
+        offLabel="OFF"
+        disabled={
+          nodata ||
+          allow === null ||
+          allow === undefined ||
+          !running ||
           !authStatus.logged
         }
       />
@@ -145,10 +287,69 @@ function CalibrationGroup(props: {
   );
 }
 
+function ObservingText(props: { data: OverwatcherResponse | null }) {
+  const { data } = props;
+
+  if (!data || !data?.observing || !data.tile_id) {
+    return null;
+  }
+
+  const stage = data.stage || '?';
+  let tileID: string;
+
+  if (data.tile_id && data.dither_position) {
+    tileID = `${data.tile_id} (${data.dither_position})`;
+  } else if (data.tile_id) {
+    tileID = `${data.tile_id}`;
+  } else {
+    tileID = '?';
+  }
+
+  const standardNo = data.standard_no || '?';
+
+  return (
+    <Group
+      gap={5}
+      style={{
+        paddingRight: 16,
+        maxWidth: 190,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        textAlign: 'right',
+      }}
+    >
+      <APIStatusText defaultTooltipText="Stage" size="xs">
+        {stage}
+      </APIStatusText>
+      <Divider orientation="vertical" />
+      <APIStatusText defaultTooltipText="Tile ID" size="xs">
+        {tileID}
+      </APIStatusText>
+      <Divider orientation="vertical" />
+      <APIStatusText defaultTooltipText="Standard number" size="xs">
+        {standardNo}
+      </APIStatusText>
+    </Group>
+  );
+}
+
+function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boolean }) {
+  const { data, nodata } = props;
+
+  return (
+    <Group gap="xs">
+      <OverwatcherPill value={data?.observing} nodata={nodata} />
+      <Box style={{ flexGrow: 1 }} />
+      <ObservingText data={data} />
+    </Group>
+  );
+}
+
 export default function OverwatcherTable() {
   const [data, , noData, refresh] = useAPICall<OverwatcherResponse>(
     '/overwatcher/status',
-    { interval: 10000 }
+    { interval: 5000 }
   );
 
   const elements = [
@@ -162,17 +363,18 @@ export default function OverwatcherTable() {
       label: 'Enabled',
       value: (
         <EnabledGroup
-          route="/overwatcher/status"
-          value={data?.enabled}
+          enabled={data?.enabled}
+          cancelling={data?.cancelling}
           nodata={noData}
-          enabled={data?.running}
+          running={data?.running}
+          refreshData={refresh}
         />
       ),
     },
     {
       key: 'observing',
       label: 'Observing',
-      value: <OverwatcherPill value={data?.observing} nodata={noData} />,
+      value: <ObservingGroup data={data} nodata={noData} />,
     },
     {
       key: 'calibrating',
@@ -193,11 +395,11 @@ export default function OverwatcherTable() {
       key: 'allow_dome_calibrations',
       label: 'Allow dome calibrations',
       value: (
-        <EnabledGroup
-          route="/overwatcher/status/allow_dome_calibrations"
-          value={data?.allow_dome_calibrations}
+        <DomeCalibrationsGroup
+          allow={data?.allow_dome_calibrations}
           nodata={noData}
-          enabled={data?.running}
+          running={data?.running}
+          refreshData={refresh}
         />
       ),
     },
