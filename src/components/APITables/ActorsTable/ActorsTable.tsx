@@ -7,12 +7,13 @@
 
 'use client';
 
+import React from 'react';
+import { IconCancel, IconHeartRateMonitor, IconRefresh } from '@tabler/icons-react';
+import { ActionIcon, Box, Group, Pill, rem, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import fetchFromAPI from '@/src/actions/fetch-from-API';
 import useAPICall from '@/src/hooks/use-api-call';
 import useTask from '@/src/hooks/use-task';
-import { ActionIcon, Box, Group, Pill, Tooltip } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconHeartRateMonitor, IconRefresh } from '@tabler/icons-react';
-import React from 'react';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
@@ -29,7 +30,7 @@ function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
   const { data, noData } = props;
 
   return (
-    <Group gap="xs">
+    <Group gap={5} style={{ flexWrap: 'nowrap' }}>
       <Pill bg={data.is_deployed ? 'lime.9' : 'red.8'}>
         <APIStatusText size="xs" nodata={noData}>
           {data.is_deployed ? 'deployed' : 'not deployed'}
@@ -90,16 +91,55 @@ function RetartActor(props: { actor: string; refreshData: () => void }) {
   );
 }
 
+function StopActor(props: { actor: string; refreshData: () => void }) {
+  const { actor, refreshData } = props;
+
+  const [opened, { open, close }] = useDisclosure();
+
+  const handleStop = React.useCallback(() => {
+    close();
+    fetchFromAPI(`/actors/stop/${actor}`)
+      .catch(() => {})
+      .finally(refreshData);
+  }, [actor, close, refreshData]);
+
+  return (
+    <>
+      <Tooltip label="Stop actor">
+        <ActionIcon
+          size="sm"
+          onClick={open}
+          variant="transparent"
+          color="gray"
+          className={classes.root}
+        >
+          <IconCancel size={18} />
+        </ActionIcon>
+      </Tooltip>
+      <ConfirmationModal
+        opened={opened}
+        close={close}
+        title="Stop actor"
+        handleAction={handleStop}
+        message={`Are you sure you want to remove ${actor}?`}
+      />
+    </>
+  );
+}
+
 function HealthRow(props: {
   data: ActorHealthResponse;
   noData: boolean;
   refreshData: () => void;
 }) {
   return (
-    <Group style={{ flexWrap: 'nowrap' }}>
+    <Group style={{ flexWrap: 'nowrap' }} gap="xs">
       <HealthPills data={props.data} noData={props.noData} />
       <Box style={{ flexGrow: 1 }} />
-      <RetartActor actor={props.data.actor} refreshData={props.refreshData} />
+      <Box style={{ alignSelf: 'baseline', minWidth: rem(50) }}>
+        <RetartActor actor={props.data.actor} refreshData={props.refreshData} />
+        <StopActor actor={props.data.actor} refreshData={props.refreshData} />
+      </Box>
     </Group>
   );
 }
