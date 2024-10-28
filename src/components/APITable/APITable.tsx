@@ -58,7 +58,7 @@ function RefreshData(props: { onClick: () => void }) {
 }
 
 export default function APITable(props: {
-  title: string;
+  title: string | React.ReactNode;
   elements: Elements;
   midsection?: React.ReactNode;
   noData?: boolean;

@@ -7,12 +7,13 @@
 
 'use client';
 
+import React from 'react';
+import Link from 'next/link';
+import { IconCloudRain } from '@tabler/icons-react';
+import { Pill } from '@mantine/core';
 import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import useNow from '@/src/hooks/use-now';
-import { Pill } from '@mantine/core';
-import { IconCloudRain } from '@tabler/icons-react';
-import React from 'react';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 
@@ -73,7 +74,9 @@ export default function WeatherTable() {
   const now = useNow({ asString: false, delay: 10000 });
 
   const age = React.useMemo(() => {
-    if (!weather || !now) return null;
+    if (!weather || !now) {
+      return null;
+    }
 
     const diff = new Date(now.getTime() - new Date(`${weather[0].ts}Z`).getTime());
 
@@ -152,7 +155,11 @@ export default function WeatherTable() {
 
   return (
     <APITable
-      title="Weather"
+      title={
+        <Link href="https://weather.lco.cl" target="_blank">
+          Weather
+        </Link>
+      }
       elements={elements}
       noData={noData}
       icon={<IconCloudRain />}
