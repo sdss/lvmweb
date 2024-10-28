@@ -9,13 +9,24 @@
 
 import React from 'react';
 import { IconRobot } from '@tabler/icons-react';
-import { Box, Button, Divider, Group, Modal, Pill, Switch } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Divider,
+  Group,
+  Modal,
+  Pill,
+  Switch,
+  Tooltip,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import APITable from '@/src/components/APITable/APITable';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
+import useTask from '@/src/hooks/use-task';
+import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 
 type OverwatcherResponse = {
   running: boolean;
@@ -81,6 +92,49 @@ function OverwatcherPill(props: OverwatcherPillProps) {
   );
 }
 
+type RunningGroupProps = {
+  running?: boolean;
+  nodata: boolean;
+};
+
+function RunningGroup(props: RunningGroupProps) {
+  const { running, nodata } = props;
+
+  const [opened, { open: openModal, close: closeModal }] = useDisclosure();
+
+  const [runner, taskRunning] = useTask<boolean>({ taskName: 'park_telescopes' });
+  const authStatus = React.useContext(AuthContext);
+
+  const runCleanup = React.useCallback(() => {
+    closeModal();
+    runner('/macros/cleanup', true).catch(() => {});
+  }, [runner, closeModal]);
+
+  return (
+    <Group>
+      <OverwatcherPill value={running} nodata={nodata} useErrorColour />
+      <Box style={{ flexGrow: 1 }} />
+      <Tooltip label={authStatus.logged ? 'Run cleanup' : 'Authentication needed'}>
+        <Button
+          size="compact-xs"
+          variant="light"
+          disabled={!authStatus.logged || taskRunning}
+          onClick={openModal}
+          mr={8}
+        >
+          Run cleanup
+        </Button>
+      </Tooltip>
+      <ConfirmationModal
+        opened={opened}
+        close={closeModal}
+        handleAction={runCleanup}
+        title="Run cleanup recipe"
+      />
+    </Group>
+  );
+}
+
 interface EnabledGroupProps {
   nodata: boolean;
   enabled?: boolean;
@@ -126,7 +180,7 @@ function EnabledGroup(props: EnabledGroupProps) {
       <Box style={{ flexGrow: 1 }} />
       <Switch
         size="md"
-        pr={16}
+        pr={8}
         checked={isOn === true}
         onChange={handleEnabledChange}
         onLabel="ON"
@@ -240,7 +294,7 @@ function DomeCalibrationsGroup(props: DomeCalibrationsGroupProps) {
       <Box style={{ flexGrow: 1 }} />
       <Switch
         size="md"
-        pr={16}
+        pr={8}
         checked={isOn === true}
         onChange={handleAllowChange}
         onLabel="ON"
@@ -356,7 +410,7 @@ export default function OverwatcherTable() {
     {
       key: 'running',
       label: 'Running',
-      value: <OverwatcherPill value={data?.running} nodata={noData} useErrorColour />,
+      value: <RunningGroup running={data?.running} nodata={noData} />,
     },
     {
       key: 'enabled',
