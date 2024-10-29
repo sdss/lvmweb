@@ -284,6 +284,7 @@ function CalibrationsGroup(props: DomeCalibrationsGroupProps) {
     // Send API request to change value
     const route = '/overwatcher/status/allow_calibrations';
     const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
+
     fetchFromAPI(fullRoute, { method: 'PUT' }, true)
       .then(() => setOn((prev) => !prev))
       .catch(() => {})
@@ -322,6 +323,7 @@ function CalibrationGroup(props: {
   const { data, nodata } = props;
 
   const tooltipText = `Running calibration: ${data?.running_calibration || ''}`;
+
   return (
     <Group gap="xs">
       <OverwatcherPill value={data?.calibrating} nodata={nodata} />
