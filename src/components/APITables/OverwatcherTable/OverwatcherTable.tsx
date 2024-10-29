@@ -34,7 +34,7 @@ type OverwatcherResponse = {
   observing: boolean;
   cancelling: boolean;
   calibrating: boolean;
-  allow_dome_calibrations: boolean;
+  allow_calibrations: boolean;
   safe: boolean | null;
   night: boolean | null;
   running_calibration: string | null;
@@ -268,7 +268,7 @@ interface DomeCalibrationsGroupProps {
   refreshData: () => void;
 }
 
-function DomeCalibrationsGroup(props: DomeCalibrationsGroupProps) {
+function CalibrationsGroup(props: DomeCalibrationsGroupProps) {
   const { nodata, allow, running = true } = props;
 
   const [isOn, setOn] = React.useState(allow || false);
@@ -280,7 +280,7 @@ function DomeCalibrationsGroup(props: DomeCalibrationsGroupProps) {
 
   const handleAllowChange = React.useCallback(() => {
     // Send API request to change value
-    const route = '/overwatcher/status/allow_dome_calibrations';
+    const route = '/overwatcher/status/allow_calibrations';
     const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
     fetchFromAPI(fullRoute, { method: 'PUT' }, true)
       .then(() => setOn((prev) => !prev))
@@ -446,11 +446,11 @@ export default function OverwatcherTable() {
       value: <OverwatcherPill value={data?.night} nodata={noData} />,
     },
     {
-      key: 'allow_dome_calibrations',
-      label: 'Allow dome calibrations',
+      key: 'allow_calibrations',
+      label: 'Allow calibrations',
       value: (
-        <DomeCalibrationsGroup
-          allow={data?.allow_dome_calibrations}
+        <CalibrationsGroup
+          allow={data?.allow_calibrations}
           nodata={noData}
           running={data?.running}
           refreshData={refresh}
