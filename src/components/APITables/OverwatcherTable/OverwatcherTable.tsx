@@ -178,21 +178,23 @@ function EnabledGroup(props: EnabledGroupProps) {
         customColour={cancelling ? 'orange.9' : undefined}
       />
       <Box style={{ flexGrow: 1 }} />
-      <Switch
-        size="md"
-        pr={8}
-        checked={isOn === true}
-        onChange={handleEnabledChange}
-        onLabel="ON"
-        offLabel="OFF"
-        disabled={
-          nodata ||
-          enabled === null ||
-          enabled === undefined ||
-          !running ||
-          !authStatus.logged
-        }
-      />
+      <Tooltip label="Enable/disable the Overwatcher">
+        <Switch
+          size="md"
+          pr={8}
+          checked={isOn === true}
+          onChange={handleEnabledChange}
+          onLabel="ON"
+          offLabel="OFF"
+          disabled={
+            nodata ||
+            enabled === null ||
+            enabled === undefined ||
+            !running ||
+            !authStatus.logged
+          }
+        />
+      </Tooltip>
       <DisableModal
         opened={modalOpened}
         close={closeModal}
@@ -292,21 +294,23 @@ function CalibrationsGroup(props: DomeCalibrationsGroupProps) {
     <Group>
       <OverwatcherPill value={allow} nodata={nodata} />
       <Box style={{ flexGrow: 1 }} />
-      <Switch
-        size="md"
-        pr={8}
-        checked={isOn === true}
-        onChange={handleAllowChange}
-        onLabel="ON"
-        offLabel="OFF"
-        disabled={
-          nodata ||
-          allow === null ||
-          allow === undefined ||
-          !running ||
-          !authStatus.logged
-        }
-      />
+      <Tooltip label="Allow/disallow calibrations">
+        <Switch
+          size="md"
+          pr={8}
+          checked={isOn === true}
+          onChange={handleAllowChange}
+          onLabel="ON"
+          offLabel="OFF"
+          disabled={
+            nodata ||
+            allow === null ||
+            allow === undefined ||
+            !running ||
+            !authStatus.logged
+          }
+        />
+      </Tooltip>
     </Group>
   );
 }
