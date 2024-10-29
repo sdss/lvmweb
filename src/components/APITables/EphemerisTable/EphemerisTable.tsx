@@ -54,7 +54,7 @@ export default function EphemerisTable() {
     }
   );
 
-  const now = useNow();
+  const now = useNow({ precision: 0 });
 
   const elements = [
     { key: 'sjd', label: 'SJD', value: ephemeris?.SJD },
