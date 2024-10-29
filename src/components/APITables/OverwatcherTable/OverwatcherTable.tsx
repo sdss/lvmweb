@@ -351,8 +351,8 @@ function ObservingText(props: { data: OverwatcherResponse | null }) {
   const stage = data.stage || '?';
   let tileID: string;
 
-  if (data.tile_id && data.dither_position) {
-    tileID = `${data.tile_id} (${data.dither_position})`;
+  if (data.tile_id && data.dither_position !== null) {
+    tileID = `${data.tile_id}-${data.dither_position}`;
   } else if (data.tile_id) {
     tileID = `${data.tile_id}`;
   } else {
@@ -377,7 +377,7 @@ function ObservingText(props: { data: OverwatcherResponse | null }) {
         {stage}
       </APIStatusText>
       <Divider orientation="vertical" />
-      <APIStatusText defaultTooltipText="Tile ID" size="xs">
+      <APIStatusText defaultTooltipText="TileID-Dither" size="xs">
         {tileID}
       </APIStatusText>
       <Divider orientation="vertical" />
