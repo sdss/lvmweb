@@ -17,6 +17,7 @@ import useTask from '@/src/hooks/use-task';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
+import { AuthContext } from '../../LVMWebRoot/LVMWebRoot';
 import classes from './ActorsTable.module.css';
 
 type ActorHealthResponse = {
@@ -29,21 +30,25 @@ type ActorHealthResponse = {
 function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
   const { data, noData } = props;
 
+  const deployedText = data.is_deployed ? 'deployed' : 'not deployed';
+  const pingText = data.ping ? 'alive' : 'dead';
+  const readyText = data.ping ? 'ready' : 'not ready';
+
   return (
     <Group gap={5} style={{ flexWrap: 'nowrap' }}>
-      <Pill bg={data.is_deployed ? 'lime.9' : 'red.8'}>
-        <APIStatusText size="xs" nodata={noData}>
-          {data.is_deployed ? 'deployed' : 'not deployed'}
+      <Pill bg={data.is_deployed ? 'lime.9' : 'red.8'} style={{ maxWidth: rem(85) }}>
+        <APIStatusText size="xs" nodata={noData} defaultTooltipText={deployedText}>
+          {deployedText}
         </APIStatusText>
       </Pill>
       <Pill bg={data.ping ? 'lime.9' : 'red.8'}>
-        <APIStatusText size="xs" nodata={noData}>
-          {data.ping ? 'alive' : 'dead'}
+        <APIStatusText size="xs" nodata={noData} defaultTooltipText={pingText}>
+          {pingText}
         </APIStatusText>
       </Pill>
       <Pill bg={data.ping ? 'blue' : 'red.8'}>
-        <APIStatusText size="xs" nodata={noData}>
-          {data.ping ? 'ready' : 'not ready'}
+        <APIStatusText size="xs" nodata={noData} defaultTooltipText={readyText}>
+          {readyText}
         </APIStatusText>
       </Pill>
     </Group>
@@ -59,6 +64,8 @@ function RetartActor(props: { actor: string; refreshData: () => void }) {
     notifyErrors: false,
   });
 
+  const AuthStatus = React.useContext(AuthContext);
+
   const handleRestart = React.useCallback(() => {
     close();
     runner(`/actors/restart/${actor}`)
@@ -73,7 +80,7 @@ function RetartActor(props: { actor: string; refreshData: () => void }) {
           size="sm"
           onClick={open}
           variant="transparent"
-          disabled={isRunning}
+          disabled={isRunning || !AuthStatus.logged}
           color="gray"
           className={classes.root}
         >
@@ -96,6 +103,8 @@ function StopActor(props: { actor: string; refreshData: () => void }) {
 
   const [opened, { open, close }] = useDisclosure();
 
+  const AuthStatus = React.useContext(AuthContext);
+
   const handleStop = React.useCallback(() => {
     close();
     fetchFromAPI(`/actors/stop/${actor}`)
@@ -109,9 +118,11 @@ function StopActor(props: { actor: string; refreshData: () => void }) {
         <ActionIcon
           size="sm"
           onClick={open}
+          disabled={!AuthStatus.logged}
           variant="transparent"
           color="gray"
           className={classes.root}
+          ml={5}
         >
           <IconCancel size={18} />
         </ActionIcon>
