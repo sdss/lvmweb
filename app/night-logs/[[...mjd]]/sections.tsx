@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPencil, IconPlus } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -74,6 +74,8 @@ function formatDate(date: string) {
 
 type CommentProps = {
   pk: number;
+  mjd: number;
+  category: string;
   date: string;
   text: string;
   refresh: () => void;
@@ -83,7 +85,13 @@ type CommentProps = {
 function Comment(props: CommentProps) {
   const { pk, date, text, refresh, current } = props;
 
-  const [opened, { open, close }] = useDisclosure(false, { onClose: refresh });
+  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false, {
+    onClose: refresh,
+  });
+  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(
+    false,
+    { onClose: refresh }
+  );
 
   return (
     <>
@@ -94,14 +102,26 @@ function Comment(props: CommentProps) {
           </Text>
           <Box style={{ flexGrow: 1 }} />
           {current && (
-            <Tooltip label="Delete comment">
-              <CloseButton
-                size="sm"
-                mt={2}
-                style={{ alignSelf: 'start' }}
-                onClick={open}
-              />
-            </Tooltip>
+            <Group gap={0}>
+              <Tooltip label="Edit comment">
+                <CloseButton
+                  size="sm"
+                  mt={2}
+                  style={{ alignSelf: 'start' }}
+                  onClick={openEdit}
+                  icon={<IconPencil size={18} stroke={1.5} />}
+                />
+              </Tooltip>
+
+              <Tooltip label="Delete comment">
+                <CloseButton
+                  size="sm"
+                  mt={2}
+                  style={{ alignSelf: 'start' }}
+                  onClick={openDelete}
+                />
+              </Tooltip>
+            </Group>
           )}
         </Group>
         <Text
@@ -113,7 +133,16 @@ function Comment(props: CommentProps) {
           {text}
         </Text>
       </Paper>
-      <DeleteCommentModal pk={pk} opened={opened} close={close} />
+      <AddCommentModal
+        mjd={props.mjd}
+        category={props.category}
+        opened={openedEdit}
+        close={closeEdit}
+        edit
+        pk={pk}
+        text={text}
+      />
+      <DeleteCommentModal pk={pk} opened={openedDelete} close={closeDelete} />
     </>
   );
 }
@@ -123,10 +152,13 @@ type AddCommentModalProps = {
   category: string;
   opened: boolean;
   close: () => void;
+  edit?: boolean;
+  pk?: number | null;
+  text?: string;
 };
 
 function AddCommentModal(props: AddCommentModalProps) {
-  const { mjd, opened, category, close } = props;
+  const { mjd, opened, category, close, edit = false, pk = null, text } = props;
 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -149,7 +181,7 @@ function AddCommentModal(props: AddCommentModalProps) {
     setLoading(true);
     fetchFromAPI('/logs/night-logs/comments/add', {
       method: 'POST',
-      body: JSON.stringify({ mjd, category, comment }),
+      body: JSON.stringify({ mjd, category, comment, pk }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -160,8 +192,10 @@ function AddCommentModal(props: AddCommentModalProps) {
       .finally(() => setLoading(false));
   }, [mjd, category]);
 
+  const title = edit ? 'Edit comment' : 'Add comment';
+
   return (
-    <Modal opened={opened} onClose={close} title="Add comment" size="lg">
+    <Modal opened={opened} onClose={close} title={title} size="lg">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -170,12 +204,20 @@ function AddCommentModal(props: AddCommentModalProps) {
       >
         <Textarea
           placeholder="Enter comment"
+          autosize
+          minRows={5}
           resize="vertical"
           error={error}
           ref={ref}
           onChange={() => setError(null)}
+          onFocus={() => {
+            const element = ref.current;
+            element?.setSelectionRange(element.value.length, element.value.length);
+          }}
           data-autofocus
-        />
+        >
+          {text}
+        </Textarea>
         <Group justify="flex-end" mt="md">
           <Button onClick={close} variant="default">
             Cancel
@@ -230,6 +272,8 @@ function Section(props: SectionProps) {
             <Comment
               key={pk}
               pk={pk}
+              mjd={mjd}
+              category={category}
               date={date}
               text={comment}
               refresh={refresh}
