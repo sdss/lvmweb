@@ -166,7 +166,6 @@ function SpecProgress(props: SpecProgressProps) {
 
   React.useEffect(() => {
     if (etr === null || totalTime === null) {
-      setProgress(null);
       return () => {};
     }
 
