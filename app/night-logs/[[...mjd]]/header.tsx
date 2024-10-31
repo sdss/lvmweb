@@ -7,7 +7,7 @@
 
 'use client';
 
-import { Group, NativeSelect, SegmentedControl } from '@mantine/core';
+import { Group, NativeSelect, SegmentedControl, Tooltip } from '@mantine/core';
 import { NightLogMode } from './page';
 
 type HeaderProps = {
@@ -24,11 +24,13 @@ export default function Header(props: HeaderProps) {
   return (
     <Group gap="sm">
       {mode === 'history' && (
-        <NativeSelect
-          data={mjds.map((m) => m.toString())}
-          value={mjd?.toString()}
-          onChange={(event) => setMJD(parseInt(event.currentTarget.value, 10))}
-        />
+        <Tooltip label="Select MJD">
+          <NativeSelect
+            data={mjds.map((m) => m.toString())}
+            value={mjd?.toString()}
+            onChange={(event) => setMJD(parseInt(event.currentTarget.value, 10))}
+          />
+        </Tooltip>
       )}
       <SegmentedControl
         data={[

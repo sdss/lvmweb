@@ -83,7 +83,7 @@ function LogControls(props: {
 
   return (
     <Group justify="flex-start" gap="lg">
-      <Tooltip label="Enable/disable autorefresh" position="top">
+      <Tooltip label="Enable/disable auto-refresh">
         <Switch
           label={autorefresh ? 'Auto-refresh ON' : 'Auto-refresh OFF'}
           style={{ top: rem(8) }}
@@ -93,31 +93,35 @@ function LogControls(props: {
         />
       </Tooltip>
       <Box style={{ flexGrow: 1 }} />
-      <NativeSelect
-        value={selected}
-        onChange={(event) => {
-          setSelected(event.currentTarget.value);
-          setCurrentMJD(event.currentTarget.value);
-        }}
-        data={mjds.map((m) => m.toString())}
-        h={36}
-      />
-      <NativeSelect
-        value={nLinesSelect}
-        onChange={(event) => {
-          setNLinesSelect(event.currentTarget.value);
-          setNLines(parseInt(event.currentTarget.value, 10));
-        }}
-        data={[
-          { label: '100', value: '100' },
-          { label: '1000', value: '1000' },
-          { label: '10000', value: '10000' },
-          { label: '100000', value: '100000' },
-          { label: 'Unlimited', value: '-1' },
-        ]}
-        h={36}
-      />
-      <Tooltip label="Refresh" position="right">
+      <Tooltip label="Select MJD">
+        <NativeSelect
+          value={selected}
+          onChange={(event) => {
+            setSelected(event.currentTarget.value);
+            setCurrentMJD(event.currentTarget.value);
+          }}
+          data={mjds.map((m) => m.toString())}
+          h={36}
+        />
+      </Tooltip>
+      <Tooltip label="Number of lines to show">
+        <NativeSelect
+          value={nLinesSelect}
+          onChange={(event) => {
+            setNLinesSelect(event.currentTarget.value);
+            setNLines(parseInt(event.currentTarget.value, 10));
+          }}
+          data={[
+            { label: '100', value: '100' },
+            { label: '1000', value: '1000' },
+            { label: '10000', value: '10000' },
+            { label: '100000', value: '100000' },
+            { label: 'Unlimited', value: '-1' },
+          ]}
+          h={36}
+        />
+      </Tooltip>
+      <Tooltip label="Refresh log" position="right">
         <ActionIcon
           h={36}
           w={36}

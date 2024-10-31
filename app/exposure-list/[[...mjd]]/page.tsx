@@ -87,15 +87,17 @@ function ExposureListControls(props: {
 
   return (
     <Group justify="flex-end" gap="lg">
-      <NativeSelect
-        value={selected}
-        onChange={(event) => {
-          setSelected(event.currentTarget.value);
-          setCurrentMJD(parseInt(event.currentTarget.value, 10));
-        }}
-        data={mjds.map((m) => m.toString())}
-        h={36}
-      />
+      <Tooltip label="Select MJD">
+        <NativeSelect
+          value={selected}
+          onChange={(event) => {
+            setSelected(event.currentTarget.value);
+            setCurrentMJD(parseInt(event.currentTarget.value, 10));
+          }}
+          data={mjds.map((m) => m.toString())}
+          h={36}
+        />
+      </Tooltip>
       <Tooltip label="Refresh" position="right">
         <ActionIcon
           h={36}

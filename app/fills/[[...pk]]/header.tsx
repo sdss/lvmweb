@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Group, Loader, NativeSelect, Title } from '@mantine/core';
+import { Box, Group, Loader, NativeSelect, Title, Tooltip } from '@mantine/core';
 import { FillListType } from './types';
 
 export function Header(props: {
@@ -44,14 +44,16 @@ export function Header(props: {
         )}
       </Group>
       <Box style={{ flexGrow: 1 }} />
-      <NativeSelect
-        value={(props.pk || 0).toString()}
-        onChange={(event) => {
-          router.push(`/fills/${parseInt(event.currentTarget.value, 10)}`);
-        }}
-        data={data}
-        h={36}
-      />
+      <Tooltip label="Select fill log">
+        <NativeSelect
+          value={(props.pk || 0).toString()}
+          onChange={(event) => {
+            router.push(`/fills/${parseInt(event.currentTarget.value, 10)}`);
+          }}
+          data={data}
+          h={36}
+        />
+      </Tooltip>
     </Group>
   );
 }
