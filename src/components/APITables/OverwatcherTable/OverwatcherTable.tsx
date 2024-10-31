@@ -136,7 +136,7 @@ function RunningGroup(props: RunningGroupProps) {
 }
 
 interface EnabledGroupProps {
-  data?: OverwatcherResponse;
+  data: OverwatcherResponse | null;
   nodata: boolean;
   refreshData?: () => void;
 }
