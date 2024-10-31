@@ -17,6 +17,7 @@ import {
   Progress,
   Stack,
   Text,
+  Tooltip,
   Transition,
 } from '@mantine/core';
 import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
@@ -169,7 +170,7 @@ function SpecProgress(props: SpecProgressProps) {
       return () => {};
     }
 
-    const interval = 0.1;
+    const interval = 1;
     const rate = 100 / totalTime;
 
     const intervalID = setInterval(() => {
@@ -186,13 +187,15 @@ function SpecProgress(props: SpecProgressProps) {
   }, [etr, totalTime]);
 
   return progress ? (
-    <Progress
-      h={10}
-      value={progress}
-      style={{ flexGrow: 1 }}
-      color={progress < 100 ? 'blue' : 'gray'}
-      animated={progress >= 100}
-    />
+    <Tooltip label={`Remaining: ${etr?.toFixed(0)}/${totalTime}s`}>
+      <Progress
+        h={10}
+        value={progress}
+        style={{ flexGrow: 1 }}
+        color={progress < 100 ? 'blue' : 'gray'}
+        animated={progress >= 100}
+      />
+    </Tooltip>
   ) : (
     <APIStatusText nodata={noData}>No exposure in progress</APIStatusText>
   );
