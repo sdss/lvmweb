@@ -136,17 +136,16 @@ function RunningGroup(props: RunningGroupProps) {
 }
 
 interface EnabledGroupProps {
+  data?: OverwatcherResponse;
   nodata: boolean;
-  enabled?: boolean;
-  cancelling?: boolean;
-  running?: boolean;
   refreshData?: () => void;
 }
 
 function EnabledGroup(props: EnabledGroupProps) {
-  const { nodata, enabled, cancelling = false, running = true } = props;
+  const { data, nodata } = props;
+  const { enabled = false, running = false, observing = false } = data || {};
 
-  const [isOn, setOn] = React.useState(enabled || false);
+  const [isOn, setOn] = React.useState(data?.enabled || false);
   const authStatus = React.useContext(AuthContext);
 
   const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure();
@@ -156,7 +155,7 @@ function EnabledGroup(props: EnabledGroupProps) {
   }, [enabled]);
 
   const handleEnabledChange = React.useCallback(() => {
-    if (!isOn) {
+    if (!isOn || !observing) {
       // Send API request to change value to enabled.
       const route = '/overwatcher/status';
       const fullRoute = isOn ? `${route}/disable` : `${route}/enable`;
@@ -172,11 +171,7 @@ function EnabledGroup(props: EnabledGroupProps) {
 
   return (
     <Group>
-      <OverwatcherPill
-        value={cancelling ? 'Cancelling' : enabled}
-        nodata={nodata}
-        customColour={cancelling ? 'orange.9' : undefined}
-      />
+      <OverwatcherPill value={enabled} nodata={nodata} />
       <Box style={{ flexGrow: 1 }} />
       <Tooltip label="Enable/disable the Overwatcher">
         <Switch
@@ -399,7 +394,12 @@ function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boole
 
   return (
     <Group gap="xs">
-      <OverwatcherPill value={data?.observing} nodata={nodata} />
+      <OverwatcherPill
+        value={data?.cancelling ? 'Cancelling' : data?.enabled}
+        nodata={nodata}
+        customColour={data?.cancelling ? 'orange.9' : undefined}
+      />
+
       <Box style={{ flexGrow: 1 }} />
       <ObservingText data={data} />
     </Group>
@@ -421,15 +421,7 @@ export default function OverwatcherTable() {
     {
       key: 'enabled',
       label: 'Enabled',
-      value: (
-        <EnabledGroup
-          enabled={data?.enabled}
-          cancelling={data?.cancelling}
-          nodata={noData}
-          running={data?.running}
-          refreshData={refresh}
-        />
-      ),
+      value: <EnabledGroup data={data} nodata={noData} refreshData={refresh} />,
     },
     {
       key: 'observing',
