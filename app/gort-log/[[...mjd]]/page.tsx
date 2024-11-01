@@ -176,7 +176,7 @@ function LogDisplay(props: { data: string | undefined; reloading: boolean }) {
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <ScrollArea h="80vh" viewportRef={ref}>
+      <ScrollArea h="80vh" mih="80vh" viewportRef={ref}>
         <Code block px={0} py={16}>
           {props.data.split('\n').map((line, index) => formatLine(line, index))}
         </Code>
