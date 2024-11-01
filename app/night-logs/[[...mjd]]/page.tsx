@@ -21,6 +21,7 @@ import {
   Stack,
   Title,
 } from '@mantine/core';
+import { useForceUpdate, useInterval } from '@mantine/hooks';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import CopySend, { EmailButton } from './copy-send';
 import Exposures from './exposures';
@@ -90,6 +91,15 @@ export default function NightLogsPage(props: NightLogsPageProps) {
   const [dataLoading, setDataLoading] = React.useState<boolean>(true);
 
   const pathname = usePathname();
+
+  const forceUpdate = useForceUpdate();
+  useInterval(
+    () => {
+      refresh().then(forceUpdate);
+    },
+    600000,
+    { autoInvoke: true }
+  );
 
   React.useEffect(() => {
     fetchNightLogMJDs().then((newMJDs) => {
