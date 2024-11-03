@@ -395,7 +395,7 @@ function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boole
   return (
     <Group gap="xs">
       <OverwatcherPill
-        value={data?.cancelling ? 'Cancelling' : data?.enabled}
+        value={data?.cancelling ? 'Cancelling' : data?.observing}
         nodata={nodata}
         customColour={data?.cancelling ? 'orange.9' : undefined}
       />
