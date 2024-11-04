@@ -21,7 +21,7 @@ export default function ShutdownActionIcon() {
 
   const shutDown = React.useCallback(() => {
     close();
-    runner('/macros/shutdown/', true).catch(() => {});
+    runner('/macros/shutdown?disable_overwatcher=1', true).catch(() => {});
   }, [close, runner]);
 
   const label = isRunning ? 'Emergency shutdown in progress' : 'Emergency shutdown';

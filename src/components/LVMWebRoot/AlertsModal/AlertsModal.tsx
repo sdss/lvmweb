@@ -95,7 +95,7 @@ export default function AlertsModal(props: AlertsModalProps) {
 
   const shutDown = React.useCallback(() => {
     close();
-    runner('/macros/shutdown/').catch(() => {});
+    runner('/macros/shutdown?disable_overwatcher=1').catch(() => {});
   }, [close, runner]);
 
   return (
