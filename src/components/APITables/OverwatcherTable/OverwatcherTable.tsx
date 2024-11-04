@@ -394,12 +394,13 @@ function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boole
 
   return (
     <Group gap="xs">
-      <OverwatcherPill
-        value={data?.cancelling ? 'Cancelling' : data?.observing}
-        nodata={nodata}
-        customColour={data?.cancelling ? 'orange.9' : undefined}
-      />
-
+      <Box w={114}>
+        <OverwatcherPill
+          value={data?.cancelling ? 'Stopping' : data?.observing}
+          nodata={nodata}
+          customColour={data?.cancelling ? 'orange.9' : undefined}
+        />
+      </Box>
       <Box style={{ flexGrow: 1 }} />
       <ObservingText data={data} />
     </Group>
