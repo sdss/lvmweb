@@ -48,6 +48,7 @@ function LogControls(props: {
   mjd: string | undefined;
   mjds: string[];
   autorefresh: boolean;
+  nLines: number;
   forceRefresh: () => void;
   setCurrentMJD: (mjd: string) => void;
   setAutorefresh: (autorefresh: boolean) => void;
@@ -56,8 +57,15 @@ function LogControls(props: {
   const [selected, setSelected] = React.useState<string | undefined>(props.mjd);
   const [nLinesSelect, setNLinesSelect] = React.useState<string>('1000');
 
-  const { mjds, autorefresh, setCurrentMJD, setAutorefresh, setNLines, forceRefresh } =
-    props;
+  const {
+    mjds,
+    autorefresh,
+    setCurrentMJD,
+    setAutorefresh,
+    nLines,
+    setNLines,
+    forceRefresh,
+  } = props;
 
   React.useEffect(() => {
     if (mjds.length === 0) {
@@ -90,6 +98,7 @@ function LogControls(props: {
           size="md"
           checked={autorefresh}
           onChange={(event) => setAutorefresh(event.currentTarget.checked)}
+          disabled={nLines >= 10000 || nLines === -1}
         />
       </Tooltip>
       <Box style={{ flexGrow: 1 }} />
@@ -202,7 +211,7 @@ export default function GortLogPage({
   const [autorefresh, setAutorefresh] = React.useState(true);
 
   const forceRefresh = React.useCallback(
-    (showReloading: boolean = true) => {
+    async (showReloading: boolean = true) => {
       if (!currentMJD) {
         return;
       }
@@ -223,15 +232,26 @@ export default function GortLogPage({
   }, []);
 
   React.useEffect(() => {
+    forceRefresh().then(() =>
+      setAutorefresh(() => {
+        if (nLines >= 10000 || nLines === -1) {
+          return false;
+        }
+        return true;
+      })
+    );
+  }, [nLines, forceRefresh]);
+
+  React.useEffect(() => {
     if (!autorefresh) {
       return () => {};
     }
 
     forceRefresh();
-    const interval = setInterval(forceRefresh, 60000);
+    const interval = setInterval(forceRefresh, 30000);
 
     return () => clearInterval(interval);
-  }, [currentMJD, nLines, forceRefresh, autorefresh]);
+  }, [currentMJD, forceRefresh, autorefresh]);
 
   return (
     <>
@@ -242,6 +262,7 @@ export default function GortLogPage({
             mjd={currentMJD}
             mjds={mjds}
             autorefresh={autorefresh}
+            nLines={nLines}
             forceRefresh={forceRefresh}
             setCurrentMJD={setCurrentMJD}
             setAutorefresh={setAutorefresh}
