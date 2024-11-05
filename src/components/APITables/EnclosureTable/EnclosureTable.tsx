@@ -7,9 +7,10 @@
 
 'use client';
 
-import useAPICall from '@/src/hooks/use-api-call';
 import { IconBuildingWarehouse } from '@tabler/icons-react';
+import useAPICall from '@/src/hooks/use-api-call';
 import APITable from '../../APITable/APITable';
+import CalLamps from './CalLamps';
 import DomeStatus from './DomeStatus';
 import DoorStatus from './DoorStatus';
 import Lights from './Lights';
@@ -17,9 +18,12 @@ import O2Levels from './O2Levels';
 import { EnclosureResponse } from './types';
 
 export default function EnclosureTable() {
-  const [enclosure, , noData, refresh] = useAPICall<EnclosureResponse>('/enclosure/', {
-    interval: 10000,
-  });
+  const [enclosure, , noData, refreshData] = useAPICall<EnclosureResponse>(
+    '/enclosure/',
+    {
+      interval: 10000,
+    }
+  );
 
   const elements = [
     {
@@ -51,7 +55,21 @@ export default function EnclosureTable() {
     {
       key: 'lights',
       label: 'Lights',
-      value: <Lights enclosureStatus={enclosure} noData={noData} />,
+      value: (
+        <Lights enclosureStatus={enclosure} noData={noData} refreshData={refreshData} />
+      ),
+      valign: 'center',
+    },
+    {
+      key: 'callamps',
+      label: 'Cal. Lamps',
+      value: (
+        <CalLamps
+          data={enclosure?.cal_lamp_state}
+          noData={noData}
+          refreshData={refreshData}
+        />
+      ),
       valign: 'center',
     },
   ];
@@ -62,7 +80,7 @@ export default function EnclosureTable() {
       elements={elements}
       noData={noData}
       icon={<IconBuildingWarehouse />}
-      refreshData={refresh}
+      refreshData={refreshData}
     />
   );
 }

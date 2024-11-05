@@ -85,7 +85,7 @@ function DomeIcons(props: { moving?: boolean }) {
 
   return (
     <>
-      <Group gap={8}>
+      <Group gap={5}>
         <DomeIcon
           icon={<IconArrowsMaximize size={18} />}
           tooltip="Open the dome"

@@ -8,7 +8,7 @@
 'use client';
 
 import React from 'react';
-import { IconBulbOff } from '@tabler/icons-react';
+import { IconBulb, IconBulbOff } from '@tabler/icons-react';
 import { ActionIcon, Box, Group, Pill, rem, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
@@ -17,12 +17,60 @@ import ConfirmationModal from '@/src/components/ConfirmationModal/ConfirmationMo
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { EnclosureResponse } from './types';
 
-function TurnLightsOffButton(props: { disabled: boolean }) {
+function TurnTelescopeRedButton(props: {
+  disabled: boolean;
+  on: boolean;
+  refreshData: () => void;
+}) {
   const [opened, { open, close }] = useDisclosure();
 
   const handleClick = React.useCallback(() => {
-    close();
-    fetchFromAPI('/enclosure/lights/off/all', {}, true).catch(() => {});
+    const route = props.on
+      ? '/enclosure/lights/off/telescope_red'
+      : '/enclosure/lights/on/telescope_red';
+
+    fetchFromAPI(route, {}, true)
+      .catch(() => {})
+      .then(props.refreshData)
+      .finally(close);
+  }, [close]);
+
+  return (
+    <>
+      <Tooltip
+        label={
+          props.disabled
+            ? 'Authentication needed'
+            : 'Turn on/off the telescope red lamps'
+        }
+      >
+        <ActionIcon size="sm" onClick={open} disabled={props.disabled}>
+          <IconBulb style={{ color: 'var(--mantine-color-red-6)' }} />
+        </ActionIcon>
+      </Tooltip>
+      <ConfirmationModal
+        opened={opened}
+        size="md"
+        title="Confirm lights on/off"
+        message={
+          'Are you sure you want to turn on/off the telescope red lights? ' +
+          'Turning the lights on can affect other telescopes if the dome is open.'
+        }
+        close={close}
+        handleAction={handleClick}
+      />
+    </>
+  );
+}
+
+function TurnLightsOffButton(props: { disabled: boolean; refreshData: () => void }) {
+  const [opened, { open, close }] = useDisclosure();
+
+  const handleClick = React.useCallback(() => {
+    fetchFromAPI('/enclosure/lights/off/all', {}, true)
+      .catch(() => {})
+      .then(props.refreshData)
+      .finally(close);
   }, [close]);
 
   return (
@@ -50,8 +98,9 @@ function TurnLightsOffButton(props: { disabled: boolean }) {
 export default function Lights(props: {
   enclosureStatus: EnclosureResponse | null;
   noData: boolean;
+  refreshData: () => void;
 }) {
-  const { enclosureStatus, noData } = props;
+  const { enclosureStatus, noData, refreshData } = props;
 
   const AuthStatus = React.useContext(AuthContext);
 
@@ -81,7 +130,17 @@ export default function Lights(props: {
           <Box>{LightsPills}</Box>
         </Group>
         <Box style={{ flexGrow: 1 }} />
-        <TurnLightsOffButton disabled={!AuthStatus.logged} />
+        <Group gap={5}>
+          <TurnTelescopeRedButton
+            disabled={!AuthStatus.logged}
+            on={lights.includes('TELESCOPE_RED')}
+            refreshData={refreshData}
+          />
+          <TurnLightsOffButton
+            disabled={!AuthStatus.logged}
+            refreshData={refreshData}
+          />
+        </Group>
       </Group>
     </>
   );

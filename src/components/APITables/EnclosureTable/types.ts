@@ -5,6 +5,15 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+export type CalLampsResponse = {
+  argon: boolean;
+  neon: boolean;
+  ldls: boolean;
+  quartz: boolean;
+  hgne: boolean;
+  xenon: boolean;
+};
+
 export type EnclosureResponse = {
   dome_status: {
     labels: string[];
@@ -19,4 +28,5 @@ export type EnclosureResponse = {
     utilities_room: number;
     spectrograph_room: number;
   };
+  cal_lamp_state: CalLampsResponse;
 };
