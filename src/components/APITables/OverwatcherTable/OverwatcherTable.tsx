@@ -394,7 +394,7 @@ function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boole
 
   return (
     <Group gap="xs">
-      <Box w={114}>
+      <Box>
         <OverwatcherPill
           value={data?.cancelling ? 'Stopping' : data?.observing}
           nodata={nodata}
