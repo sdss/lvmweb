@@ -130,7 +130,7 @@ export default function Lights(props: {
           {LightsPills}
         </Group>
         <Box style={{ flexGrow: 1 }} />
-        <Group gap={5}>
+        <Group gap={5} style={{ alignSelf: 'baseline' }}>
           <TurnTelescopeRedButton
             disabled={!AuthStatus.logged}
             on={lights.includes('TELESCOPE_RED')}

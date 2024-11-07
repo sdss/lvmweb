@@ -132,7 +132,7 @@ export default function APITable(props: {
           colSpan={colspan}
           ta={isSpan ? 'center' : undefined}
           autoFocus={false}
-          maw={isSpan ? undefined : 180}
+          maw={isSpan ? undefined : 130}
         >
           <Text size="sm">{isSpan ? value : element.label}</Text>
         </Table.Td>

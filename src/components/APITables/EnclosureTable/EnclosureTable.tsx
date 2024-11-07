@@ -58,7 +58,7 @@ export default function EnclosureTable() {
       value: (
         <Lights enclosureStatus={enclosure} noData={noData} refreshData={refreshData} />
       ),
-      valign: 'center',
+      valign: 'top',
     },
     {
       key: 'callamps',
@@ -70,7 +70,7 @@ export default function EnclosureTable() {
           refreshData={refreshData}
         />
       ),
-      valign: 'center',
+      valign: 'top',
     },
   ];
 
