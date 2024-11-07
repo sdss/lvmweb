@@ -349,7 +349,9 @@ export default function SpecTable() {
     {
       key: 'ln2_status',
       label: 'LN\u2082 Status',
-      value: <LN2Status filling={filling} noData={noDataFilling} />,
+      value: noDataFilling ? undefined : (
+        <LN2Status filling={filling} noData={noDataFilling} />
+      ),
     },
     {
       key: 'last_exposure_no',
