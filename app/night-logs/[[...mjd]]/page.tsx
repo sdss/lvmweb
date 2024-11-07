@@ -26,6 +26,7 @@ import fetchFromAPI from '@/src/actions/fetch-from-API';
 import CopySend, { EmailButton } from './copy-send';
 import Exposures from './exposures';
 import Header from './header';
+import Notifications from './notifications';
 import Observers from './observers';
 import Sections from './sections';
 
@@ -35,6 +36,13 @@ export type NightLogComment = {
   pk: number;
   date: string;
   comment: string;
+};
+
+export type NotificationType = {
+  date: string;
+  message: string;
+  level: string;
+  payload: object | null;
 };
 
 export type NightLogData = {
@@ -49,6 +57,7 @@ export type NightLogData = {
     other: NightLogComment[];
   };
   exposure_table: string | null;
+  notifications: NotificationType[];
 };
 
 async function fetchNightLogMJDs() {
@@ -242,6 +251,7 @@ export default function NightLogsPage(props: NightLogsPageProps) {
                 current={data !== null && data.current}
               />
               <Exposures exposure_data={data.exposure_table} />
+              <Notifications notifications={data.notifications} />
             </>
           )}
         </Stack>
