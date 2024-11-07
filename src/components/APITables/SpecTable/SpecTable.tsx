@@ -9,17 +9,7 @@
 
 import React from 'react';
 import { IconPrismLight } from '@tabler/icons-react';
-import {
-  Box,
-  Divider,
-  Group,
-  Pill,
-  Progress,
-  Stack,
-  Text,
-  Tooltip,
-  Transition,
-} from '@mantine/core';
+import { Divider, Group, Pill, Progress, Stack, Text, Tooltip } from '@mantine/core';
 import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
@@ -201,31 +191,25 @@ function SpecProgress(props: SpecProgressProps) {
   );
 }
 
-function FillPill(props: { active: boolean }) {
-  const [opened, setOpened] = React.useState(false);
+function LN2Status(props: { filling: boolean | null; noData: boolean }) {
+  let color = 'blue';
+  let text = 'Not filling';
 
-  React.useEffect(() => {
-    if (!props.active) {
-      return () => {};
-    }
-
-    const id = setInterval(() => setOpened((old) => !old), 1500);
-
-    return () => clearInterval(id);
-  }, [props.active]);
+  if (props.filling === null || props.noData) {
+    color = 'red.8';
+    text = 'Unknown';
+  } else if (props.filling) {
+    color = 'orange.9';
+    text = 'Filling';
+  }
 
   return (
-    <Transition mounted={opened} transition="fade" duration={500} timingFunction="ease">
-      {(styles) => (
-        <Box style={styles}>
-          <Pill bg="yellow.8" c="dark.6" size="lg">
-            Filling
-          </Pill>
-        </Box>
-      )}
-    </Transition>
+    <Pill bg={color}>
+      <APIStatusText size="sm">{text}</APIStatusText>
+    </Pill>
   );
 }
+
 export default function SpecTable() {
   const STATUS_INTERVAL = 5000;
   const TEMPS_INTERVAL = 60000;
@@ -363,6 +347,11 @@ export default function SpecTable() {
       value: specTemps ? LN2Temperatures : undefined,
     },
     {
+      key: 'ln2_status',
+      label: 'LN\u2082 Status',
+      value: <LN2Status filling={filling} noData={noDataFilling} />,
+    },
+    {
       key: 'last_exposure_no',
       label: 'Last Exposure',
       value: specState?.last_exposure_no,
@@ -371,7 +360,6 @@ export default function SpecTable() {
   return (
     <APITable
       title="Spectrographs"
-      midsection={filling && !noDataFilling && <FillPill active={filling} />}
       elements={elements}
       noData={noData}
       icon={<IconPrismLight />}
