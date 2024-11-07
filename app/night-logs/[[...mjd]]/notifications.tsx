@@ -84,7 +84,7 @@ export default function Notifications(props: NotificationsProps) {
         <Title order={3}>Notifications</Title>
         <hr className={classes.line} />
       </Box>
-      {notifications ? (
+      {notifications.length > 0 ? (
         <NotificationsTable notifications={notifications} />
       ) : (
         <Text size="sm" fs="italic">
