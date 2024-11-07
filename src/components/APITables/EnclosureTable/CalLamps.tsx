@@ -110,8 +110,8 @@ export default function CalLamps(props: CalLampsProps) {
   return (
     <>
       <Group gap="xs" pr={4}>
-        <Group gap="xs" maw={rem(200)}>
-          <Box>{LampPills}</Box>
+        <Group gap={2} maw={rem(200)}>
+          {LampPills}
         </Group>
         <Box style={{ flexGrow: 1 }} />
         <Group gap={5}>

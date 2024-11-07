@@ -126,8 +126,8 @@ export default function Lights(props: {
   return (
     <>
       <Group gap="xs" pr={4}>
-        <Group gap="xs" maw={rem(200)}>
-          <Box>{LightsPills}</Box>
+        <Group gap={2} maw={rem(200)}>
+          {LightsPills}
         </Group>
         <Box style={{ flexGrow: 1 }} />
         <Group gap={5}>
