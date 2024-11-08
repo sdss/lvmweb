@@ -10,6 +10,7 @@
 import React from 'react';
 import { IconPrismLight } from '@tabler/icons-react';
 import { Divider, Group, Pill, Progress, Stack, Text, Tooltip } from '@mantine/core';
+import { useDebouncedState } from '@mantine/hooks';
 import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
@@ -244,16 +245,25 @@ function SpecStatus(props: SpecStatusProps) {
 }
 
 function LN2Status(props: { filling: boolean | null; noData: boolean }) {
-  let color = 'blue';
-  let text = 'Not filling';
+  // The LN2 fill status is a different call and when the panel is first
+  // rendered, the filling status is not available. So for a second the status
+  // appears in red as "Unknown". We add a debounce to give some time to the API
+  // call to return the correct status.
+  const [color, setColor] = useDebouncedState('blue', 1000);
+  const [text, setText] = useDebouncedState('Not filling', 1000);
 
-  if (props.filling === null || props.noData) {
-    color = 'red.8';
-    text = 'Unknown';
-  } else if (props.filling) {
-    color = 'orange.9';
-    text = 'Filling';
-  }
+  React.useEffect(() => {
+    if (props.filling === null || props.noData) {
+      setColor('red.8');
+      setText('Unknown');
+    } else if (props.filling) {
+      setColor('orange.9');
+      setText('Filling');
+    } else {
+      setColor('blue');
+      setText('Not filling');
+    }
+  }, [props.filling, props.noData]);
 
   return (
     <Pill bg={color}>
