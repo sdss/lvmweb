@@ -31,13 +31,15 @@ function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
   const { data, noData } = props;
 
   const deployedText = data.is_deployed ? 'deployed' : 'not deployed';
+  const deployedTooltip = `${deployedText[0].toUpperCase()}${deployedText.slice(1)} - ${data.deployment_name}`;
+
   const pingText = data.ping ? 'alive' : 'dead';
   const readyText = data.ping ? 'ready' : 'not ready';
 
   return (
     <Group gap={5} style={{ flexWrap: 'nowrap' }}>
       <Pill bg={data.is_deployed ? 'lime.9' : 'red.8'} style={{ maxWidth: rem(85) }}>
-        <APIStatusText size="xs" nodata={noData} defaultTooltipText={deployedText}>
+        <APIStatusText size="xs" nodata={noData} defaultTooltipText={deployedTooltip}>
           {deployedText}
         </APIStatusText>
       </Pill>
