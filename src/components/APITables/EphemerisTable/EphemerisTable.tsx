@@ -109,7 +109,7 @@ export default function EphemerisTable() {
 
   const elements = [
     { key: 'sjd', label: 'SJD', value: ephemeris?.SJD },
-    { key: 'request_jd', label: 'Request JD', value: ephemeris?.request_jd.toFixed(5) },
+    { key: 'request_jd', label: 'Current JD', value: ephemeris?.request_jd.toFixed(5) },
     { key: 'iso_date', label: 'ISO Date', value: now },
     {
       key: 'night_progress',
