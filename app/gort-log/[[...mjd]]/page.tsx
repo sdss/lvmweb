@@ -51,10 +51,8 @@ async function downloadLog(mjd: string | undefined): Promise<void> {
   }
 
   const data = await fetchLogData(mjd, -1);
-  const data64 = Buffer.from(data, 'utf-8').toString('base64');
 
-  const uri = `data:application/octet-stream;charset=utf-8;base64,${data64}`;
-
+  // See https://stackoverflow.com/questions/72706000/nextjs-api-download-buffer-into-browser
   const dataBlob = new Blob([data], { type: 'text/utf-8' });
   const url = URL.createObjectURL(dataBlob);
   const a = document.createElement('a');
