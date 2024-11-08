@@ -37,18 +37,6 @@ type SpecTempsResponse = {
   temperature: number;
 }[];
 
-function SpecStatusPills(specs: string[], nodata: boolean) {
-  return (
-    <Group gap="xs">
-      {specs.map((spec) => (
-        <Pill key={spec} bg="blue">
-          <APIStatusText nodata={nodata}>{spec}</APIStatusText>
-        </Pill>
-      ))}
-    </Group>
-  );
-}
-
 function SpecTemperatures(
   specs: { [k in Cameras]?: number },
   nodata: boolean,
@@ -145,16 +133,6 @@ function SpecProgress(props: SpecProgressProps) {
     );
   }, [state]);
 
-  const readingSpecs = React.useMemo(() => {
-    if (!state) {
-      return [];
-    }
-
-    return Object.keys(state.status).filter(
-      (spec) => state.status[spec as Specs] === 'reading'
-    );
-  }, [state]);
-
   React.useEffect(() => {
     if (noData || !state) {
       setProgress(null);
@@ -207,7 +185,7 @@ function SpecProgress(props: SpecProgressProps) {
         h={10}
         value={progress}
         style={{ flexGrow: 1 }}
-        color={reading ? 'lime.9' : 'blue'}
+        color={reading ? 'green.9' : 'blue'}
         animated={progress >= 100}
       />
     </Tooltip>
@@ -251,7 +229,7 @@ function SpecStatus(props: SpecStatusProps) {
         key={spec}
         label={exposingSpecs.includes(spec) ? `Exposing ${spec}` : `Reading ${spec}`}
       >
-        <Pill bg={exposingSpecs.includes(spec) ? 'blue' : 'lime.9'}>
+        <Pill bg={exposingSpecs.includes(spec) ? 'blue' : 'green.9'}>
           <APIStatusText nodata={noData}>{spec}</APIStatusText>
         </Pill>
       </Tooltip>
