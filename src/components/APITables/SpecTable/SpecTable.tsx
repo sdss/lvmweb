@@ -131,8 +131,29 @@ function SpecProgress(props: SpecProgressProps) {
   const [etr, setETR] = React.useState<number | null>(null);
   const [totalTime, setTotalTime] = React.useState<number | null>(null);
   const [progress, setProgress] = React.useState<number | null>(null);
+  const [reading, setReading] = React.useState<boolean>(false);
 
   const { state, noData } = props;
+
+  const exposingSpecs = React.useMemo(() => {
+    if (!state) {
+      return [];
+    }
+
+    return Object.keys(state.status).filter(
+      (spec) => state.status[spec as Specs] === 'exposing'
+    );
+  }, [state]);
+
+  const readingSpecs = React.useMemo(() => {
+    if (!state) {
+      return [];
+    }
+
+    return Object.keys(state.status).filter(
+      (spec) => state.status[spec as Specs] === 'reading'
+    );
+  }, [state]);
 
   React.useEffect(() => {
     if (noData || !state) {
@@ -150,6 +171,7 @@ function SpecProgress(props: SpecProgressProps) {
       return;
     }
 
+    setReading(exposingSpecs.length === 0);
     setETR(state.exposure_etr);
     setTotalTime(state.total_exposure_time);
     setProgress((1 - state.exposure_etr / state.total_exposure_time) * 100);
@@ -164,6 +186,7 @@ function SpecProgress(props: SpecProgressProps) {
     const rate = 100 / totalTime;
 
     const intervalID = setInterval(() => {
+      setETR((prevETR) => (prevETR === null ? prevETR : prevETR - interval));
       setProgress((prevProgress) => {
         if (prevProgress === null) {
           return prevProgress;
@@ -176,19 +199,70 @@ function SpecProgress(props: SpecProgressProps) {
     return () => clearInterval(intervalID);
   }, [etr, totalTime]);
 
+  const exposureState = reading ? 'Reading' : 'Exposing';
+
   return progress ? (
-    <Tooltip label={`Remaining: ${etr?.toFixed(0)}/${totalTime}s`}>
+    <Tooltip label={`${exposureState} - ETR: ${etr?.toFixed(0)} / ${totalTime} s`}>
       <Progress
         h={10}
         value={progress}
         style={{ flexGrow: 1 }}
-        color={progress < 100 ? 'blue' : 'gray'}
+        color={reading ? 'lime.9' : 'blue'}
         animated={progress >= 100}
       />
     </Tooltip>
   ) : (
     <APIStatusText nodata={noData}>No exposure in progress</APIStatusText>
   );
+}
+
+type SpecStatusProps = SpecProgressProps;
+
+function SpecStatus(props: SpecStatusProps) {
+  const { state, noData } = props;
+
+  const exposingSpecs = React.useMemo(() => {
+    if (!state) {
+      return [];
+    }
+
+    return Object.keys(state.status).filter(
+      (spec) => state.status[spec as Specs] === 'exposing'
+    );
+  }, [state]);
+
+  const readingSpecs = React.useMemo(() => {
+    if (!state) {
+      return [];
+    }
+
+    return Object.keys(state.status).filter(
+      (spec) => state.status[spec as Specs] === 'reading'
+    );
+  }, [state]);
+
+  const Pills = ['sp1', 'sp2', 'sp3'].map((spec) => {
+    if (!exposingSpecs.includes(spec) && !readingSpecs.includes(spec)) {
+      return null;
+    }
+
+    return (
+      <Tooltip
+        key={spec}
+        label={exposingSpecs.includes(spec) ? `Exposing ${spec}` : `Reading ${spec}`}
+      >
+        <Pill bg={exposingSpecs.includes(spec) ? 'blue' : 'lime.9'}>
+          <APIStatusText nodata={noData}>{spec}</APIStatusText>
+        </Pill>
+      </Tooltip>
+    );
+  });
+
+  if (Pills.filter((spec) => spec !== null).length === 0) {
+    return <APIStatusText nodata={noData}>All spectrographs are idle</APIStatusText>;
+  }
+
+  return <Group gap="xs">{Pills}</Group>;
 }
 
 function LN2Status(props: { filling: boolean | null; noData: boolean }) {
@@ -239,26 +313,6 @@ export default function SpecTable() {
     refreshTemps();
   }, [refreshSpec, refreshTemps]);
 
-  const exposingSpecs = React.useMemo(() => {
-    if (!specState) {
-      return [];
-    }
-
-    return Object.keys(specState.status).filter(
-      (spec) => specState.status[spec as Specs] === 'exposing'
-    );
-  }, [specState]);
-
-  const readingSpecs = React.useMemo(() => {
-    if (!specState) {
-      return [];
-    }
-
-    return Object.keys(specState.status).filter(
-      (spec) => specState.status[spec as Specs] === 'reading'
-    );
-  }, [specState]);
-
   const getTemperatures = React.useCallback(
     (sens: Sensor) => {
       if (!specTemps) {
@@ -276,20 +330,6 @@ export default function SpecTable() {
     },
     [specTemps]
   );
-
-  const ExposingPills =
-    exposingSpecs.length > 0 ? (
-      SpecStatusPills(exposingSpecs, noData)
-    ) : (
-      <APIStatusText nodata={noData}>No cameras are exposing</APIStatusText>
-    );
-
-  const ReadingPills =
-    readingSpecs.length > 0 ? (
-      SpecStatusPills(readingSpecs, noData)
-    ) : (
-      <APIStatusText nodata={noData}>No cameras are reading</APIStatusText>
-    );
 
   const ccdTemperatures = getTemperatures('ccd');
   const ln2Temperatures = getTemperatures('ln2');
@@ -331,11 +371,10 @@ export default function SpecTable() {
       value: <SpecProgress state={specState} noData={noDataSpec} />,
     },
     {
-      key: 'exposing',
-      label: 'Exposing',
-      value: specState ? ExposingPills : undefined,
+      key: 'status',
+      label: 'Status',
+      value: <SpecStatus state={specState} noData={noDataSpec} />,
     },
-    { key: 'reading', label: 'Reading', value: specState ? ReadingPills : undefined },
     {
       key: 'ccd_temperatures',
       label: 'CCD Temperatures',
