@@ -8,7 +8,7 @@
 'use client';
 
 import React from 'react';
-import { IconRefresh } from '@tabler/icons-react';
+import { IconDownload, IconRefresh } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -44,6 +44,27 @@ async function fetchLogData(mjd: string, n_lines: number = -1): Promise<string> 
   return response;
 }
 
+async function downloadLog(mjd: string | undefined): Promise<void> {
+  if (!mjd) {
+    // This function won't be called with an undefined mjd, but just in case.
+    return;
+  }
+
+  const data = await fetchLogData(mjd, -1);
+  const data64 = Buffer.from(data, 'utf-8').toString('base64');
+
+  const uri = `data:application/octet-stream;charset=utf-8;base64,${data64}`;
+
+  const dataBlob = new Blob([data], { type: 'text/utf-8' });
+  const url = URL.createObjectURL(dataBlob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `lvmgort_${mjd}.log`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
 function LogControls(props: {
   mjd: string | undefined;
   mjds: string[];
@@ -56,6 +77,7 @@ function LogControls(props: {
 }) {
   const [selected, setSelected] = React.useState<string | undefined>(props.mjd);
   const [nLinesSelect, setNLinesSelect] = React.useState<string>('1000');
+  const [downloading, setDownloading] = React.useState(false);
 
   const {
     mjds,
@@ -102,45 +124,66 @@ function LogControls(props: {
         />
       </Tooltip>
       <Box style={{ flexGrow: 1 }} />
-      <Tooltip label="Select MJD">
-        <NativeSelect
-          value={selected}
-          onChange={(event) => {
-            setSelected(event.currentTarget.value);
-            setCurrentMJD(event.currentTarget.value);
-          }}
-          data={mjds.map((m) => m.toString())}
-          h={36}
-        />
-      </Tooltip>
-      <Tooltip label="Number of lines to show">
-        <NativeSelect
-          value={nLinesSelect}
-          onChange={(event) => {
-            setNLinesSelect(event.currentTarget.value);
-            setNLines(parseInt(event.currentTarget.value, 10));
-          }}
-          data={[
-            { label: '100', value: '100' },
-            { label: '1000', value: '1000' },
-            { label: '10000', value: '10000' },
-            { label: '100000', value: '100000' },
-            { label: 'Unlimited', value: '-1' },
-          ]}
-          h={36}
-        />
-      </Tooltip>
-      <Tooltip label="Refresh log" position="right">
-        <ActionIcon
-          h={36}
-          w={36}
-          variant="transparent"
-          color="dark.0"
-          onClick={forceRefresh}
-        >
-          <IconRefresh />
-        </ActionIcon>
-      </Tooltip>
+      <Group gap="xs">
+        <Tooltip label="Select MJD">
+          <NativeSelect
+            value={selected}
+            onChange={(event) => {
+              setSelected(event.currentTarget.value);
+              setCurrentMJD(event.currentTarget.value);
+            }}
+            data={mjds.map((m) => m.toString())}
+            h={36}
+          />
+        </Tooltip>
+        <Tooltip label="Number of lines to show">
+          <NativeSelect
+            value={nLinesSelect}
+            onChange={(event) => {
+              setNLinesSelect(event.currentTarget.value);
+              setNLines(parseInt(event.currentTarget.value, 10));
+            }}
+            ml={8}
+            data={[
+              { label: '100', value: '100' },
+              { label: '1000', value: '1000' },
+              { label: '10000', value: '10000' },
+              { label: '100000', value: '100000' },
+              { label: 'Unlimited', value: '-1' },
+            ]}
+            h={36}
+          />
+        </Tooltip>
+        <Tooltip label={downloading ? 'Downloading log' : 'Download log'}>
+          <ActionIcon
+            h={36}
+            w={36}
+            ml={8}
+            mr={-4}
+            variant="transparent"
+            color="dark.0"
+            disabled={props.mjd === undefined}
+            onClick={() => {
+              setDownloading(true);
+              downloadLog(props.mjd).finally(() => setDownloading(false));
+            }}
+            loading={downloading}
+          >
+            <IconDownload />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Refresh log" position="right">
+          <ActionIcon
+            h={36}
+            w={36}
+            variant="transparent"
+            color="dark.0"
+            onClick={forceRefresh}
+          >
+            <IconRefresh />
+          </ActionIcon>
+        </Tooltip>
+      </Group>
     </Group>
   );
 }
