@@ -105,6 +105,7 @@ function LogControls(props: {
         <Skeleton width={100} height={36} />
         <Skeleton width={100} height={36} />
         <Skeleton width={36} height={36} />
+        <Skeleton width={36} height={36} />
       </Group>
     );
   }
