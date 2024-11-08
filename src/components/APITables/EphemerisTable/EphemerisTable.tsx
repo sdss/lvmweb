@@ -7,11 +7,14 @@
 
 'use client';
 
+import React from 'react';
 import { IconSunrise } from '@tabler/icons-react';
+import { Progress, Tooltip } from '@mantine/core';
 import useAPICall from '@/src/hooks/use-api-call';
 import useNow from '@/src/hooks/use-now';
 import booleanYesNo from '@/src/tools/boolean-yes-no';
 import JDToISO from '@/src/tools/jd-to-iso';
+import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 
 type EphemerisResponse = {
@@ -46,6 +49,54 @@ function hoursToHoursMin(hours: number | undefined) {
   return `${sign}${hString}:${mString}`;
 }
 
+function JDToUnix(jd: number) {
+  return (jd - 2440587.5) * 86400000; // Unix time in milliseconds
+}
+
+type NightProgressProps = { ephemeris: EphemerisResponse | null; noData: boolean };
+
+function NightProgress(props: NightProgressProps) {
+  const { ephemeris, noData } = props;
+
+  const [progress, setProgress] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!ephemeris) {
+      return;
+    }
+
+    const now = Date.now();
+    const sunset = JDToUnix(ephemeris.sunset);
+    const sunrise = JDToUnix(ephemeris.sunrise);
+
+    if (now < sunset) {
+      setProgress(0);
+    } else {
+      setProgress(((now - sunset) / (sunrise - sunset)) * 100);
+    }
+  }, [ephemeris]);
+
+  let tooltipLabel = '';
+  if (progress <= 0) {
+    return <APIStatusText nodata={noData}>Night has not started</APIStatusText>;
+  } else if (progress >= 100) {
+    tooltipLabel = 'Night has ended';
+  } else {
+    tooltipLabel = `${progress.toFixed(1)}% complete`;
+  }
+
+  return (
+    <Tooltip label={tooltipLabel}>
+      <Progress
+        value={noData ? 100 : progress}
+        color="blue"
+        w="70%"
+        animated={!ephemeris || noData}
+      />
+    </Tooltip>
+  );
+}
+
 export default function EphemerisTable() {
   const [ephemeris, , noData, refresh] = useAPICall<EphemerisResponse>(
     '/ephemeris/summary',
@@ -60,6 +111,11 @@ export default function EphemerisTable() {
     { key: 'sjd', label: 'SJD', value: ephemeris?.SJD },
     { key: 'request_jd', label: 'Request JD', value: ephemeris?.request_jd.toFixed(5) },
     { key: 'iso_date', label: 'ISO Date', value: now },
+    {
+      key: 'night_progress',
+      label: 'Night Progress',
+      value: <NightProgress ephemeris={ephemeris} noData={noData} />,
+    },
     { key: 'sunset', label: 'Sunset', value: JDToISO(ephemeris?.sunset) },
     {
       key: 'twilight_end',
