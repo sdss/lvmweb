@@ -14,3 +14,10 @@
   padding-left: rem(16px);
   padding-right: rem(16px);
 }
+
+.message {
+  a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+}
