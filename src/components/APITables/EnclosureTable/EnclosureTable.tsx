@@ -21,7 +21,7 @@ export default function EnclosureTable() {
   const [enclosure, , noData, refreshData] = useAPICall<EnclosureResponse>(
     '/enclosure/',
     {
-      interval: 10000,
+      interval: 15000,
     }
   );
 
@@ -29,7 +29,13 @@ export default function EnclosureTable() {
     {
       key: 'dome_status',
       label: 'Dome Status',
-      value: <DomeStatus domeLabels={enclosure?.dome_status.labels} noData={noData} />,
+      value: (
+        <DomeStatus
+          domeLabels={enclosure?.dome_status.labels}
+          noData={noData}
+          refreshData={refreshData}
+        />
+      ),
       valign: 'center',
     },
     {

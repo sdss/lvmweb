@@ -30,6 +30,7 @@ function DomeIcon(props: {
   taskName?: string;
   task?: boolean;
   setDisabled?: React.Dispatch<React.SetStateAction<boolean>>;
+  refreshData?: () => void;
 }) {
   const {
     icon,
@@ -40,6 +41,7 @@ function DomeIcon(props: {
     setDisabled,
     taskName = 'undefined',
     task = false,
+    refreshData,
   } = props;
 
   const [opened, { open, close }] = useDisclosure();
@@ -51,11 +53,14 @@ function DomeIcon(props: {
     if (task) {
       const result = runner(route, true);
       setDisabled && setDisabled(isRunning);
-      result.catch(() => {});
+      result.catch(() => {}).finally(refreshData);
     } else {
       fetchFromAPI(route, {}, true)
         .catch(() => {})
-        .finally(() => setDisabled && setDisabled(false));
+        .finally(() => {
+          setDisabled && setDisabled(false);
+          refreshData && refreshData();
+        });
     }
   }, [route, close, isRunning, runner, setDisabled, task]);
 
@@ -77,7 +82,7 @@ function DomeIcon(props: {
   );
 }
 
-function DomeIcons(props: { moving?: boolean }) {
+function DomeIcons(props: { moving?: boolean; refreshData: () => void }) {
   const [disabled, setDisabled] = React.useState(false);
 
   const authStatus = React.useContext(AuthContext);
@@ -92,6 +97,7 @@ function DomeIcons(props: { moving?: boolean }) {
           route="/enclosure/open/"
           disabled={props.moving || disabled || notAuthed}
           setDisabled={setDisabled}
+          refreshData={props.refreshData}
           taskName="open dome"
           task
         />
@@ -101,6 +107,7 @@ function DomeIcons(props: { moving?: boolean }) {
           route="/enclosure/close/"
           disabled={props.moving || disabled || notAuthed}
           setDisabled={setDisabled}
+          refreshData={props.refreshData}
           taskName="close dome"
           task
         />
@@ -110,19 +117,22 @@ function DomeIcons(props: { moving?: boolean }) {
           route="/enclosure/stop/"
           color="red.9"
           disabled={notAuthed}
+          refreshData={props.refreshData}
         />
       </Group>
     </>
   );
 }
 
-export default function DomeStatus({
-  domeLabels,
-  noData,
-}: {
+type DomeStatusProps = {
   domeLabels: string[] | undefined;
   noData: boolean;
-}) {
+  refreshData: () => void;
+};
+
+export default function DomeStatus(props: DomeStatusProps) {
+  const { domeLabels, noData, refreshData } = props;
+
   if (!domeLabels || domeLabels.length === 0) {
     return null;
   }
@@ -149,7 +159,7 @@ export default function DomeStatus({
         </APIStatusText>
       </Pill>
       {DividerElement}
-      <DomeIcons moving={label === 'Moving'} />
+      <DomeIcons moving={label === 'Moving'} refreshData={refreshData} />
     </Group>
   );
 }
