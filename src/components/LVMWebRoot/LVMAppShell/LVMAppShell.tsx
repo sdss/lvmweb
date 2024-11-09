@@ -42,9 +42,11 @@ export default function LVMAppShell({ children }: { children: React.ReactNode })
   }, []);
 
   const toggleAsideCookie = React.useCallback(() => {
-    collapsedAside
-      ? cookies.set('openAside', 'true')
-      : cookies.set('openAside', 'false');
+    if (isAsideLarge) {
+      collapsedAside
+        ? cookies.set('openAside', 'true')
+        : cookies.set('openAside', 'false');
+    }
     toggleAside();
   }, [collapsedAside]);
 
