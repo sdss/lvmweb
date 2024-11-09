@@ -40,19 +40,22 @@ export default function Notifications(props: NotificationsProps) {
     }
 
     const timeout = setTimeout(() => {
-      ref.current?.scrollTo({ top: ref.current.scrollHeight, behavior: 'auto' });
+      ref.current?.scrollTo({ top: 0, behavior: 'auto' });
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, [notifications?.length, noData]);
+  }, [noData, notifications?.length]);
 
   let elements: React.ReactNode;
   if (noData || notifications === null) {
     elements = [...Array(15).keys()].map((_, index) => <Skeleton key={index} h={80} />);
   } else {
-    elements = notifications.map(({ date, message, level }, index) => (
-      <Notification key={index} date={date} message={message} level={level} />
-    ));
+    elements = notifications
+      .slice(0)
+      .reverse()
+      .map(({ date, message, level }, index) => (
+        <Notification key={index} date={date} message={message} level={level} />
+      ));
   }
 
   return (
