@@ -161,7 +161,7 @@ function SpecProgress(props: SpecProgressProps) {
       return () => {};
     }
 
-    const interval = 1;
+    const interval = totalTime > 300 ? 1 : 0.1;
     const rate = 100 / totalTime;
 
     const intervalID = setInterval(() => {
