@@ -1,0 +1,16 @@
+.header {
+  position: absolute;
+  top: rem(4px);
+  left: rem(8px);
+  width: 100%;
+  padding-right: rem(18px);
+}
+
+.paper {
+  position: relative;
+  background-color: var(--dark-background);
+  padding-top: rem(30px);
+  padding-bottom: rem(10px);
+  padding-left: rem(16px);
+  padding-right: rem(16px);
+}

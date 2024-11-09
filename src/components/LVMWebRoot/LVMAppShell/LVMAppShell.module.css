@@ -12,3 +12,15 @@
   border-radius: rem(100px);
   padding: rem(10px);
 }
+
+.aside {
+  background-color: var(--mantine-color-dark-7);
+}
+
+.aside-drawer-body {
+  height: calc(100vh - 60px);
+}
+
+.aside-drawer-title {
+  font-size: 15pt;
+}

@@ -7,8 +7,20 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { IconExclamationCircle } from '@tabler/icons-react';
-import { Box, Group, Image, rem, Text, Title } from '@mantine/core';
+import {
+  IconExclamationCircle,
+  IconLayoutSidebarRightFilled,
+} from '@tabler/icons-react';
+import {
+  ActionIcon,
+  Box,
+  Group,
+  Image,
+  rem,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import AlertsActionIcon from '@/src/components/AlertsActionIcon/AlertsActionIcon';
@@ -20,7 +32,29 @@ import classes from './Header.module.css';
 
 const eIcon = <IconExclamationCircle style={{ width: rem(24), height: rem(24) }} />;
 
-export default function Header() {
+type AsideCollapseProps = {
+  collapsedAside: boolean;
+  toggleAside: () => void;
+};
+
+function ToggleAside(props: AsideCollapseProps) {
+  const color = props.collapsedAside ? 'gray-3' : 'blue-6';
+
+  return (
+    <Tooltip label="Toggle notifications" position="bottom">
+      <ActionIcon
+        size="lg"
+        color="white"
+        variant="transparent"
+        onClick={props.toggleAside}
+      >
+        <IconLayoutSidebarRightFilled color={`var(--mantine-color-${color})`} />
+      </ActionIcon>
+    </Tooltip>
+  );
+}
+
+export default function Header(props: AsideCollapseProps) {
   const alerts = useAlertsContext();
 
   const [isAlert, setIsAlert] = React.useState(false);
@@ -95,9 +129,10 @@ export default function Header() {
             </Title>
           </Box>
           <Box style={{ flex: 1 }} />
-          <Group gap="xs" align="flex-end">
+          <Group gap="sm" align="flex-end">
             <AlertsActionIcon />
             <ShutdownActionIcon />
+            <ToggleAside {...props} />
             <AuthenticatedIcon />
           </Group>
         </Group>

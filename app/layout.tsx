@@ -5,18 +5,15 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+import '@/src/variables.css';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+
+import { CookiesProvider } from 'next-client-cookies/server';
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import LVMWebRoot from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { theme } from '@/src/theme';
-
-import '@/src/variables.css';
-
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
-
-import '@mantine/core/styles.css';
-
-import { Notifications } from '@mantine/notifications';
-
-import '@mantine/notifications/styles.css';
 
 export const metadata = {
   title: 'LVM Web',
@@ -43,7 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
           <Notifications position="bottom-left" />
-          <LVMWebRoot>{children}</LVMWebRoot>
+          <CookiesProvider>
+            <LVMWebRoot>{children}</LVMWebRoot>
+          </CookiesProvider>
         </MantineProvider>
       </body>
     </html>

@@ -9633,6 +9633,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-cookie@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "js-cookie@npm:3.0.5"
+  checksum: 10c0/04a0e560407b4489daac3a63e231d35f4e86f78bff9d792011391b49c59f721b513411cd75714c418049c8dc9750b20fcddad1ca5a2ca616c3aca4874cce5b3a
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -10060,6 +10067,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     next: "npm:15.0.3"
+    next-client-cookies: "npm:^2.0.0"
     postcss: "npm:^8.4.47"
     postcss-modules-values: "npm:^4.0.0"
     postcss-preset-mantine: "npm:1.17.0"
@@ -10502,6 +10510,18 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: 10c0/c2f5a604a54a8ec5438a342e1f356dff4bc33ccccdb6dc668d94fe8e5eccfc9d2c2eea6064b0967a767ba63b33763f51ccf2cd2441b461a7322656c1f06b3f5d
+  languageName: node
+  linkType: hard
+
+"next-client-cookies@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "next-client-cookies@npm:2.0.0"
+  dependencies:
+    js-cookie: "npm:^3.0.5"
+  peerDependencies:
+    next: ">= 15.0.0"
+    react: ">= 16.8.0"
+  checksum: 10c0/de4a49dad74ab7e6bc2ad1627aefb6d4453a0f54715e470f6f8aa390998046f543f6881e1e8c395f20867be6b2f631844d635fccddce37905ac26b4f3b0874d2
   languageName: node
   linkType: hard
 
