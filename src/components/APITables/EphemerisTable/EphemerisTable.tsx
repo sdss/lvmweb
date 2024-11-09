@@ -66,8 +66,8 @@ function NightProgress(props: NightProgressProps) {
     }
 
     const now = Date.now();
-    const sunset = JDToUnix(ephemeris.sunset);
-    const sunrise = JDToUnix(ephemeris.sunrise);
+    const sunset = JDToUnix(ephemeris.twilight_end);
+    const sunrise = JDToUnix(ephemeris.twilight_start);
 
     if (now < sunset) {
       setProgress(0);
@@ -82,8 +82,11 @@ function NightProgress(props: NightProgressProps) {
   } else if (progress >= 100) {
     tooltipLabel = 'Night has ended';
   } else {
-    const hours = ephemeris?.time_to_sunrise;
-    tooltipLabel = `${progress.toFixed(1)}% complete / ${hoursToHoursMin(hours)} to sunrise`;
+    const now = Date.now();
+    const sunrise = JDToUnix(ephemeris?.twilight_start || 0);
+
+    const hours = (sunrise - now) / 3600000;
+    tooltipLabel = `${progress.toFixed(1)}% complete / ${hoursToHoursMin(hours)} to twilight`;
   }
 
   return (
