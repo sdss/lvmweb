@@ -82,7 +82,8 @@ function NightProgress(props: NightProgressProps) {
   } else if (progress >= 100) {
     tooltipLabel = 'Night has ended';
   } else {
-    tooltipLabel = `${progress.toFixed(1)}% complete`;
+    const hours = ephemeris?.time_to_sunrise;
+    tooltipLabel = `${progress.toFixed(1)}% complete / ${hoursToHoursMin(hours)} to sunrise`;
   }
 
   return (
