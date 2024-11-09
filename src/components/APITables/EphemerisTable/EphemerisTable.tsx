@@ -93,7 +93,7 @@ function NightProgress(props: NightProgressProps) {
     <Tooltip label={tooltipLabel}>
       <Progress
         value={noData ? 100 : progress}
-        color="blue"
+        color={progress >= 100 ? 'green.9' : 'blue'}
         w="70%"
         animated={!ephemeris || noData}
       />
