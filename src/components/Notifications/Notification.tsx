@@ -14,7 +14,7 @@ import {
   IconInfoSquare,
 } from '@tabler/icons-react';
 import { Box, Group, Paper, Text, Tooltip } from '@mantine/core';
-import classes from './notification.module.css';
+import classes from './Notification.module.css';
 
 function formatDate(date: string) {
   return date.split('T')[1].split('.')[0];
