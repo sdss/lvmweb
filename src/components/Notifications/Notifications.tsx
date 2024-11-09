@@ -28,10 +28,8 @@ export default function Notifications(props: NotificationsProps) {
   const { hideTitle = false } = props;
 
   const [notifications, , noData] = useAPICall<NotificationsResponse[]>(
-    '/logs/notifications/0',
-    {
-      interval: 10000,
-    }
+    '/notifications/0',
+    { interval: 10000 }
   );
 
   React.useEffect(() => {
