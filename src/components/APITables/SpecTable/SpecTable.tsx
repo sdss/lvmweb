@@ -186,7 +186,7 @@ function SpecProgress(props: SpecProgressProps) {
         h={10}
         value={progress}
         style={{ flexGrow: 1 }}
-        color={reading ? 'green.9' : 'blue'}
+        color={reading ? 'lime.9' : 'blue'}
         animated={progress >= 100}
       />
     </Tooltip>
@@ -230,7 +230,7 @@ function SpecStatus(props: SpecStatusProps) {
         key={spec}
         label={exposingSpecs.includes(spec) ? `Exposing ${spec}` : `Reading ${spec}`}
       >
-        <Pill bg={exposingSpecs.includes(spec) ? 'blue' : 'green.9'}>
+        <Pill bg={exposingSpecs.includes(spec) ? 'blue' : 'lime.9'}>
           <APIStatusText nodata={noData}>{spec}</APIStatusText>
         </Pill>
       </Tooltip>
