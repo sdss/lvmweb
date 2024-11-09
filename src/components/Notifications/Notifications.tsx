@@ -8,7 +8,7 @@
 'use client';
 
 import React from 'react';
-import { Box, ScrollArea, Skeleton, Stack, Title } from '@mantine/core';
+import { Box, ScrollArea, Skeleton, Stack, Text, Title } from '@mantine/core';
 import useAPICall from '@/src/hooks/use-api-call';
 import Notification from './Notification';
 
@@ -46,7 +46,7 @@ export default function Notifications(props: NotificationsProps) {
     return () => clearTimeout(timeout);
   }, [noData, notifications?.length]);
 
-  let elements: React.ReactNode;
+  let elements: React.ReactNode[];
   if (noData || notifications === null) {
     elements = [...Array(15).keys()].map((_, index) => <Skeleton key={index} h={80} />);
   } else {
@@ -63,7 +63,13 @@ export default function Notifications(props: NotificationsProps) {
       <Box ta="center">{!hideTitle && <Title order={3}>Notifications</Title>}</Box>
       <Box style={{ flexGrow: 1 }} />
       <ScrollArea scrollbars="y" type="never" viewportRef={ref}>
-        <Stack gap="sm">{elements}</Stack>
+        {elements.length === 0 ? (
+          <Text pb="50vh" ta="center" style={{ textShadow: 'gray 0.2px 0.2px' }}>
+            No notifications yet
+          </Text>
+        ) : (
+          <Stack gap="sm">{elements}</Stack>
+        )}
       </ScrollArea>
     </Stack>
   );
