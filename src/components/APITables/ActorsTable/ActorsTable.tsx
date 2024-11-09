@@ -68,11 +68,12 @@ function RetartActor(props: { actor: string; refreshData: () => void }) {
 
   const AuthStatus = React.useContext(AuthContext);
 
-  const handleRestart = React.useCallback(() => {
+  const handleRestart = React.useCallback(async () => {
     close();
     runner(`/actors/restart/${actor}`)
       .catch(() => {})
-      .finally(refreshData);
+      .then(refreshData)
+      .finally(close);
   }, [actor, close, refreshData, runner]);
 
   return (
@@ -107,8 +108,7 @@ function StopActor(props: { actor: string; refreshData: () => void }) {
 
   const AuthStatus = React.useContext(AuthContext);
 
-  const handleStop = React.useCallback(() => {
-    close();
+  const handleStop = React.useCallback(async () => {
     fetchFromAPI(`/actors/stop/${actor}`)
       .catch(() => {})
       .finally(refreshData);

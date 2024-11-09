@@ -47,7 +47,7 @@ function DomeIcon(props: {
   const [opened, { open, close }] = useDisclosure();
   const [runner, isRunning] = useTask({ taskName, notifyErrors: false });
 
-  const handleAction = React.useCallback(() => {
+  const handleAction = React.useCallback(async () => {
     close();
 
     if (task) {
@@ -57,9 +57,11 @@ function DomeIcon(props: {
     } else {
       fetchFromAPI(route, {}, true)
         .catch(() => {})
+        .then(() => {
+          refreshData && refreshData();
+        })
         .finally(() => {
           setDisabled && setDisabled(false);
-          refreshData && refreshData();
         });
     }
   }, [route, close, isRunning, runner, setDisabled, task]);

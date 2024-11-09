@@ -24,7 +24,7 @@ function TurnTelescopeRedButton(props: {
 }) {
   const [opened, { open, close }] = useDisclosure();
 
-  const handleClick = React.useCallback(() => {
+  const handleClick = React.useCallback(async () => {
     const route = props.on
       ? '/enclosure/lights/off/telescope_red'
       : '/enclosure/lights/on/telescope_red';
@@ -66,8 +66,8 @@ function TurnTelescopeRedButton(props: {
 function TurnLightsOffButton(props: { disabled: boolean; refreshData: () => void }) {
   const [opened, { open, close }] = useDisclosure();
 
-  const handleClick = React.useCallback(() => {
-    fetchFromAPI('/enclosure/lights/off/all', {}, true)
+  const handleClick = React.useCallback(async () => {
+    await fetchFromAPI('/enclosure/lights/off/all', {}, true)
       .catch(() => {})
       .then(props.refreshData)
       .finally(close);

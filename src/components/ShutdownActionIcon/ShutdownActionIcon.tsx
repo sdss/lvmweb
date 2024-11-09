@@ -19,7 +19,7 @@ export default function ShutdownActionIcon() {
   const [isOpen, { open, close }] = useDisclosure(false);
   const [runner, isRunning] = useTask({ taskName: 'shutdown', notifyErrors: false });
 
-  const shutDown = React.useCallback(() => {
+  const shutDown = React.useCallback(async () => {
     close();
     runner('/macros/shutdown?disable_overwatcher=1', true).catch(() => {});
   }, [close, runner]);

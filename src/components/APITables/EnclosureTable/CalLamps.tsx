@@ -38,7 +38,7 @@ const LAMP_TO_LABEL: { [k: string]: string } = {
 function TurnLightsOffButton(props: { disabled: boolean; refreshData: () => void }) {
   const [opened, { open, close }] = useDisclosure();
 
-  const handleClick = React.useCallback(() => {
+  const handleClick = React.useCallback(async () => {
     fetchFromAPI(
       '/enclosure/nps/calib',
       {
