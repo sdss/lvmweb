@@ -5,7 +5,9 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+import Markdown from 'react-markdown';
 import { Box, Stack, Table, Text, Title } from '@mantine/core';
+import LinkRenderer from '@/src/components/LinkRenderer/LinkRenderer';
 import { NotificationType } from './page';
 import classes from './night-logs.module.css';
 
@@ -47,7 +49,9 @@ function NotificationRow(props: { notification: NotificationType }) {
     <Table.Tr style={getStyle(notification.level)}>
       <Table.Td miw={200}>{formatDate(notification.date)}</Table.Td>
       <Table.Td miw={100}>{notification.level}</Table.Td>
-      <Table.Td>{notification.message}</Table.Td>
+      <Table.Td>
+        <Markdown components={{ a: LinkRenderer }}>{notification.message}</Markdown>
+      </Table.Td>
       <Table.Td miw={200}>{formatPayload(notification.payload)}</Table.Td>
     </Table.Tr>
   );

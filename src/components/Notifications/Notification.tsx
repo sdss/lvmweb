@@ -15,15 +15,8 @@ import {
 } from '@tabler/icons-react';
 import Markdown from 'react-markdown';
 import { Box, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
+import LinkRenderer from '../LinkRenderer/LinkRenderer';
 import classes from './Notification.module.css';
-
-function LinkRenderer(props: any) {
-  return (
-    <a href={props.href} target="_blank" rel="noreferrer">
-      {props.children}
-    </a>
-  );
-}
 
 function formatDate(date: string) {
   return date.split('T')[1].split('.')[0];
