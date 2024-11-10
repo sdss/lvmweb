@@ -60,7 +60,7 @@ export default function Notifications(props: NotificationsProps) {
     <Stack px={16} py={hideTitle ? 0 : 16} gap="xs" h="100%">
       <Box ta="center">{!hideTitle && <Title order={3}>Notifications</Title>}</Box>
       <Box style={{ flexGrow: 1 }} />
-      <ScrollArea scrollbars="y" type="never" viewportRef={ref}>
+      <ScrollArea scrollbars="xy" type="never" viewportRef={ref}>
         {elements.length === 0 ? (
           <Text pb="50vh" ta="center" style={{ textShadow: 'gray 0.2px 0.2px' }}>
             No notifications yet
