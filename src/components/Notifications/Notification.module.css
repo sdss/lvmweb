@@ -16,8 +16,14 @@
 }
 
 .message {
+  white-space: pre-line;
+
   a {
     text-decoration: underline;
     text-underline-offset: 0.15em;
+  }
+
+  &[data-is-error='true'] {
+    color: var(--mantine-color-red-9);
   }
 }

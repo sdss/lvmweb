@@ -65,8 +65,8 @@ export default function Notification(props: NotificationProps) {
         <Text
           size="sm"
           component="div"
-          style={{ whiteSpace: 'pre-line' }}
           className={classes.message}
+          data-is-error={level === 'error' || level === 'critical'}
           ff="monospace"
         >
           <Markdown components={{ a: LinkRenderer }}>{message}</Markdown>
