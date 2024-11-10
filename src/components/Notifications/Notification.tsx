@@ -14,7 +14,7 @@ import {
   IconInfoSquare,
 } from '@tabler/icons-react';
 import Markdown from 'react-markdown';
-import { Box, Group, Paper, Text, Tooltip } from '@mantine/core';
+import { Box, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import classes from './Notification.module.css';
 
 function LinkRenderer(props: any) {
@@ -53,24 +53,26 @@ export default function Notification(props: NotificationProps) {
   return (
     <Box style={props.style}>
       <Paper className={classes.paper} radius={5} withBorder>
-        <Group className={classes.header}>
-          <Text size="xs" c="dark.3" style={{ alignSelf: 'baseline' }}>
-            {formatDate(date)}
+        <Stack gap={0}>
+          <Group className={classes.header}>
+            <Text size="xs" c="dark.3" style={{ alignSelf: 'baseline' }}>
+              {formatDate(date)}
+            </Text>
+            <Box style={{ flexGrow: 1 }} />
+            <Tooltip label={level} position="left" withArrow>
+              <Box>{icon}</Box>
+            </Tooltip>
+          </Group>
+          <Text
+            size="sm"
+            component="div"
+            className={classes.message}
+            data-is-error={level === 'error' || level === 'critical'}
+            ff="monospace"
+          >
+            <Markdown components={{ a: LinkRenderer }}>{message}</Markdown>
           </Text>
-          <Box style={{ flexGrow: 1 }} />
-          <Tooltip label={level} position="left" withArrow>
-            <Box>{icon}</Box>
-          </Tooltip>
-        </Group>
-        <Text
-          size="sm"
-          component="div"
-          className={classes.message}
-          data-is-error={level === 'error' || level === 'critical'}
-          ff="monospace"
-        >
-          <Markdown components={{ a: LinkRenderer }}>{message}</Markdown>
-        </Text>
+        </Stack>
       </Paper>
     </Box>
   );

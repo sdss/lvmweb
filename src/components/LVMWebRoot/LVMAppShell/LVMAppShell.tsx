@@ -85,6 +85,7 @@ export default function LVMAppShell({ children }: { children: React.ReactNode })
         opened={!isAsideLarge && !collapsedAside}
         onClose={toggleAside}
         position="right"
+        size={350}
         title="Notifications"
         keepMounted
         classNames={{

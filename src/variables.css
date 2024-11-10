@@ -1,6 +1,8 @@
 :root {
   --dark-background: var(--mantine-color-dark-8);
 
+  --notification-aside-width: rem(320px);
+
   /* Do not change text decoration and color for links. */
   a {
     color: inherit;

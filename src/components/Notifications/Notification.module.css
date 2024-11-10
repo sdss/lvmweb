@@ -1,22 +1,23 @@
 .header {
-  position: absolute;
-  top: rem(4px);
-  left: rem(8px);
   width: 100%;
-  padding-right: rem(18px);
 }
 
 .paper {
-  position: relative;
+  max-width: calc(var(--notification-aside-width) - rem(35px));
   background-color: var(--dark-background);
-  padding-top: rem(30px);
-  padding-bottom: rem(10px);
+  padding-top: rem(10px);
+  padding-bottom: rem(4px);
   padding-left: rem(16px);
   padding-right: rem(16px);
+  overflow-wrap: break-word;
 }
 
 .message {
   white-space: pre-line;
+
+  p {
+    margin-top: 0px;
+  }
 
   a {
     text-decoration: underline;
