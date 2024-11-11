@@ -39,6 +39,13 @@
   }
 }
 
+.grafana-button {
+  fill: var(--mantine-color-orange-8);
+  &:hover {
+    fill: var(--mantine-color-orange-6);
+  }
+}
+
 .email-button {
   &[data-variant='subtle'] {
     color: var(--mantine-color-dark-1);

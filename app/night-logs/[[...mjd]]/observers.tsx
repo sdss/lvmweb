@@ -20,8 +20,40 @@ import {
   Tooltip,
 } from '@mantine/core';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+import GrafanaIcon from './GrafanaIcon';
 import { NightLogData } from './page';
 import classes from './night-logs.module.css';
+
+function MJDToUnix(mjd: number) {
+  return (mjd - 40587) * 86400 * 1000;
+}
+
+function GrafanaButton(props: { mjd: number | null }) {
+  const now = new Date().getTime();
+
+  // Even in winter the night never starts before 23:00 UT and ends before 11:00 UT
+  const startUnix = props.mjd ? MJDToUnix(props.mjd - 0.042) : 'now-30m';
+  let endUnix = props.mjd ? MJDToUnix(props.mjd + 0.46) : now;
+
+  if (endUnix > now) {
+    endUnix = now;
+  }
+
+  return (
+    <Tooltip label="Go to guiding dashboard">
+      <ActionIcon
+        component={Link}
+        href={`https://lvm-grafana.lco.cl/d/edad41a2-ada5-4f63-8bfa-8c182ed1386f/guiding?orgId=1&from=${startUnix}&to=${endUnix}`}
+        target="_blank"
+        rel="noreferrer"
+        variant="transparent"
+        size="lg"
+      >
+        <GrafanaIcon className={classes['grafana-button']} height={24} width={24} />
+      </ActionIcon>
+    </Tooltip>
+  );
+}
 
 type ObserverProps = {
   mjd: number | null;
@@ -117,14 +149,17 @@ export default function Observers(props: ObserverProps) {
           <Loader size="sm" color="#B8B8B8" />
         ))}
       <Box style={{ flexGrow: 1 }} />
-      <Button
-        component={Link}
-        href={`/gort-log/${mjd}`}
-        variant="outline"
-        classNames={{ root: classes['gort-button'] }}
-      >
-        Go to GORT log
-      </Button>
+      <Group gap="xs">
+        <Button
+          component={Link}
+          href={`/gort-log/${mjd}`}
+          variant="outline"
+          classNames={{ root: classes['gort-button'] }}
+        >
+          Go to GORT log
+        </Button>
+        <GrafanaButton mjd={mjd} />
+      </Group>
     </Group>
   );
 }
