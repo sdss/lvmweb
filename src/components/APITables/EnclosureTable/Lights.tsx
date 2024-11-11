@@ -33,7 +33,7 @@ function TurnTelescopeRedButton(props: {
       .catch(() => {})
       .then(props.refreshData)
       .finally(close);
-  }, [close]);
+  }, [close, props.on]);
 
   return (
     <>
