@@ -154,6 +154,7 @@ export default function FillPage(props: FillPageProps) {
         <Header
           pk={pk}
           records={records}
+          complete={fillData ? fillData.complete : false}
           status={
             !fillData
               ? null

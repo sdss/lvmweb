@@ -13,6 +13,7 @@ import { FillListType } from './types';
 export function Header(props: {
   pk: number | null;
   records: FillListType;
+  complete: boolean;
   status: boolean | null;
 }) {
   const [data, setData] = React.useState<{ label: string; value: string }[]>([]);
@@ -31,6 +32,16 @@ export function Header(props: {
     setData(newData);
   }, [props.records]);
 
+  let statusColour: string;
+  let statusText: string;
+  if (!props.complete) {
+    statusColour = 'yellow.8';
+    statusText = 'in progress';
+  } else {
+    statusColour = props.status ? 'green.8' : 'red.9';
+    statusText = props.status ? 'succeeded' : 'failed';
+  }
+
   return (
     <Group justify="flex-start" gap="lg">
       <Group gap="xs">
@@ -38,8 +49,8 @@ export function Header(props: {
         {props.status === null ? (
           <Loader size="sm" color="gray.7" />
         ) : (
-          <Title order={2} c={props.status ? 'green.8' : 'red.9'}>
-            {props.status ? 'succeeded' : 'failed'}
+          <Title order={2} c={statusColour}>
+            {statusText}
           </Title>
         )}
       </Group>

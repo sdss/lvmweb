@@ -18,6 +18,7 @@ export type ValveTimesType = {
 
 export type FillMetadataType = {
   pk: number;
+  complete: boolean;
   action: string | null;
   start_time: string | null;
   end_time: string | null;
