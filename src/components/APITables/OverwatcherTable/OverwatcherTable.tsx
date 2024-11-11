@@ -86,9 +86,11 @@ function OverwatcherPill(props: OverwatcherPillProps) {
   }
 
   return (
-    <Pill bg={colour}>
-      <APIStatusText nodata={nodata}>{text}</APIStatusText>
-    </Pill>
+    <Box style={{ flexGrow: 1, paddingLeft: 16 }}>
+      <Pill bg={colour}>
+        <APIStatusText nodata={nodata}>{text}</APIStatusText>
+      </Pill>
+    </Box>
   );
 }
 
@@ -113,7 +115,6 @@ function RunningGroup(props: RunningGroupProps) {
   return (
     <Group>
       <OverwatcherPill value={running} nodata={nodata} useErrorColour />
-      <Box style={{ flexGrow: 1 }} />
       <Tooltip label={authStatus.logged ? 'Run cleanup' : 'Authentication needed'}>
         <Button
           size="compact-xs"
@@ -172,7 +173,6 @@ function EnabledGroup(props: EnabledGroupProps) {
   return (
     <Group>
       <OverwatcherPill value={enabled} nodata={nodata} />
-      <Box style={{ flexGrow: 1 }} />
       <Tooltip label="Enable/disable the Overwatcher">
         <Switch
           size="md"
@@ -289,7 +289,6 @@ function CalibrationsGroup(props: DomeCalibrationsGroupProps) {
   return (
     <Group>
       <OverwatcherPill value={allow} nodata={nodata} />
-      <Box style={{ flexGrow: 1 }} />
       <Tooltip label="Allow/disallow calibrations">
         <Switch
           size="md"
@@ -322,7 +321,6 @@ function CalibrationGroup(props: {
   return (
     <Group gap="xs">
       <OverwatcherPill value={data?.calibrating} nodata={nodata} />
-      <Box style={{ flexGrow: 1 }} />
       <APIStatusText
         nodata={nodata}
         defaultTooltipText={tooltipText}
@@ -394,14 +392,11 @@ function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boole
 
   return (
     <Group gap="xs">
-      <Box>
-        <OverwatcherPill
-          value={data?.cancelling ? 'Stopping' : data?.observing}
-          nodata={nodata}
-          customColour={data?.cancelling ? 'orange.9' : undefined}
-        />
-      </Box>
-      <Box style={{ flexGrow: 1 }} />
+      <OverwatcherPill
+        value={data?.cancelling ? 'Stopping' : data?.observing}
+        nodata={nodata}
+        customColour={data?.cancelling ? 'orange.9' : undefined}
+      />
       <ObservingText data={data} />
     </Group>
   );
