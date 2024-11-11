@@ -45,6 +45,21 @@ export type NotificationType = {
   payload: object | null;
 };
 
+export type NightMetrics = {
+  sjd: number;
+  twilight_start: number;
+  twilight_end: number;
+  night_length: number;
+  n_object_exps: number;
+  total_exp_time: number;
+  time_lost: number;
+  efficiency_no_readout: number;
+  efficiency_readout: number;
+  efficiency_nominal: number;
+  night_started: boolean;
+  night_ended: boolean;
+};
+
 export type NightLogData = {
   mjd: number;
   current: boolean;
@@ -56,6 +71,7 @@ export type NightLogData = {
     weather: NightLogComment[];
     other: NightLogComment[];
   };
+  metrics: NightMetrics;
   exposure_table: string | null;
   notifications: NotificationType[];
 };

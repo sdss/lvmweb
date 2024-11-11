@@ -13,6 +13,7 @@ import {
   Button,
   CloseButton,
   Group,
+  List,
   Modal,
   Paper,
   Stack,
@@ -23,7 +24,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import fetchFromAPI from '@/src/actions/fetch-from-API';
-import { NightLogComment, NightLogData } from './page';
+import { NightLogComment, NightLogData, NightMetrics } from './page';
 import classes from './night-logs.module.css';
 
 type DeleteCommentModalProps = {
@@ -291,6 +292,59 @@ function Section(props: SectionProps) {
   );
 }
 
+type MetricsProps = {
+  data: NightMetrics;
+};
+
+function padZeros(num: number, size: number) {
+  return `000000000${num}`.slice(-size);
+}
+
+function secondsToHM(d: number) {
+  const h = Math.floor(d / 3600);
+  const m = Math.floor((d % 3600) / 60);
+
+  return `${h}:${padZeros(m, 2)}`;
+}
+
+function Metrics(props: MetricsProps) {
+  const { data } = props;
+
+  return (
+    <>
+      <Stack gap="sm">
+        <Box w="100%">
+          <Group>
+            <Title order={3}>Night metrics</Title>
+            <Box style={{ flexGrow: 1 }} />
+          </Group>
+          <hr className={classes.line} />
+        </Box>
+        <List withPadding>
+          <List.Item>Night length: {secondsToHM(data.night_length)} hours</List.Item>
+          <List.Item>Number of object exposures: {data.n_object_exps}</List.Item>
+          <List.Item>
+            Time not observing:{' '}
+            {data.night_started ? `${secondsToHM(data.time_lost)} hours` : 'N/A'}
+          </List.Item>
+          <List.Item>
+            Efficiency (with nominal overheads):{' '}
+            {data.night_started ? `${data.efficiency_nominal.toFixed(1)}%` : 'N/A'}
+          </List.Item>
+          <List.Item>
+            Efficiency (with readout):{' '}
+            {data.night_started ? `${data.efficiency_readout.toFixed(1)}%` : 'N/A'}
+          </List.Item>
+          <List.Item>
+            Efficiency (without readout):{' '}
+            {data.night_started ? `${data.efficiency_no_readout.toFixed(1)}%` : 'N/A'}
+          </List.Item>
+        </List>
+      </Stack>
+    </>
+  );
+}
+
 type SectionsProps = {
   data: NightLogData;
   mjd: number | null;
@@ -331,6 +385,7 @@ export default function Sections(props: SectionsProps) {
         refresh={refresh}
         current={current}
       />
+      <Metrics data={data.metrics} />
     </Stack>
   );
 }
