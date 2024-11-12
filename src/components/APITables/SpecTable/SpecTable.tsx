@@ -361,7 +361,7 @@ export default function SpecTable() {
     },
     {
       key: 'status',
-      label: 'Status',
+      label: 'Exposure status',
       value: <SpecStatus state={specState} noData={noDataSpec} />,
     },
     {
