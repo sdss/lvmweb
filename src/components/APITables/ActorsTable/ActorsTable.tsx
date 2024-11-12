@@ -36,7 +36,7 @@ function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
   const readyText = data.ping ? 'ready' : 'not ready';
 
   return (
-    <Group gap={12} style={{ flexWrap: 'nowrap' }}>
+    <Group gap={12} pl={8} style={{ flexWrap: 'nowrap' }}>
       <Pill bg={data.is_deployed ? 'lime.9' : 'red.8'} style={{ maxWidth: rem(85) }}>
         <APIStatusText size="xs" nodata={noData} defaultTooltipText={deployedTooltip}>
           {deployedText}
