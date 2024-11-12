@@ -137,7 +137,6 @@ export default function APITable(props: {
           autoFocus={false}
           miw={isSpan ? undefined : w}
           maw={isSpan ? undefined : w}
-          w={isSpan ? undefined : w}
         >
           <Text size="sm">{isSpan ? value : element.label}</Text>
         </Table.Td>
