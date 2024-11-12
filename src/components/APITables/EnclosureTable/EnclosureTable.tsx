@@ -38,11 +38,11 @@ export default function EnclosureTable() {
       ),
       valign: 'center',
     },
-    {
-      key: 'dome_labels',
-      label: 'Dome Status Labels',
-      value: enclosure?.dome_status.labels.join(' | '),
-    },
+    // {
+    //   key: 'dome_labels',
+    //   label: 'Dome Status Labels',
+    //   value: enclosure?.dome_status.labels.join(' | '),
+    // },
     {
       key: 'door',
       label: 'Door',
@@ -53,11 +53,11 @@ export default function EnclosureTable() {
       label: 'O\u2082 Levels',
       value: <O2Levels enclosureStatus={enclosure} noData={noData} />,
     },
-    {
-      key: 'safety_labels',
-      label: 'Safety Labels',
-      value: enclosure?.safety_status.labels.join(' | '),
-    },
+    // {
+    //   key: 'safety_labels',
+    //   label: 'Safety Labels',
+    //   value: enclosure?.safety_status.labels.join(' | '),
+    // },
     {
       key: 'lights',
       label: 'Lights',
@@ -87,6 +87,7 @@ export default function EnclosureTable() {
       noData={noData}
       icon={<IconBuildingWarehouse />}
       refreshData={refreshData}
+      w={100}
     />
   );
 }

@@ -94,7 +94,7 @@ function NightProgress(props: NightProgressProps) {
       <Progress
         value={noData ? 100 : progress}
         color={progress >= 100 ? 'lime.9' : 'blue'}
-        w="70%"
+        w="85%"
         animated={!ephemeris || noData}
       />
     </Tooltip>
@@ -168,6 +168,7 @@ export default function EphemerisTable() {
       noData={noData}
       icon={<IconSunrise />}
       refreshData={refresh}
+      w={165}
     />
   );
 }

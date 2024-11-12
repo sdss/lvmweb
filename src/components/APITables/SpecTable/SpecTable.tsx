@@ -185,9 +185,10 @@ function SpecProgress(props: SpecProgressProps) {
       <Progress
         h={10}
         value={progress}
-        style={{ flexGrow: 1 }}
+        // style={{ flexGrow: 1 }}
         color={reading ? 'lime.9' : 'blue'}
         animated={progress >= 100}
+        w="95%"
       />
     </Tooltip>
   ) : (
@@ -241,7 +242,7 @@ function SpecStatus(props: SpecStatusProps) {
     return <APIStatusText nodata={noData}>All spectrographs are idle</APIStatusText>;
   }
 
-  return <Group gap="xs">{Pills}</Group>;
+  return <Group gap={6}>{Pills}</Group>;
 }
 
 function LN2Status(props: { filling: boolean | null; noData: boolean }) {

@@ -14,6 +14,7 @@ import {
   Box,
   Group,
   Paper,
+  rem,
   Skeleton,
   Table,
   Text,
@@ -64,6 +65,7 @@ export default function APITable(props: {
   noData?: boolean;
   icon?: JSX.Element;
   refreshData?: () => void;
+  w?: number;
 }) {
   const {
     title,
@@ -71,6 +73,7 @@ export default function APITable(props: {
     midsection,
     noData = false,
     icon = <IconSettings />,
+    w = rem(145),
     refreshData,
   } = props;
 
@@ -132,8 +135,9 @@ export default function APITable(props: {
           colSpan={colspan}
           ta={isSpan ? 'center' : undefined}
           autoFocus={false}
-          miw={isSpan ? undefined : 135}
-          maw={isSpan ? undefined : 135}
+          miw={isSpan ? undefined : w}
+          maw={isSpan ? undefined : w}
+          maw={isSpan ? undefined : w}
         >
           <Text size="sm">{isSpan ? value : element.label}</Text>
         </Table.Td>

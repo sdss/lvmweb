@@ -86,7 +86,7 @@ function OverwatcherPill(props: OverwatcherPillProps) {
   }
 
   return (
-    <Box style={{ flexGrow: 1, paddingLeft: 16 }}>
+    <Box style={{ flexGrow: 1, paddingLeft: 8 }}>
       <Pill bg={colour}>
         <APIStatusText nodata={nodata}>{text}</APIStatusText>
       </Pill>
@@ -460,6 +460,7 @@ export default function OverwatcherTable() {
       noData={noData}
       icon={<IconRobot />}
       refreshData={refresh}
+      w={125}
     />
   );
 }
