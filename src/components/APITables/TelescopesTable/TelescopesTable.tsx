@@ -84,7 +84,7 @@ function TelescopeParked(props: TelescopeStatusProps) {
   }
 
   return (
-    <Group gap="xs" pr={4}>
+    <Group gap={4} pr={4}>
       {Pills}
       <Box style={{ flexGrow: 1 }} />
       <ParkButton refresh={props.refresh} />
@@ -164,7 +164,7 @@ function TelescopeConnected(props: TelescopeStatusProps) {
   }, [data]);
 
   return (
-    <Group gap="xs" pr={4}>
+    <Group gap={!allConnected ? 4 : 6} pr={4}>
       {Pills}
       <Box style={{ flexGrow: 1 }} />
       {!allConnected && <ConnectButton refresh={props.refresh} />}
@@ -201,6 +201,7 @@ export default function TelescopesTable() {
       icon={<IconTelescope />}
       noData={noData}
       refreshData={refresh}
+      w={90}
     />
   );
 }

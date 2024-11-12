@@ -33,19 +33,13 @@ function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
   const deployedText = data.is_deployed ? 'deployed' : 'not deployed';
   const deployedTooltip = `${deployedText[0].toUpperCase()}${deployedText.slice(1)} - ${data.deployment_name}`;
 
-  const pingText = data.ping ? 'alive' : 'dead';
   const readyText = data.ping ? 'ready' : 'not ready';
 
   return (
-    <Group gap={5} style={{ flexWrap: 'nowrap' }}>
+    <Group gap={12} style={{ flexWrap: 'nowrap' }}>
       <Pill bg={data.is_deployed ? 'lime.9' : 'red.8'} style={{ maxWidth: rem(85) }}>
         <APIStatusText size="xs" nodata={noData} defaultTooltipText={deployedTooltip}>
           {deployedText}
-        </APIStatusText>
-      </Pill>
-      <Pill bg={data.ping ? 'lime.9' : 'red.8'}>
-        <APIStatusText size="xs" nodata={noData} defaultTooltipText={pingText}>
-          {pingText}
         </APIStatusText>
       </Pill>
       <Pill bg={data.ping ? 'blue' : 'red.8'}>
@@ -197,6 +191,7 @@ export default function ActorsTable() {
       noData={noData}
       icon={<IconHeartRateMonitor />}
       refreshData={refresh}
+      w={120}
     />
   );
 }

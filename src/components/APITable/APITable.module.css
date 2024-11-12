@@ -3,9 +3,9 @@
   border-left: 2px solid var(--mantine-color-dark-3);
   border-radius: rem(5px);
   height: fit-content;
-  width: em(450px);
-  max-width: em(450px);
-  min-width: em(450px);
+  width: em(400px);
+  max-width: em(400px);
+  min-width: em(400px);
 
   .header {
     background-color: var(--mantine-color-dark-6);

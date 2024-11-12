@@ -104,24 +104,24 @@ export default function WeatherTable() {
     },
     {
       key: 'wind_speed_avg',
-      label: 'Wind Speed (5m avg.)',
+      label: 'Wind Speed (5m)',
       value: weather?.[0]?.wind_speed_avg_5m.toFixed(1),
       unit: ' mph',
     },
     {
       key: 'wind_speed_30m',
-      label: 'Wind Speed (30m avg.)',
+      label: 'Wind Speed (30m)',
       value: colourValue(weather?.[0]?.wind_speed_avg_30m, alerts?.wind_alert, 'mph'),
     },
     {
       key: 'wind_gust',
-      label: 'Wind Gust (1m max.)',
+      label: 'Wind Gust (1m)',
       value: weather?.[0]?.wind_speed_max.toFixed(1),
       unit: ' mph',
     },
     {
       key: 'wind_dir_avg',
-      label: 'Wind Dir. (5m avg.)',
+      label: 'Wind Dir. (5m)',
       value: weather?.[0]?.wind_dir_avg_5m.toFixed(1),
       unit: ' degrees',
     },
@@ -164,6 +164,7 @@ export default function WeatherTable() {
       noData={noData}
       icon={<IconCloudRain />}
       refreshData={refresh}
+      w={150}
     />
   );
 }

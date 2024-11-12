@@ -18,7 +18,7 @@ export const theme = createTheme({
       '#2d4b81',
     ],
   },
-  scale: 1.0,
+  scale: 1.05,
   breakpoints: {
     xs: '20em',
     sm: '40em',
