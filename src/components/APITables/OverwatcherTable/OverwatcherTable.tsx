@@ -104,7 +104,7 @@ function RunningGroup(props: RunningGroupProps) {
 
   const [opened, { open: openModal, close: closeModal }] = useDisclosure();
 
-  const [runner, taskRunning] = useTask<boolean>({ taskName: 'park_telescopes' });
+  const [runner, taskRunning] = useTask<boolean>({ taskName: 'cleanup' });
   const authStatus = React.useContext(AuthContext);
 
   const runCleanup = React.useCallback(async () => {
