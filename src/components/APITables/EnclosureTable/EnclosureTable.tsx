@@ -87,7 +87,7 @@ export default function EnclosureTable() {
       noData={noData}
       icon={<IconBuildingWarehouse />}
       refreshData={refreshData}
-      w={100}
+      w={90}
     />
   );
 }

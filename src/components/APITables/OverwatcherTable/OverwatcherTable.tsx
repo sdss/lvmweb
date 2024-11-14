@@ -52,6 +52,7 @@ type OverwatcherPillProps = {
   yesColor?: string;
   naColor?: string;
   customColour?: string;
+  tooltipText?: string;
 };
 
 function OverwatcherPill(props: OverwatcherPillProps) {
@@ -63,6 +64,7 @@ function OverwatcherPill(props: OverwatcherPillProps) {
     noColor = 'dark.5',
     naColor = 'dark.5',
     customColour,
+    tooltipText,
   } = props;
 
   let text: string;
@@ -87,9 +89,11 @@ function OverwatcherPill(props: OverwatcherPillProps) {
 
   return (
     <Box style={{ flexGrow: 1, paddingLeft: 8 }}>
-      <Pill bg={colour}>
-        <APIStatusText nodata={nodata}>{text}</APIStatusText>
-      </Pill>
+      <Tooltip label={tooltipText} hidden={tooltipText === undefined}>
+        <Pill bg={colour} maw={70}>
+          <APIStatusText nodata={nodata}>{text}</APIStatusText>
+        </Pill>
+      </Tooltip>
     </Box>
   );
 }
@@ -365,7 +369,6 @@ function ObservingText(props: { data: OverwatcherResponse | null }) {
       gap={5}
       style={{
         paddingRight: 16,
-        maxWidth: 190,
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
@@ -390,12 +393,19 @@ function ObservingText(props: { data: OverwatcherResponse | null }) {
 function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boolean }) {
   const { data, nodata } = props;
 
+  const tooltipText = data?.cancelling
+    ? 'Cancelling'
+    : data?.observing
+      ? 'Observing'
+      : 'Not observing';
+
   return (
     <Group gap="xs">
       <OverwatcherPill
-        value={data?.cancelling ? 'Stopping' : data?.observing}
+        value={data?.cancelling ? 'Stop.' : data?.observing}
         nodata={nodata}
         customColour={data?.cancelling ? 'orange.9' : undefined}
+        tooltipText={tooltipText}
       />
       <ObservingText data={data} />
     </Group>
@@ -460,7 +470,7 @@ export default function OverwatcherTable() {
       noData={noData}
       icon={<IconRobot />}
       refreshData={refresh}
-      w={125}
+      w={120}
     />
   );
 }
