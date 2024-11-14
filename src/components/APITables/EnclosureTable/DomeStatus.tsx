@@ -147,7 +147,13 @@ export default function DomeStatus(props: DomeStatusProps) {
   } else if (domeLabels.includes('CLOSED')) {
     label = 'Closed';
   } else if (domeLabels.includes('MOVING')) {
-    label = 'Moving';
+    if (domeLabels.includes('MOTOR_OPENING')) {
+      label = 'Opening';
+    } else if (domeLabels.includes('MOTOR_CLOSING')) {
+      label = 'Closing';
+    } else {
+      label = 'Moving';
+    }
     DividerElement = <Progress h={10} value={100} style={{ flexGrow: 1 }} animated />;
   } else {
     label = 'Unknown';
