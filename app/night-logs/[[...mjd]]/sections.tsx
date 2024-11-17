@@ -239,10 +239,21 @@ type SectionProps = {
   mjd: number;
   refresh: () => void;
   current: boolean;
+  allowAdding?: boolean;
+  tooltipText?: string;
 };
 
 function Section(props: SectionProps) {
-  const { title, category, data, mjd, refresh, current } = props;
+  const {
+    title,
+    category,
+    data,
+    mjd,
+    refresh,
+    current,
+    tooltipText,
+    allowAdding = true,
+  } = props;
 
   const [opened, { open, close }] = useDisclosure(false, { onClose: refresh });
 
@@ -251,9 +262,11 @@ function Section(props: SectionProps) {
       <Stack gap="sm">
         <Box w="100%">
           <Group>
-            <Title order={3}>{title}</Title>
+            <Tooltip label={tooltipText} hidden={!tooltipText}>
+              <Title order={3}>{title}</Title>
+            </Tooltip>
             <Box style={{ flexGrow: 1 }} />
-            {current && (
+            {current && allowAdding && (
               <Tooltip label="Add comment">
                 <ActionIcon
                   radius="xl"
@@ -384,6 +397,16 @@ export default function Sections(props: SectionsProps) {
         mjd={mjd}
         refresh={refresh}
         current={current}
+      />
+      <Section
+        title="Overwatcher"
+        category="overwatcher"
+        data={data.comments.other}
+        mjd={mjd}
+        refresh={refresh}
+        current={current}
+        allowAdding={false}
+        tooltipText="Self-reported comments from the Overwatcher"
       />
       <Metrics data={data.metrics} />
     </Stack>
