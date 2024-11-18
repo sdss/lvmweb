@@ -401,7 +401,7 @@ export default function Sections(props: SectionsProps) {
       <Section
         title="Overwatcher"
         category="overwatcher"
-        data={data.comments.other}
+        data={data.comments.overwatcher}
         mjd={mjd}
         refresh={refresh}
         current={current}

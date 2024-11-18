@@ -70,6 +70,7 @@ export type NightLogData = {
     issues: NightLogComment[];
     weather: NightLogComment[];
     other: NightLogComment[];
+    overwatcher: NightLogComment[];
   };
   metrics: NightMetrics;
   exposure_table: string | null;
