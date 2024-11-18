@@ -34,6 +34,8 @@ type OverwatcherResponse = {
   observing: boolean;
   cancelling: boolean;
   calibrating: boolean;
+  focusing: boolean;
+  troubleshooting: boolean;
   allow_calibrations: boolean;
   safe: boolean | null;
   night: boolean | null;
@@ -347,7 +349,23 @@ function CalibrationGroup(props: {
 function ObservingText(props: { data: OverwatcherResponse | null }) {
   const { data } = props;
 
-  if (!data || !data?.observing || !data.tile_id) {
+  if (!data) {
+    return null;
+  }
+
+  if (data.troubleshooting) {
+    return (
+      <APIStatusText size="xs" color="red.9">
+        troubleshooting
+      </APIStatusText>
+    );
+  }
+
+  if (data.focusing) {
+    return <APIStatusText size="xs">focusing</APIStatusText>;
+  }
+
+  if (!data.observing || !data.tile_id) {
     return null;
   }
 
