@@ -337,7 +337,7 @@ function Metrics(props: MetricsProps) {
           <List.Item>Night length: {secondsToHM(data.night_length)} hours</List.Item>
           <List.Item>Number of object exposures: {data.n_object_exps}</List.Item>
           <List.Item>
-            Time not observing:{' '}
+            Time not exposing:{' '}
             {data.night_started ? `${secondsToHM(data.time_lost)} hours` : 'N/A'}
           </List.Item>
           <List.Item>
