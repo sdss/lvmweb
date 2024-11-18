@@ -366,7 +366,7 @@ function ObservingText(props: { data: OverwatcherResponse | null }) {
 
   return (
     <Group
-      gap={5}
+      gap={4}
       style={{
         paddingRight: 16,
         whiteSpace: 'nowrap',
@@ -400,7 +400,7 @@ function ObservingGroup(props: { data: OverwatcherResponse | null; nodata: boole
       : 'Not observing';
 
   return (
-    <Group gap="xs">
+    <Group gap={0}>
       <OverwatcherPill
         value={data?.cancelling ? 'Stop.' : data?.observing}
         nodata={nodata}
@@ -470,7 +470,7 @@ export default function OverwatcherTable() {
       noData={noData}
       icon={<IconRobot />}
       refreshData={refresh}
-      w={120}
+      w={125}
     />
   );
 }
