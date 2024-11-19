@@ -333,7 +333,7 @@ function CalibrationGroup(props: {
         size="xs"
         style={{
           paddingRight: 16,
-          maxWidth: 190,
+          maxWidth: 170,
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
           overflow: 'hidden',
