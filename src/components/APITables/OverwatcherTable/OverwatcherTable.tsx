@@ -355,14 +355,31 @@ function ObservingText(props: { data: OverwatcherResponse | null }) {
 
   if (data.troubleshooting) {
     return (
-      <APIStatusText size="xs" color="red.9">
+      <APIStatusText
+        size="xs"
+        color="red.9"
+        style={{
+          paddingRight: 16,
+          textAlign: 'right',
+        }}
+      >
         troubleshooting
       </APIStatusText>
     );
   }
 
   if (data.focusing) {
-    return <APIStatusText size="xs">focusing</APIStatusText>;
+    return (
+      <APIStatusText
+        size="xs"
+        style={{
+          paddingRight: 16,
+          textAlign: 'right',
+        }}
+      >
+        focusing
+      </APIStatusText>
+    );
   }
 
   if (!data.observing || !data.tile_id) {
