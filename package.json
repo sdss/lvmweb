@@ -27,7 +27,7 @@
     "@tabler/icons": "^3.22.0",
     "@tabler/icons-react": "^3.22.0",
     "@visx/visx": "^3.12.0",
-    "next": "15.0.3",
+    "next": "15.1.2",
     "next-client-cookies": "^2.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
