@@ -276,7 +276,7 @@ function LN2Status(props: { filling: boolean | null; noData: boolean }) {
 export default function SpecTable() {
   const STATUS_INTERVAL = 5000;
   const TEMPS_INTERVAL = 60000;
-  const FILLING_INTERVAL = 3000;
+  const FILLING_INTERVAL = 30000;
 
   const alerts = React.useContext(AlertsContext);
 
