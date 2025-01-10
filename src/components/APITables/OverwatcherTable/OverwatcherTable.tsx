@@ -174,7 +174,7 @@ function EnabledGroup(props: EnabledGroupProps) {
       // Use modal to confirm disabling.
       openModal();
     }
-  }, [isOn]);
+  }, [isOn, observing]);
 
   return (
     <Group>
