@@ -63,7 +63,7 @@ export default function APITable(props: {
   elements: Elements;
   midsection?: React.ReactNode;
   noData?: boolean;
-  icon?: JSX.Element;
+  icon?: React.JSX.Element;
   refreshData?: () => void;
   w?: number;
 }) {
