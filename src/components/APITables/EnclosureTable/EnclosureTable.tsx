@@ -21,7 +21,7 @@ export default function EnclosureTable() {
   const [enclosure, , noData, refreshData] = useAPICall<EnclosureResponse>(
     '/enclosure/',
     {
-      interval: 15000,
+      interval: 5000,
     }
   );
 
