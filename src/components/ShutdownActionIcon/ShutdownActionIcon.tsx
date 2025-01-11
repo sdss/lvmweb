@@ -11,6 +11,7 @@ import React from 'react';
 import { IconArrowBarLeft } from '@tabler/icons-react';
 import { ActionIcon, Group, Loader, Text, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { isLCO } from '@/src/actions/get-ip';
 import useTask from '@/src/hooks/use-task';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import classes from './ShutdownActionIcon.module.css';
@@ -21,7 +22,17 @@ export default function ShutdownActionIcon() {
 
   const shutDown = React.useCallback(async () => {
     close();
-    runner('/macros/shutdown?disable_overwatcher=1', true).catch(() => {});
+
+    const lcoOverride = process.env.LCO_OVERRIDE_CODE;
+
+    if ((await isLCO()) && lcoOverride !== undefined) {
+      runner(
+        `/macros/shutdownLCO?override_code=${lcoOverride}&disable_overwatcher=1`,
+        true
+      ).catch(() => {});
+    } else {
+      runner('/macros/shutdown?disable_overwatcher=1', true).catch(() => {});
+    }
   }, [close, runner]);
 
   const label = isRunning ? 'Emergency shutdown in progress' : 'Emergency shutdown';
