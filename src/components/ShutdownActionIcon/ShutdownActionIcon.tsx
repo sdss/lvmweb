@@ -11,7 +11,7 @@ import React from 'react';
 import { IconArrowBarLeft } from '@tabler/icons-react';
 import { ActionIcon, Group, Loader, Text, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { isLCO } from '@/src/actions/get-ip';
+import { getLCOOverrideCode, isLCO } from '@/src/actions/get-ip';
 import useTask from '@/src/hooks/use-task';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import { AuthContext } from '../LVMWebRoot/LVMWebRoot';
@@ -53,14 +53,14 @@ export default function ShutdownActionIcon() {
       <Tooltip label={label} position="bottom" visibleFrom="sm">
         <Group
           gap={0}
-          onClick={open}
+          onClick={disabled ? undefined : open}
           style={{ cursor: 'pointer' }}
           className={classes.icon}
         >
           <ActionIcon
             size="lg"
             color="white"
-            classNames={{ icon: classes.icon }}
+            classNames={{ icon: disabled ? undefined : classes.icon }}
             onClick={open}
             disabled={disabled}
             style={{
@@ -74,7 +74,14 @@ export default function ShutdownActionIcon() {
               <IconArrowBarLeft />
             )}
           </ActionIcon>
-          <Text size="sm" c={disabled ? 'dimmed' : 'gray.2'} visibleFrom="sm">
+          <Text
+            size="sm"
+            c={disabled ? 'dimmed' : 'gray.2'}
+            visibleFrom="sm"
+            style={{
+              cursor: disabled ? 'no-drop' : 'pointer',
+            }}
+          >
             Shutdown
           </Text>
         </Group>
