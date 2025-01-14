@@ -19,7 +19,7 @@ import classes from './ShutdownActionIcon.module.css';
 
 export default function ShutdownActionIcon() {
   const [isOpen, { open, close }] = useDisclosure(false);
-  const [runner, isRunning] = useTask({ taskName: 'shutdown', notifyErrors: false });
+  const [runner, isRunning] = useTask({ taskName: 'shutdown', notifyErrors: true });
 
   const [atLCO, setAtLCO] = React.useState(false);
   const authStatus = React.useContext(AuthContext);
