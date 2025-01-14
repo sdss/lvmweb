@@ -33,10 +33,7 @@ export default function ShutdownActionIcon() {
   const shutDown = React.useCallback(async () => {
     close();
 
-    const lcoOverride = process.env.LCO_OVERRIDE_CODE;
-    console.log('lcoOverride:', lcoOverride);
-    console.log(authStatus.logged);
-    console.log(atLCO);
+    const lcoOverride = await getLCOOverrideCode();
 
     if (!authStatus.logged && atLCO && lcoOverride !== undefined) {
       runner(

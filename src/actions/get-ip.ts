@@ -22,3 +22,7 @@ export async function isLCO() {
   }
   return false;
 }
+
+export async function getLCOOverrideCode() {
+  return process.env.LCO_OVERRIDE_CODE || null;
+}
