@@ -34,6 +34,9 @@ export default function ShutdownActionIcon() {
     close();
 
     const lcoOverride = process.env.LCO_OVERRIDE_CODE;
+    console.log('lcoOverride:', lcoOverride);
+    console.log(authStatus.logged);
+    console.log(atLCO);
 
     if (!authStatus.logged && atLCO && lcoOverride !== undefined) {
       runner(
