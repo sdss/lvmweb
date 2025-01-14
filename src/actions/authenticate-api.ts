@@ -9,6 +9,7 @@
 
 import { cookies } from 'next/headers';
 import fetchFromAPI from './fetch-from-API';
+import { isLCO } from './get-ip';
 
 type APIResponse = {
   access_token: string;
@@ -25,6 +26,8 @@ export default async function authenticateAPI(password: string) {
   /** Gets a bearer token from the API and stores it as an HTTP-only cookie. */
 
   const cookieName = await getAuthCookieName();
+  const atAPO = await isLCO();
+
   let response: APIResponse;
 
   try {
@@ -38,7 +41,7 @@ export default async function authenticateAPI(password: string) {
     cookieStore.set({
       name: cookieName,
       value: response.access_token,
-      secure: true,
+      secure: !atAPO,
       maxAge: 31104000,
       path: '/',
       sameSite: 'lax',
