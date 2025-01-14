@@ -38,7 +38,7 @@ export default function ShutdownActionIcon() {
     if (!authStatus.logged && atLCO && lcoOverride !== undefined) {
       runner(
         `/macros/shutdownLCO?override_code=${lcoOverride}&disable_overwatcher=1`,
-        true
+        false
       ).catch(() => {});
     } else {
       runner('/macros/shutdown?disable_overwatcher=1', true).catch(() => {});
