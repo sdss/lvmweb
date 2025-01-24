@@ -105,6 +105,7 @@ function OverwatcherPill(props: OverwatcherPillProps) {
 type RunningGroupProps = {
   running?: boolean;
   nodata: boolean;
+  refreshData?: () => void;
 };
 
 function RunningGroup(props: RunningGroupProps) {
@@ -118,13 +119,15 @@ function RunningGroup(props: RunningGroupProps) {
 
   const runCleanup = React.useCallback(async () => {
     closeModal();
-    runner('/macros/cleanup', true).catch(() => {});
+    runner('/macros/cleanup', true)
+      .then(() => props.refreshData?.())
+      .catch(() => {});
   }, [runner, closeModal]);
 
   const resetOverwatcher = React.useCallback(() => {
     setResetRunning(true);
     fetchFromAPI('/overwatcher/reset', {}, false)
-      .then(() => {})
+      .then(() => props.refreshData?.())
       .catch(() => {})
       .finally(() => setResetRunning(false));
   }, []);
@@ -510,7 +513,9 @@ export default function OverwatcherTable() {
     {
       key: 'running',
       label: 'Running',
-      value: <RunningGroup running={data?.running} nodata={noData} />,
+      value: (
+        <RunningGroup running={data?.running} nodata={noData} refreshData={refresh} />
+      ),
     },
     {
       key: 'enabled',
