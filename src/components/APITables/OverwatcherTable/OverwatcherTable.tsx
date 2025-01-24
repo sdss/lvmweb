@@ -8,8 +8,9 @@
 'use client';
 
 import React from 'react';
-import { IconRobot } from '@tabler/icons-react';
+import { IconExchange, IconRobot, IconSpray } from '@tabler/icons-react';
 import {
+  ActionIcon,
   Box,
   Button,
   Divider,
@@ -108,6 +109,7 @@ type RunningGroupProps = {
 function RunningGroup(props: RunningGroupProps) {
   const { running, nodata } = props;
 
+  const [resetRunning, setResetRunning] = React.useState(false);
   const [opened, { open: openModal, close: closeModal }] = useDisclosure();
 
   const [runner, taskRunning] = useTask<boolean>({ taskName: 'cleanup' });
@@ -118,20 +120,42 @@ function RunningGroup(props: RunningGroupProps) {
     runner('/macros/cleanup', true).catch(() => {});
   }, [runner, closeModal]);
 
+  const resetOverwatcher = React.useCallback(() => {
+    setResetRunning(true);
+    fetchFromAPI('/overwatcher/reset', {}, false)
+      .then(() => {})
+      .catch(() => {})
+      .finally(() => setResetRunning(false));
+  }, []);
+
   return (
     <Group>
       <OverwatcherPill value={running} nodata={nodata} useErrorColour />
-      <Tooltip label={authStatus.logged ? 'Run cleanup' : 'Authentication needed'}>
-        <Button
-          size="compact-xs"
-          variant="light"
-          disabled={!authStatus.logged || taskRunning}
-          onClick={openModal}
-          mr={8}
+      <Group gap={8} style={{ paddingRight: 8 }}>
+        <Tooltip label={authStatus.logged ? 'Run cleanup' : 'Authentication needed'}>
+          <ActionIcon
+            size="sm"
+            onClick={openModal}
+            loading={taskRunning}
+            disabled={!authStatus.logged}
+          >
+            <IconSpray size={18} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip
+          label={authStatus.logged ? 'Reset Overwatcher' : 'Authentication needed'}
         >
-          Run cleanup
-        </Button>
-      </Tooltip>
+          <ActionIcon
+            size="sm"
+            color="yellow.9"
+            onClick={resetOverwatcher}
+            loading={resetRunning}
+            disabled={!authStatus.logged || taskRunning}
+          >
+            <IconExchange size={18} />
+          </ActionIcon>
+        </Tooltip>
+      </Group>
       <ConfirmationModal
         opened={opened}
         close={closeModal}
