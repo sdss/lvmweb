@@ -379,7 +379,7 @@ function SafetyGroup(props: { data: OverwatcherResponse | null; nodata: boolean 
 
   return (
     <Group gap="xs">
-      <OverwatcherPill value={data?.safe} nodata={nodata} />
+      <OverwatcherPill value={data?.safe} nodata={nodata} noColor="red.9" />
       <APIStatusText
         nodata={nodata}
         defaultTooltipText={alertsText}
