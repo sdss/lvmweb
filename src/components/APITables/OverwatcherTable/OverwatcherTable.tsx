@@ -39,6 +39,7 @@ type OverwatcherResponse = {
   troubleshooting: boolean;
   allow_calibrations: boolean;
   safe: boolean | null;
+  alerts: string[] | null;
   night: boolean | null;
   running_calibration: string | null;
   tile_id: number | null;
@@ -370,6 +371,34 @@ function CalibrationGroup(props: {
   );
 }
 
+function SafetyGroup(props: { data: OverwatcherResponse | null; nodata: boolean }) {
+  const { data, nodata } = props;
+
+  const alerts = props.data?.alerts || [];
+  const alertsText = alerts.join(' | ');
+
+  return (
+    <Group gap="xs">
+      <OverwatcherPill value={data?.safe} nodata={nodata} />
+      <APIStatusText
+        nodata={nodata}
+        defaultTooltipText={alertsText}
+        size="xs"
+        style={{
+          paddingRight: 16,
+          maxWidth: 170,
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          textAlign: 'right',
+        }}
+      >
+        {alertsText}
+      </APIStatusText>
+    </Group>
+  );
+}
+
 function ObservingText(props: { data: OverwatcherResponse | null }) {
   const { data } = props;
 
@@ -501,7 +530,7 @@ export default function OverwatcherTable() {
     {
       key: 'safe',
       label: 'Safe',
-      value: <OverwatcherPill value={data?.safe} nodata={noData} noColor="red.9" />,
+      value: <SafetyGroup data={data} nodata={noData} />,
     },
     {
       key: 'night',
