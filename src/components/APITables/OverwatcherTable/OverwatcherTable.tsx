@@ -288,14 +288,14 @@ function DisableModal(props: {
   );
 }
 
-interface DomeCalibrationsGroupProps {
+interface AllowDomeCalibrationsGroupProps {
   nodata: boolean;
   allow?: boolean;
   running?: boolean;
   refreshData: () => void;
 }
 
-function CalibrationsGroup(props: DomeCalibrationsGroupProps) {
+function AllowCalibrationsGroup(props: AllowDomeCalibrationsGroupProps) {
   const { nodata, allow, running = true } = props;
 
   const [isOn, setOn] = React.useState(allow || false);
@@ -512,7 +512,7 @@ export default function OverwatcherTable() {
       key: 'allow_calibrations',
       label: 'Allow calibrations',
       value: (
-        <CalibrationsGroup
+        <AllowCalibrationsGroup
           allow={data?.allow_calibrations}
           nodata={noData}
           running={data?.running}
