@@ -14,6 +14,16 @@ export type CalLampsResponse = {
   xenon: boolean;
 };
 
+export type EngineeringModeResponse = {
+  enabled: boolean;
+  started_at: string | null;
+  ends_at: string | null;
+  plc_software_bypass: boolean;
+  plc_hardware_bypass: boolean;
+  plc_software_bypass_mode: string;
+  plc_hardware_bypass_mode: string;
+};
+
 export type EnclosureResponse = {
   dome_status: {
     labels: string[];
@@ -29,4 +39,5 @@ export type EnclosureResponse = {
     spectrograph_room: number;
   };
   cal_lamp_state: CalLampsResponse;
+  engineering_mode: EngineeringModeResponse;
 };

@@ -13,6 +13,7 @@ import APITable from '../../APITable/APITable';
 import CalLamps from './CalLamps';
 import DomeStatus from './DomeStatus';
 import DoorStatus from './DoorStatus';
+import EngineeringModeTable from './EngineeringModeTable';
 import Lights from './Lights';
 import O2Levels from './O2Levels';
 import { EnclosureResponse } from './types';
@@ -77,6 +78,17 @@ export default function EnclosureTable() {
         />
       ),
       valign: 'top',
+    },
+    {
+      key: 'engineering_mode',
+      label: 'Eng. Mode',
+      value: (
+        <EngineeringModeTable
+          enclosureStatus={enclosure}
+          noData={noData}
+          refreshData={refreshData}
+        />
+      ),
     },
   ];
 
