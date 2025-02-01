@@ -13,10 +13,12 @@ import {
   ActionIcon,
   Box,
   Button,
+  Checkbox,
   Divider,
   Group,
   Modal,
   Pill,
+  Stack,
   Switch,
   Tooltip,
 } from '@mantine/core';
@@ -239,12 +241,17 @@ function DisableModal(props: {
   refreshData?: () => void;
 }) {
   const { opened, close, refreshData } = props;
+  const [closeDome, setCloseDome] = React.useState(false);
   const [isDisabling, setDisabling] = React.useState(false);
 
   const handleDisable = React.useCallback(
     (now: boolean) => {
       setDisabling(true);
-      fetchFromAPI(`/overwatcher/status/disable?now=${now}`, { method: 'PUT' }, true)
+      fetchFromAPI(
+        `/overwatcher/status/disable?now=${now}&close_dome=${closeDome}`,
+        { method: 'PUT' },
+        true
+      )
         .catch(() => {})
         .finally(() => {
           setDisabling(false);
@@ -252,7 +259,7 @@ function DisableModal(props: {
           refreshData?.();
         });
     },
-    [close]
+    [close, closeDome]
   );
 
   return (
@@ -262,32 +269,41 @@ function DisableModal(props: {
       title="Are you sure that you want to disable the Overwatcher?"
       size="lg"
     >
-      <Group justify="end" pt={16}>
-        <Button
-          variant="default"
-          onClick={props.close}
-          disabled={isDisabling}
-          style={{ cursor: isDisabling ? 'no-drop' : undefined }}
-        >
-          Cancel
-        </Button>
-        <Button
-          color="blue"
-          onClick={() => handleDisable(false)}
-          disabled={isDisabling}
-          style={{ cursor: isDisabling ? 'no-drop' : undefined }}
-        >
-          After this tile
-        </Button>
-        <Button
-          color="red"
-          onClick={() => handleDisable(true)}
-          disabled={isDisabling}
-          style={{ cursor: isDisabling ? 'no-drop' : undefined }}
-        >
-          Immediately
-        </Button>
-      </Group>
+      <Stack gap="md">
+        <Checkbox
+          label="Close dome after disabling"
+          checked={closeDome}
+          onChange={(event) => setCloseDome(event.target.checked)}
+        />
+        <Group justify="end" pt={16}>
+          <Button
+            variant="default"
+            onClick={props.close}
+            disabled={isDisabling}
+            style={{ cursor: isDisabling ? 'no-drop' : undefined }}
+          >
+            Cancel
+          </Button>
+          {!closeDome && (
+            <Button
+              color="blue"
+              onClick={() => handleDisable(false)}
+              disabled={isDisabling}
+              style={{ cursor: isDisabling ? 'no-drop' : undefined }}
+            >
+              After this tile
+            </Button>
+          )}
+          <Button
+            color="red"
+            onClick={() => handleDisable(true)}
+            disabled={isDisabling}
+            style={{ cursor: isDisabling ? 'no-drop' : undefined }}
+          >
+            Immediately
+          </Button>
+        </Group>
+      </Stack>
     </Modal>
   );
 }
