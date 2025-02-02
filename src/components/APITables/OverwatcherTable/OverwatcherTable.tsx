@@ -187,11 +187,11 @@ function EnabledGroup(props: EnabledGroupProps) {
   const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure();
 
   const handleEnabledChange = React.useCallback(
-    (newValue: boolean) => {
-      if (newValue || !observing) {
+    (newState: boolean) => {
+      if (newState || !observing) {
         // Send API request to change value to enabled.
         const route = '/overwatcher/status';
-        const fullRoute = newValue ? `${route}/enable` : `${route}/disable`;
+        const fullRoute = newState ? `${route}/enable` : `${route}/disable`;
         fetchFromAPI(fullRoute, { method: 'PUT' }, true)
           .then(() => {})
           .catch(() => {})
@@ -212,7 +212,7 @@ function EnabledGroup(props: EnabledGroupProps) {
           size="md"
           pr={8}
           checked={enabled}
-          onChange={(event) => handleEnabledChange(event.target.checked)}
+          onChange={() => handleEnabledChange(!enabled)}
           onLabel="ON"
           offLabel="OFF"
           disabled={
