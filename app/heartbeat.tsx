@@ -9,19 +9,22 @@
 
 import React from 'react';
 import { Modal, Text } from '@mantine/core';
-import useAPICall from '@/src/hooks/use-api-call';
+import useAPICall, { APICallStatus } from '@/src/hooks/use-api-call';
 
 export default function LVMWebHeartbeat() {
   const [nFailures, setNFailures] = React.useState(0);
   const [showModal, setShowModal] = React.useState(false);
 
-  const checkHeartbeat = React.useCallback((data: { result: boolean }) => {
-    if (!data || !data.result) {
-      setNFailures((prev) => prev + 1);
-    } else {
-      setNFailures(0);
-    }
-  }, []);
+  const checkHeartbeat = React.useCallback(
+    (data: { result: boolean }, status: APICallStatus) => {
+      if (!data || !data.result || status === APICallStatus.ERROR) {
+        setNFailures((prev) => prev + 1);
+      } else if (status === APICallStatus.OK) {
+        setNFailures(0);
+      }
+    },
+    []
+  );
 
   React.useEffect(() => {
     if (nFailures >= 3) {
@@ -31,18 +34,33 @@ export default function LVMWebHeartbeat() {
     }
   }, [nFailures]);
 
-  useAPICall<boolean>('/test', { interval: 5000, callback: checkHeartbeat }, false);
+  useAPICall<boolean>('/test', { interval: 10000, callback: checkHeartbeat }, false);
 
   return (
     <Modal
-      opened={true}
+      opened={showModal}
       onClose={() => {}}
       closeButtonProps={{ icon: undefined }}
+      radius={10}
+      shadow="xl"
       centered
+      overlayProps={{ blur: 5 }}
       size="60%"
-      styles={{ body: { background: 'var(--mantine-color-red-9)' } }}
+      styles={{
+        body: {
+          padding: 48,
+          alignContent: 'center',
+        },
+        header: {
+          minHeight: 0,
+          padding: 0,
+        },
+        close: { visibility: 'hidden', display: 'none' },
+      }}
     >
-      <Text>Test</Text>
+      <Text style={{ justifySelf: 'center' }} size="20pt">
+        Connection to the server cannot be established.
+      </Text>
     </Modal>
   );
 }

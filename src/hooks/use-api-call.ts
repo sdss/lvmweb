@@ -12,7 +12,7 @@ import useIntervalImmediate from './use-interval-immediate';
 export type UseAPICallOptions = {
   baseURL?: string;
   interval?: number;
-  callback?: (result: any) => void;
+  callback?: (result: any, status: APICallStatus) => void;
 };
 
 export type UseAPICallResponse<T> = [
@@ -57,10 +57,11 @@ export default function useAPICall<T>(
       .then((dd) => {
         setData(dd);
         setStatus(APICallStatus.OK);
-        callback && callback(dd);
+        callback && callback(dd, APICallStatus.OK);
       })
       .catch(() => {
         setStatus(APICallStatus.ERROR);
+        callback && callback(null, APICallStatus.ERROR);
       });
   }, [baseURL, route, needs_authentication]);
 
