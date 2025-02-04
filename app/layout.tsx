@@ -14,6 +14,7 @@ import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import LVMWebRoot from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { theme } from '@/src/theme';
+import LVMWebHeartbeat from './heartbeat';
 
 export const metadata = {
   title: 'LVM Web',
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Notifications position="bottom-left" />
           <CookiesProvider>
             <LVMWebRoot>{children}</LVMWebRoot>
+            <LVMWebHeartbeat />
           </CookiesProvider>
         </MantineProvider>
       </body>

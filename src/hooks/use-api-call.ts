@@ -12,6 +12,7 @@ import useIntervalImmediate from './use-interval-immediate';
 export type UseAPICallOptions = {
   baseURL?: string;
   interval?: number;
+  callback?: (result: any) => void;
 };
 
 export type UseAPICallResponse<T> = [
@@ -35,7 +36,7 @@ export default function useAPICall<T>(
 ): UseAPICallResponse<T> {
   /** Performs an API call on an interval. */
 
-  const { baseURL, interval = 5000 } = options;
+  const { baseURL, interval = 5000, callback } = options;
 
   const [data, setData] = React.useState<T | null>(null);
   const [noData, setNoData] = React.useState<boolean>(true);
@@ -51,11 +52,12 @@ export default function useAPICall<T>(
     }
   }, [status]);
 
-  const callback = React.useCallback(() => {
+  const callAPI = React.useCallback(() => {
     fetchFromAPI<T>(route, { baseURL }, needs_authentication)
       .then((dd) => {
         setData(dd);
         setStatus(APICallStatus.OK);
+        callback && callback(dd);
       })
       .catch(() => {
         setStatus(APICallStatus.ERROR);
@@ -64,8 +66,8 @@ export default function useAPICall<T>(
 
   useIntervalImmediate(() => {
     setStatus(APICallStatus.FETCHING);
-    callback();
+    callAPI();
   }, interval);
 
-  return [data, status, noData, () => callback()];
+  return [data, status, noData, () => callAPI()];
 }
