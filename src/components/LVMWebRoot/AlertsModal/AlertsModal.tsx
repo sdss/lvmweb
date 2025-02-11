@@ -114,7 +114,7 @@ export default function AlertsModal(props: AlertsModalProps) {
       <Stack gap="lg">
         {domeClosed && (
           <Alert variant="filled" color="blue" radius={5} icon={<IconInfoCircle />}>
-            The dome is closed. This alert for informational purposes only.
+            The dome is closed. This alert is for informational purposes only.
           </Alert>
         )}
         <Box>
