@@ -8,7 +8,13 @@
 'use client';
 
 import React from 'react';
-import { IconExchange, IconRobot, IconSpray } from '@tabler/icons-react';
+import {
+  IconExchange,
+  IconRobot,
+  IconRuler2,
+  IconRuler2Off,
+  IconSpray,
+} from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -49,6 +55,18 @@ type OverwatcherResponse = {
   stage: string | null;
   standard_no: number | null;
 };
+
+type CalibrationsListResponse = {
+  name: string;
+  start_time: string | null;
+  max_start_time: string | null;
+  after: string | null;
+  time_to_cal: number | null;
+  status: string;
+  requires_dome: 'open' | 'closed' | null;
+  close_dome_after: boolean;
+  disabled: boolean;
+}[];
 
 type OverwatcherPillProps = {
   value: boolean | string | null | undefined;
@@ -358,6 +376,99 @@ function AllowCalibrationsGroup(props: AllowDomeCalibrationsGroupProps) {
   );
 }
 
+function ScheduleLongTermCalsModal(props: {
+  opened: boolean;
+  close: () => void;
+  unschedule: boolean;
+  refreshData: () => void;
+}) {
+  const { opened, close, unschedule, refreshData } = props;
+
+  const [now, setNow] = React.useState(false);
+  const [running, setRunning] = React.useState(false);
+
+  const route = '/overwatcher/calibrations/schedule-long-term';
+
+  const sendCommand = React.useCallback(() => {
+    setRunning(true);
+    fetchFromAPI(`${route}?remove=${unschedule}&now=${now}`)
+      .then(() => refreshData())
+      .catch(() => {})
+      .finally(() => {
+        setRunning(false);
+        props.close();
+      });
+  }, [now, unschedule]);
+
+  return (
+    <Modal opened={opened} onClose={close} title="Long-term calibrations">
+      <Stack gap="md" p={16}>
+        <Box p={4}>
+          {unschedule
+            ? 'Do you want to unschedule the long-term calibrations?'
+            : 'Do you want to schedule the long-term calibrations?'}
+        </Box>
+        <Group>
+          <Checkbox
+            label="Abort observations?"
+            checked={now}
+            onChange={(event) => setNow(event.target.checked)}
+            pr={16}
+          />
+          <Button onClick={sendCommand} loading={running}>
+            Yes
+          </Button>
+          <Button color="gray.7" onClick={close}>
+            No
+          </Button>
+        </Group>
+      </Stack>
+    </Modal>
+  );
+}
+
+function ScheduleLongTermCals() {
+  const [calsList, , , calsRefresh] = useAPICall<CalibrationsListResponse>(
+    '/overwatcher/calibrations/list',
+    { interval: 60000 }
+  );
+
+  const [opened, { open: openModal, close: closeModal }] = useDisclosure();
+
+  const longTermCal = calsList?.find((cal) => cal.name === 'long_term_calibrations');
+  if (!longTermCal) {
+    return null;
+  }
+
+  const isEnabled = !longTermCal.disabled;
+
+  return (
+    <>
+      <Tooltip
+        label={
+          isEnabled
+            ? 'Disable long-term calibrations'
+            : 'Schedule long-term calibrations'
+        }
+      >
+        <ActionIcon
+          size="sm"
+          color={isEnabled ? 'yellow.9' : 'blue'}
+          onClick={openModal}
+        >
+          {isEnabled ? <IconRuler2Off size={18} /> : <IconRuler2 size={18} />}
+        </ActionIcon>
+      </Tooltip>
+      <ScheduleLongTermCalsModal
+        opened={opened}
+        close={closeModal}
+        unschedule={isEnabled}
+        refreshData={calsRefresh}
+      />
+    </>
+  );
+}
+
 function CalibrationGroup(props: {
   data: OverwatcherResponse | null;
   nodata: boolean;
@@ -369,21 +480,26 @@ function CalibrationGroup(props: {
   return (
     <Group gap="xs">
       <OverwatcherPill value={data?.calibrating} nodata={nodata} />
-      <APIStatusText
-        nodata={nodata}
-        defaultTooltipText={tooltipText}
-        size="xs"
-        style={{
-          paddingRight: 16,
-          maxWidth: 170,
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
-          textAlign: 'right',
-        }}
-      >
-        {data?.running_calibration}
-      </APIStatusText>
+      <Group gap={8} style={{ paddingRight: 8 }}>
+        {data?.calibrating ? (
+          <APIStatusText
+            nodata={nodata}
+            defaultTooltipText={tooltipText}
+            size="xs"
+            style={{
+              maxWidth: 170,
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              textAlign: 'right',
+            }}
+          >
+            {data?.running_calibration || 'quick_cals'}
+          </APIStatusText>
+        ) : (
+          <ScheduleLongTermCals />
+        )}
+      </Group>
     </Group>
   );
 }
