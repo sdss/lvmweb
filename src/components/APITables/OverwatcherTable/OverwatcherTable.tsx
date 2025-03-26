@@ -494,7 +494,7 @@ function CalibrationGroup(props: {
               textAlign: 'right',
             }}
           >
-            {data?.running_calibration || 'quick_cals'}
+            {data?.running_calibration}
           </APIStatusText>
         ) : (
           <ScheduleLongTermCals />
