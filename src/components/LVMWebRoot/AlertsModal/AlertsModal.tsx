@@ -86,6 +86,10 @@ export default function AlertsModal(props: AlertsModalProps) {
       tempAlerts.push('Wind levels are unsafe.');
     }
 
+    if (alerts.overwatcher_alerts?.idle) {
+      tempAlerts.push('Overwatcher has been idle for over 10 minutes.');
+    }
+
     if (alerts.test_alert) {
       tempAlerts.push('Test alert.');
     }

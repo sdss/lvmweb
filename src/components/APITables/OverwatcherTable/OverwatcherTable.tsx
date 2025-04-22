@@ -40,6 +40,7 @@ import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 type OverwatcherResponse = {
   running: boolean;
   enabled: boolean;
+  idle: boolean;
   observing: boolean;
   cancelling: boolean;
   calibrating: boolean;

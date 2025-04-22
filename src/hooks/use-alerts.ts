@@ -40,6 +40,7 @@ export interface AlertsResponse {
   dew_point_alert: boolean | null;
   rain: boolean;
   door_alert: boolean;
+  overwatcher_alerts: { idle: boolean } | null;
 }
 
 export interface AlertsModel extends AlertsResponse {
@@ -80,6 +81,7 @@ export default function useAlerts(interval: number = 15000): AlertsModel | undef
         alertsAPI.wind_alert === true ||
         alertsAPI.dew_point_alert === true ||
         alertsAPI.humidity_alert === true ||
+        alertsAPI.overwatcher_alerts?.idle === true ||
         test_alert,
       camera_active_alerts: tempAlerts as CameraAlerts[],
       o2_active_alerts: o2Alerts as O2Rooms[],
