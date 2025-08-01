@@ -19,42 +19,40 @@ import APITable from '../../APITable/APITable';
 
 type WeatherResponse = {
   ts: string;
-  temperature: number;
-  wind_dir_min: number;
-  wind_dir_avg: number;
-  wind_dir_max: number;
-  wind_speed_min: number;
-  wind_speed_avg: number;
-  wind_speed_max: number;
-  wind_speed_avg_5m: number;
-  wind_speed_avg_30m: number;
-  wind_dir_avg_5m: number;
-  wind_gust_5m: number;
-  relative_humidity: number;
-  air_pressure: number;
-  rain_intensity: number;
-  dew_point: number;
+  temperature: number | null;
+  wind_dir_min: number | null;
+  wind_dir_avg: number | null;
+  wind_dir_max: number | null;
+  wind_speed_min: number | null;
+  wind_speed_avg: number | null;
+  wind_speed_max: number | null;
+  wind_speed_avg_5m: number | null;
+  wind_speed_avg_30m: number | null;
+  wind_dir_avg_5m: number | null;
+  wind_gust_5m: number | null;
+  relative_humidity: number | null;
+  air_pressure: number | null;
+  rain_intensity: number | null;
+  dew_point: number | null;
   station: string;
 }[];
 
 function colourValue(
-  speed: number | undefined,
+  speed: number | null | undefined,
   alert: boolean | null | undefined,
   unit: string | null = null
 ) {
   let color: string | undefined = undefined;
   let tooltip: string | undefined = undefined;
-  let speedText: string;
+
+  const speedText = nullableValue(speed, unit);
+
   if (alert === null || speed === undefined) {
     color = 'yellow.8';
     tooltip = 'Alert status unknown';
-    speedText = speed === undefined ? '?' : `${speed.toFixed(1)} ${unit}`;
   } else if (alert) {
     color = 'red.9';
     tooltip = 'Alert!';
-    speedText = `${speed.toFixed(1)} ${unit}`;
-  } else {
-    speedText = `${speed.toFixed(1)} ${unit}`;
   }
 
   return (
@@ -62,6 +60,16 @@ function colourValue(
       {speedText}
     </APIStatusText>
   );
+}
+
+function nullableValue(
+  value: number | null | undefined,
+  unit: string | null = null
+): string {
+  if (value === null || value === undefined) {
+    return 'No data';
+  }
+  return `${value.toFixed(1)} ${unit}`;
 }
 
 export default function WeatherTable() {
@@ -99,14 +107,12 @@ export default function WeatherTable() {
     {
       key: 'temperature',
       label: 'Temperature',
-      value: weather?.[0]?.temperature.toFixed(1),
-      unit: '°C',
+      value: nullableValue(weather?.[0]?.temperature, '°C'),
     },
     {
       key: 'wind_speed_avg',
       label: 'Wind Speed (5m)',
-      value: weather?.[0]?.wind_speed_avg_5m.toFixed(1),
-      unit: ' mph',
+      value: nullableValue(weather?.[0]?.wind_speed_avg_5m, 'mph'),
     },
     {
       key: 'wind_speed_30m',
@@ -116,14 +122,12 @@ export default function WeatherTable() {
     {
       key: 'wind_gust',
       label: 'Wind Gust (1m)',
-      value: weather?.[0]?.wind_speed_max.toFixed(1),
-      unit: ' mph',
+      value: nullableValue(weather?.[0]?.wind_speed_max, 'mph'),
     },
     {
       key: 'wind_dir_avg',
       label: 'Wind Dir. (5m)',
-      value: weather?.[0]?.wind_dir_avg_5m.toFixed(1),
-      unit: ' degrees',
+      value: nullableValue(weather?.[0]?.wind_dir_avg_5m, 'degrees'),
     },
     {
       key: 'relative_humidity',
