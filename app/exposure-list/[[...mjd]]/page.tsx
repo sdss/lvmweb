@@ -137,7 +137,7 @@ function ExposureDataTable(props: {
     '# std',
     '# cameras',
     'Object',
-    'Dither pos.',
+    'Dither',
   ].map((key) => <Table.Th key={key}>{key}</Table.Th>);
 
   const Rows = !data
@@ -165,7 +165,7 @@ function ExposureDataTable(props: {
             <Table.Td>{exp.n_standards}</Table.Td>
             <Table.Td>{exp.n_cameras}</Table.Td>
             <Table.Td>{exp.object}</Table.Td>
-            <Table.Td>{exp.dpos}</Table.Td>
+            <Table.Td>{exp.image_type === 'object' ? exp.dpos : null}</Table.Td>
           </Table.Tr>
         );
       });
