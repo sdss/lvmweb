@@ -38,6 +38,7 @@ type ExposureData = {
   n_standards: number | null;
   n_cameras: number | null;
   object: string | null;
+  dpos: number | null;
 };
 
 async function fetchMJDs(): Promise<number[]> {
@@ -136,6 +137,7 @@ function ExposureDataTable(props: {
     '# std',
     '# cameras',
     'Object',
+    'Dither pos.',
   ].map((key) => <Table.Th key={key}>{key}</Table.Th>);
 
   const Rows = !data
@@ -163,6 +165,7 @@ function ExposureDataTable(props: {
             <Table.Td>{exp.n_standards}</Table.Td>
             <Table.Td>{exp.n_cameras}</Table.Td>
             <Table.Td>{exp.object}</Table.Td>
+            <Table.Td>{exp.dpos}</Table.Td>
           </Table.Tr>
         );
       });
