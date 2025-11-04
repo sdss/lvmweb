@@ -82,7 +82,7 @@ export default function WeatherTable() {
   const now = useNow({ asString: false, delay: 10000 });
 
   const age = React.useMemo(() => {
-    if (!weather || !now) {
+    if (!weather || !now || weather.length === 0) {
       return null;
     }
 
