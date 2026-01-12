@@ -7,11 +7,15 @@
 
 'use server';
 
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 
 export default async function getSystemFile(imagePath: string) {
   // Reads the file and returns it as a base64 string.
+
+  if (!existsSync(imagePath)) {
+    return null;
+  }
 
   const filePath = path.resolve(imagePath);
   return readFileSync(filePath, { encoding: 'base64' });
