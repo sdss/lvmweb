@@ -13,17 +13,22 @@ import { useRouter } from 'next/navigation';
 import {
   Box,
   Container,
+  Flex,
   Grid,
+  Group,
   rem,
   Skeleton,
   Stack,
   Title,
   useMatches,
 } from '@mantine/core';
+import useAPICall from '@/src/hooks/use-api-call';
+import AbortFillButton from './abort-fill';
 import ErrorAlert from './error-alert';
 import { fetchFillData, fetchFillList } from './fetchData';
 import { Header } from './header';
 import { LogDisplay } from './log';
+import ManualFill from './manual-fill';
 import { Plots } from './plots';
 import { EventTimesTable, OpenTimesTable } from './tables';
 import { FillListType, FillMetadataType } from './types';
@@ -87,6 +92,10 @@ export default function FillPage(props: FillPageProps) {
 
   const router = useRouter();
 
+  const [filling] = useAPICall<boolean>('/spectrographs/fills/running', {
+    interval: 10000,
+  });
+
   React.useEffect(() => {
     if (pks.length === 0) {
       fetchFillList().then((response) => {
@@ -124,6 +133,24 @@ export default function FillPage(props: FillPageProps) {
     setFillData(null);
   }, [pk, notFound]);
 
+  React.useEffect(() => {
+    // Refresh fill data if the fill is ongoing.
+
+    if (!fillData) {
+      return;
+    }
+
+    if (!fillData.complete) {
+      const interval = setInterval(() => {
+        fetchFillData(pk!).then((response) => {
+          setFillData(response);
+        });
+      }, 10_000);
+
+      return () => clearInterval(interval);
+    }
+  }, [fillData?.complete, pk]);
+
   if (!pk) {
     return;
   }
@@ -148,9 +175,19 @@ export default function FillPage(props: FillPageProps) {
   return (
     <Container size="xl">
       <Stack p={8} mt={2} gap="xl">
-        <Title order={1}>
-          LN<sub>2</sub> fill log
-        </Title>
+        <Group>
+          <Title order={1}>
+            LN<sub>2</sub> fill log
+          </Title>
+          <Title order={1} c="gray.6">
+            #{pk}
+          </Title>
+          <Flex style={{ flexGrow: 1 }} />
+          <AbortFillButton
+            visible={(fillData ? !fillData.complete : false) && filling === true}
+          />
+          <ManualFill disabled={filling === true} />
+        </Group>
         <Header
           pk={pk}
           records={records}
