@@ -71,7 +71,6 @@ function ManualFillModal(props: { opened: boolean; onClose: () => void }) {
       },
     })
       .then((result) => {
-        console.log(result);
         if (!result || !result.result) {
           setError(`Failed starting manual fill: ${result?.error || 'unknown error'}`);
           return;
