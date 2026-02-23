@@ -10,7 +10,9 @@ import { useRouter } from 'next/navigation';
 import { IconAlertCircle, IconCircleX } from '@tabler/icons-react';
 import {
   Alert,
+  Box,
   Button,
+  Checkbox,
   Flex,
   Group,
   Loader,
@@ -19,6 +21,7 @@ import {
   Text,
   TextInput,
   ThemeIcon,
+  Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
@@ -44,6 +47,7 @@ function ManualFillModal(props: { opened: boolean; onClose: () => void }) {
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState<string | null>(null);
   const [running, setRunning] = React.useState(false);
+  const [dryRun, setDryRun] = React.useState(false);
 
   const [taskRunner, isTaskRunning] = useTask<ManualFillTaskResponse>({
     taskName: 'starting ln2 fill',
@@ -64,7 +68,7 @@ function ManualFillModal(props: { opened: boolean; onClose: () => void }) {
 
     taskRunner('/spectrographs/fills/manual-fill', true, {
       method: 'POST',
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ password, dry_run: dryRun }),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -84,7 +88,7 @@ function ManualFillModal(props: { opened: boolean; onClose: () => void }) {
       .finally(() => {
         setRunning(false);
       });
-  }, [password]);
+  }, [password, dryRun]);
 
   return (
     <Modal
@@ -131,6 +135,18 @@ function ManualFillModal(props: { opened: boolean; onClose: () => void }) {
           <Group style={{ display: isTaskRunning || running ? 'flex' : 'none' }}>
             <Loader type="bars" color="blue.8" size="sm" />
             <Text>Starting fill. Please wait ...</Text>
+          </Group>
+          <Group style={{ display: !isTaskRunning && !running ? 'flex' : 'none' }}>
+            <Tooltip label="Perform a dry run of the fill. The solenoid valves won't be activated.">
+              <Box>
+                <Checkbox
+                  label="Dry run"
+                  checked={dryRun}
+                  onChange={(e) => setDryRun(e.currentTarget.checked)}
+                  disabled={isTaskRunning || running}
+                />
+              </Box>
+            </Tooltip>
           </Group>
           <Flex style={{ flexGrow: 1 }} />
           <Button
