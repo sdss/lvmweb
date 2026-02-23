@@ -5,7 +5,7 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React, { FormEvent } from 'react';
+import React from 'react';
 import { IconLock, IconLockOpen } from '@tabler/icons-react';
 import {
   ActionIcon,
@@ -41,7 +41,7 @@ function AuthoriseModal(props: AuthoriseModalProps) {
   const { check: checkAuth } = authStatus;
 
   const attemptAuth = React.useCallback(
-    async (event: FormEvent<HTMLFormElement>, password: string) => {
+    async (event: React.SubmitEvent<HTMLFormElement>, password: string) => {
       event.preventDefault();
 
       setLoading(true);
