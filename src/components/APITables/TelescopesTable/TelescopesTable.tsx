@@ -101,7 +101,7 @@ function ConnectButton(props: { refresh: () => void }) {
 
   const connect = React.useCallback(() => {
     setRunning(true);
-    fetchFromAPI('/telescopes/connect', {}, true)
+    void fetchFromAPI('/telescopes/connect', {}, true)
       .finally(() => setRunning(false))
       .finally(refresh);
   }, [refresh]);

@@ -56,12 +56,9 @@ export default function useAlerts(interval: number = 15000): AlertsModel | undef
 
   const [alertsAPI, , noData] = useAPICall<AlertsResponse>('/alerts/', { interval });
 
-  const [alerts, setAlerts] = React.useState<AlertsModel | undefined>(undefined);
-
-  React.useEffect(() => {
+  const alerts = React.useMemo<AlertsModel | undefined>(() => {
     if (!alertsAPI || noData) {
-      setAlerts(undefined);
-      return;
+      return undefined;
     }
 
     const tempAlerts = Object.keys(alertsAPI.camera_alerts || []).filter(
@@ -89,13 +86,7 @@ export default function useAlerts(interval: number = 15000): AlertsModel | undef
       test_alert,
     };
 
-    setAlerts((a) => {
-      // Quick check to avoid re-rendering if the alerts have not changed.
-      if (JSON.stringify(a) === JSON.stringify(newAlerts)) {
-        return a;
-      }
-      return newAlerts;
-    });
+    return newAlerts;
   }, [alertsAPI, noData]);
 
   return alerts;

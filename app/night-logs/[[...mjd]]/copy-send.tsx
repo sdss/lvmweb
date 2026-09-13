@@ -38,7 +38,7 @@ export function EmailButton(props: EmailButtonProps) {
   const sendEmail = React.useCallback(() => {
     setLoading(true);
 
-    fetchFromAPI(`/logs/night-logs/${mjd}/email`)
+    void fetchFromAPI(`/logs/night-logs/${mjd}/email`)
       .catch(() => {
         notifications.show({
           message: 'Email failed to send',
@@ -50,14 +50,14 @@ export function EmailButton(props: EmailButtonProps) {
       })
       .then(() => {
         if (refresh) {
-          refresh();
+          void refresh();
         }
 
         setLabelState('Email sent!');
         setTimeout(() => setLabelState(label), 3000);
       })
       .finally(() => setLoading(false));
-  }, [mjd]);
+  }, [mjd, refresh, label]);
 
   if (!mjd) {
     return null;
@@ -108,7 +108,7 @@ export default function CopySend(props: CopySendProps) {
         });
       })
       .finally(() => setLoading(false));
-  }, [mjd]);
+  }, [mjd, clipboard]);
 
   if (!mjd) {
     return null;

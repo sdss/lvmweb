@@ -89,7 +89,7 @@ function ManualFillModal(props: { opened: boolean; onClose: () => void }) {
       .finally(() => {
         setRunning(false);
       });
-  }, [password, dryRun]);
+  }, [password, dryRun, router, taskRunner]);
 
   return (
     <Modal

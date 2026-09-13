@@ -51,7 +51,7 @@ export default function AlertsModal(props: AlertsModalProps) {
     if (opened) {
       refresh();
     }
-  }, [opened]);
+  }, [opened, refresh]);
 
   React.useEffect(() => {
     if (!alerts) {

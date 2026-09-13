@@ -109,7 +109,7 @@ export default function NightLogsPage(props: NightLogsPageProps) {
   const [mjd, setMJD] = React.useState<number | null>(null);
   const [data, setData] = React.useState<NightLogData | null>(null);
 
-  const mjds = React.useRef<number[]>([]);
+  const [mjds, setMJDs] = React.useState<number[]>([]);
 
   const [mode, setMode] = React.useState<NightLogMode | null>(null);
   const [notFound, setNotFound] = React.useState<boolean>(false);
@@ -123,15 +123,15 @@ export default function NightLogsPage(props: NightLogsPageProps) {
   const forceUpdate = useForceUpdate();
   useInterval(
     () => {
-      refresh().then(forceUpdate);
+      void refresh().then(forceUpdate);
     },
     600000,
     { autoInvoke: true }
   );
 
   React.useEffect(() => {
-    fetchNightLogMJDs().then((newMJDs) => {
-      mjds.current = newMJDs;
+    void fetchNightLogMJDs().then((newMJDs) => {
+      setMJDs(newMJDs);
       setMJDsLoading(false);
     });
   }, []);
@@ -149,16 +149,18 @@ export default function NightLogsPage(props: NightLogsPageProps) {
     }
 
     if (!mjd) {
-      createMJD().then((newMJD) => {
+      void createMJD().then((newMJD) => {
         setMJD(newMJD);
-        if (mjds.current.length > 0 && mjds.current.indexOf(newMJD) === -1) {
-          mjds.current.push(newMJD);
-        }
+        setMJDs((currentMJDs) =>
+          currentMJDs.length > 0 && currentMJDs.indexOf(newMJD) === -1
+            ? [...currentMJDs, newMJD]
+            : currentMJDs
+        );
       });
       return;
     }
 
-    if (mjd && mjds.current.length > 0 && mjds.current.indexOf(mjd) === -1) {
+    if (mjd && mjds.length > 0 && mjds.indexOf(mjd) === -1) {
       setNotFound(true);
       return;
     }
@@ -169,7 +171,7 @@ export default function NightLogsPage(props: NightLogsPageProps) {
       window.history.pushState(null, '', `/night-logs/${mjd}`);
     }
 
-    getMJDData(mjd)
+    void getMJDData(mjd)
       .then((data) => {
         setData(data);
         if (data !== null && data.current) {
@@ -180,7 +182,7 @@ export default function NightLogsPage(props: NightLogsPageProps) {
         return data !== null;
       })
       .then((result) => setDataLoading(!result));
-  }, [mjdsLoading, mjd]);
+  }, [mjdsLoading, mjd, mjds, pathname]);
 
   React.useEffect(() => {
     if (mjdsLoading) {
@@ -188,9 +190,9 @@ export default function NightLogsPage(props: NightLogsPageProps) {
     }
 
     if (mode === 'tonight') {
-      setMJD(mjds.current[mjds.current.length - 1]);
+      setMJD(mjds[mjds.length - 1]);
     }
-  }, [mjdsLoading, mode]);
+  }, [mjdsLoading, mode, mjds]);
 
   if (notFound && !pageLoading && mjd) {
     return (
@@ -210,7 +212,7 @@ export default function NightLogsPage(props: NightLogsPageProps) {
   }
 
   const refresh = React.useCallback(async () => {
-    getMJDData(mjd).then((data) => setData(data));
+    void getMJDData(mjd).then((data) => setData(data));
   }, [mjd]);
 
   if (pageLoading || dataLoading) {
@@ -251,13 +253,7 @@ export default function NightLogsPage(props: NightLogsPageProps) {
         <Group>
           <Title order={1}>Night log for {mjd}</Title>
           <Box style={{ flexGrow: 1 }} />
-          <Header
-            mjds={mjds.current}
-            mjd={mjd}
-            mode={mode}
-            setMode={setMode}
-            setMJD={setMJD}
-          />
+          <Header mjds={mjds} mjd={mjd} mode={mode} setMode={setMode} setMJD={setMJD} />
         </Group>
         <Observers data={data} mjd={mjd} current={data !== null && data.current} />
         <Stack gap={50}>

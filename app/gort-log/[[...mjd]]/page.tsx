@@ -165,7 +165,7 @@ function LogControls(props: {
             disabled={props.mjd === undefined}
             onClick={() => {
               setDownloading(true);
-              downloadLog(props.mjd).finally(() => setDownloading(false));
+              void downloadLog(props.mjd).finally(() => setDownloading(false));
             }}
             loading={downloading}
           >
@@ -263,7 +263,7 @@ export default function GortLogPage({
         setReloading(true);
       }
 
-      fetchLogData(currentMJD, nLines)
+      void fetchLogData(currentMJD, nLines)
         .then(setData)
         .then(() => setReloading(false));
     },
@@ -271,11 +271,11 @@ export default function GortLogPage({
   );
 
   React.useEffect(() => {
-    fetchMJDs().then(setMJDs);
+    void fetchMJDs().then(setMJDs);
   }, []);
 
   React.useEffect(() => {
-    forceRefresh().then(() =>
+    void forceRefresh().then(() =>
       setAutorefresh(() => {
         if (nLines >= 10000 || nLines === -1) {
           return false;
@@ -290,7 +290,7 @@ export default function GortLogPage({
       return () => {};
     }
 
-    forceRefresh();
+    void forceRefresh();
     const interval = setInterval(forceRefresh, 30000);
 
     return () => clearInterval(interval);

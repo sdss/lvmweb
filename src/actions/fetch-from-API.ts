@@ -34,10 +34,9 @@ export default async function fetchFromAPI<T>(
       throw new AuthenticationError('No API token found.');
     }
 
-    opts.headers = {
-      ...opts.headers,
-      Authorization: `Bearer ${token.value}`,
-    };
+    const headers = new Headers(opts.headers);
+    headers.set('Authorization', `Bearer ${token.value}`);
+    opts.headers = headers;
   }
 
   const response = await fetch(url, opts);

@@ -156,7 +156,7 @@ function SpecProgress(props: SpecProgressProps) {
     setETR(state.exposure_etr);
     setTotalTime(state.total_exposure_time);
     setProgress((1 - state.exposure_etr / state.total_exposure_time) * 100);
-  }, [state, noData]);
+  }, [state, noData, exposingSpecs.length]);
 
   React.useEffect(() => {
     if (etr === null || totalTime === null) {
@@ -266,7 +266,7 @@ function LN2Status(props: { filling: boolean | null; noData: boolean }) {
       setColor('blue');
       setText('Not filling');
     }
-  }, [props.filling, props.noData]);
+  }, [props, setColor, setText]);
 
   return (
     <Pill bg={color}>

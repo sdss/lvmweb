@@ -34,23 +34,25 @@ export default function LVMAppShell({ children }: { children: React.ReactNode })
     if (isAsideLarge === undefined || !isAsideLarge) {
       collapseAside();
     }
-  }, [isAsideLarge]);
+  }, [isAsideLarge, collapseAside]);
 
   React.useEffect(() => {
     const openAsideCookie = cookies.get('openAside');
     if (openAsideCookie === 'true') {
       openAside();
     }
-  }, []);
+  }, [openAside, cookies]);
 
   const toggleAsideCookie = React.useCallback(() => {
     if (isAsideLarge) {
-      collapsedAside
-        ? cookies.set('openAside', 'true')
-        : cookies.set('openAside', 'false');
+      if (collapsedAside) {
+        cookies.set('openAside', 'true');
+      } else {
+        cookies.set('openAside', 'false');
+      }
     }
     toggleAside();
-  }, [collapsedAside]);
+  }, [collapsedAside, isAsideLarge, toggleAside, cookies]);
 
   return (
     <>

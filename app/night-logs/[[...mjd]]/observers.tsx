@@ -96,7 +96,7 @@ export default function Observers(props: ObserverProps) {
 
       setLoading(true);
 
-      fetchFromAPI(`/logs/night-logs/comments/add`, {
+      void fetchFromAPI(`/logs/night-logs/comments/add`, {
         method: 'POST',
         body: JSON.stringify({ mjd, category: 'observers', comment: newValue }),
         headers: {

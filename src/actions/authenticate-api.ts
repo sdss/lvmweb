@@ -60,7 +60,7 @@ export async function testAuthentication() {
 
   try {
     await fetchFromAPI('/auth/test', {}, true);
-  } catch (error) {
+  } catch {
     return false;
   }
 

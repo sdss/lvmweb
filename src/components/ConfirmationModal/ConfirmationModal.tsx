@@ -31,7 +31,7 @@ export default function ConfirmationModal(props: ConfirmationModalProps) {
         setLoading(false);
         props.close();
       });
-  }, [props.handleAction]);
+  }, [props]);
 
   return (
     <Modal

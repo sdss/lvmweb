@@ -100,7 +100,7 @@ export default function FillPage(props: FillPageProps) {
 
   React.useEffect(() => {
     if (pks.length === 0) {
-      fetchFillList().then((response) => {
+      void fetchFillList().then((response) => {
         setRecords(response);
         setPKs(Array.from(response.keys()));
       });
@@ -121,14 +121,14 @@ export default function FillPage(props: FillPageProps) {
 
     setPK(paramPK);
     setNotFound(false);
-  }, [paramsUse.pk, pks]);
+  }, [paramsUse.pk, pks, router]);
 
   React.useEffect(() => {
     if (pk === null || notFound) {
       return;
     }
 
-    fetchFillData(pk).then((response) => {
+    void fetchFillData(pk).then((response) => {
       setFillData(response);
     });
 
@@ -144,14 +144,14 @@ export default function FillPage(props: FillPageProps) {
 
     if (!fillData.complete) {
       const interval = setInterval(() => {
-        fetchFillData(pk!).then((response) => {
+        void fetchFillData(pk!).then((response) => {
           setFillData(response);
         });
       }, 10_000);
 
       return () => clearInterval(interval);
     }
-  }, [fillData?.complete, pk]);
+  }, [fillData?.complete, pk, fillData]);
 
   if (!pk) {
     return;

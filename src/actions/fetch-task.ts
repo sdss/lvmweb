@@ -5,6 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
+// oxlint-disable typescript/restrict-template-expressions
+
 'use server';
 
 import fetchFromAPI from './fetch-from-API';

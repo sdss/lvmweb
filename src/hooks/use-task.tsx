@@ -88,6 +88,7 @@ export default function useTask<T>(
     (error: unknown) => {
       let message: string;
       if (notifyErrors && error) {
+        // oxlint-disable-next-line typescript/no-base-to-string typescript/restrict-template-expressions
         message = `Task ${taskName} failed with error: ${error}`;
       } else {
         message = `Task ${taskName} failed.`;
@@ -104,7 +105,7 @@ export default function useTask<T>(
       });
       setIsRunning(false);
       taskID.current = null;
-      deferRef?.reject(new Error(message));
+      deferRef.current?.reject(new Error(message));
     },
     [showNotifications, taskName, notifyErrors, deferRef]
   );
@@ -143,7 +144,7 @@ export default function useTask<T>(
             if (result.is_err) {
               failTask(result.error);
             } else {
-              deferRef?.resolve(result.return_value);
+              deferRef.current?.resolve(result.return_value);
 
               updateNotification(showNotifications, notifID.current, true, {
                 title: 'Task complete',
@@ -196,7 +197,7 @@ export default function useTask<T>(
           setIsRunning(true);
         })
         .catch(() => {
-          deferRef?.reject(new Error('Task failed to start.'));
+          deferRef.current?.reject(new Error('Task failed to start.'));
 
           setIsRunning(false);
           taskID.current = null;

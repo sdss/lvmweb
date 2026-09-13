@@ -61,6 +61,4 @@ export function Plots(props: { plot_data: { [key: string]: string } | null }) {
       </Stack>
     </Stack>
   );
-
-  return;
 }

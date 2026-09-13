@@ -31,11 +31,11 @@ function TurnTelescopeRedButton(props: {
       ? '/enclosure/lights/off/telescope_red'
       : '/enclosure/lights/on/telescope_red';
 
-    fetchFromAPI(route, {}, true)
+    void fetchFromAPI(route, {}, true)
       .catch(() => {})
       .then(props.refreshData)
       .finally(close);
-  }, [close, props.on]);
+  }, [close, props]);
 
   return (
     <>
@@ -73,7 +73,7 @@ function TurnLightsOffButton(props: { disabled: boolean; refreshData: () => void
       .catch(() => {})
       .then(props.refreshData)
       .finally(close);
-  }, [close]);
+  }, [close, props]);
 
   return (
     <>

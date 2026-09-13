@@ -35,5 +35,5 @@ export default function useDeferredPromise<DeferType>() {
     return deferRef.current;
   };
 
-  return { defer, deferRef: deferRef.current };
+  return { defer, deferRef };
 }

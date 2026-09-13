@@ -24,6 +24,14 @@ export default defineConfig({
     ],
     rules: {
       'vite-plus/prefer-vite-plus-imports': 'error',
+      'no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+          allowTaggedTemplates: true,
+        },
+      ],
     },
   },
   fmt: {

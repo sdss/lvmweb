@@ -123,7 +123,7 @@ function ExposureDataTable(props: {
     return <Skeleton height="80vh" w="100%" />;
   }
 
-  const { data, reloading = false } = props;
+  const { data, reloading } = props;
 
   const Header = [
     'Exp #',
@@ -212,7 +212,7 @@ export default function ExposureListPage(props: ExposureListPageProps) {
         setReloading(true);
       }
 
-      fetchExposureListData(currentMJD)
+      void fetchExposureListData(currentMJD)
         .then(setData)
         .then(() => setReloading(false));
     },
@@ -220,7 +220,7 @@ export default function ExposureListPage(props: ExposureListPageProps) {
   );
 
   React.useEffect(() => {
-    fetchMJDs().then(setMJDs);
+    void fetchMJDs().then(setMJDs);
   }, []);
 
   React.useEffect(() => {

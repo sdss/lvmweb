@@ -11,10 +11,10 @@ import { cookies } from 'next/headers';
 
 export async function setCookie(name: string, value: string) {
   const cookieStore = await cookies();
-  await cookieStore.set(name, value);
+  cookieStore.set(name, value);
 }
 
 export async function getCookie(name: string) {
   const cookieStore = await cookies();
-  return await cookieStore.get(name)?.value;
+  return cookieStore.get(name)?.value;
 }

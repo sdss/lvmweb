@@ -60,6 +60,7 @@ type NightProgressProps = { ephemeris: EphemerisResponse | null; noData: boolean
 function NightProgress(props: NightProgressProps) {
   const { ephemeris, noData } = props;
 
+  const [now, setNow] = React.useState<number | null>(null);
   const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
@@ -67,14 +68,16 @@ function NightProgress(props: NightProgressProps) {
       return;
     }
 
-    const now = Date.now();
+    const _now = Date.now();
+    setNow(_now);
+
     const sunset = JDToUnix(ephemeris.twilight_end);
     const sunrise = JDToUnix(ephemeris.twilight_start);
 
-    if (now < sunset) {
+    if (_now < sunset) {
       setProgress(0);
     } else {
-      setProgress(((now - sunset) / (sunrise - sunset)) * 100);
+      setProgress(((_now - sunset) / (sunrise - sunset)) * 100);
     }
   }, [ephemeris]);
 
@@ -83,8 +86,7 @@ function NightProgress(props: NightProgressProps) {
     return <APIStatusText nodata={noData}>Night has not started</APIStatusText>;
   } else if (progress >= 100) {
     tooltipLabel = 'Night has ended';
-  } else {
-    const now = Date.now();
+  } else if (now && ephemeris) {
     const sunrise = JDToUnix(ephemeris?.twilight_start || 0);
 
     const hours = (sunrise - now) / 3600000;

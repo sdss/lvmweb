@@ -43,28 +43,24 @@ export default function useAPICall<T>(
   const [noData, setNoData] = React.useState<boolean>(true);
   const [status, setStatus] = React.useState<APICallStatus>(APICallStatus.NODATA);
 
-  React.useEffect(() => {
-    // Once the status changes to ERROR, do not change it back until a explicit OK.
-
-    if (status === APICallStatus.ERROR) {
-      setNoData(true);
-    } else if (status === APICallStatus.OK) {
-      setNoData(false);
-    }
-  }, [status]);
-
   const callAPI = React.useCallback(() => {
     fetchFromAPI<T>(route, { baseURL }, needs_authentication)
       .then((dd) => {
         setData(dd);
+        setNoData(false);
         setStatus(APICallStatus.OK);
-        callback && callback(dd, APICallStatus.OK);
+        if (callback) {
+          callback(dd, APICallStatus.OK);
+        }
       })
       .catch(() => {
+        setNoData(true);
         setStatus(APICallStatus.ERROR);
-        callback && callback(null, APICallStatus.ERROR);
+        if (callback) {
+          callback(null, APICallStatus.ERROR);
+        }
       });
-  }, [baseURL, route, needs_authentication]);
+  }, [baseURL, route, needs_authentication, callback]);
 
   useIntervalImmediate(() => {
     setStatus(APICallStatus.FETCHING);

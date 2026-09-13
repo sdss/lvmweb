@@ -145,7 +145,7 @@ function RunningGroup(props: RunningGroupProps) {
     runner('/macros/cleanup', true)
       .then(() => props.refreshData?.())
       .catch(() => {});
-  }, [runner, closeModal]);
+  }, [runner, closeModal, props]);
 
   const resetOverwatcher = React.useCallback(() => {
     setResetRunning(true);
@@ -153,7 +153,7 @@ function RunningGroup(props: RunningGroupProps) {
       .then(() => props.refreshData?.())
       .catch(() => {})
       .finally(() => setResetRunning(false));
-  }, []);
+  }, [props]);
 
   return (
     <Group>
@@ -222,7 +222,7 @@ function EnabledGroup(props: EnabledGroupProps) {
         openModal();
       }
     },
-    [observing]
+    [observing, openModal, props]
   );
 
   return (
@@ -278,7 +278,7 @@ function DisableModal(props: {
           refreshData?.();
         });
     },
-    [close, closeDome]
+    [close, closeDome, refreshData]
   );
 
   return (
@@ -353,7 +353,7 @@ function AllowCalibrationsGroup(props: AllowDomeCalibrationsGroupProps) {
       .then(() => setOn((prev) => !prev))
       .catch(() => {})
       .finally(props.refreshData);
-  }, [isOn]);
+  }, [isOn, props]);
 
   return (
     <Group>
@@ -401,7 +401,7 @@ function ScheduleLongTermCalsModal(props: {
         setRunning(false);
         props.close();
       });
-  }, [now, unschedule]);
+  }, [now, unschedule, refreshData, props]);
 
   return (
     <Modal opened={opened} onClose={close} title="Long-term calibrations">

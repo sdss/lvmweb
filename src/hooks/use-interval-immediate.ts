@@ -13,11 +13,15 @@ export default function useIntervalImmediate(callback: () => unknown, delay: num
 
   const refCB = React.useRef(callback);
 
+  React.useEffect(() => {
+    refCB.current = callback;
+  }, [callback]);
+
   // Initial call
   React.useEffect(() => {
     refCB.current();
   }, []);
 
   // Subsequent calls. The first call starts after delay ms.
-  useInterval(refCB.current, delay);
+  useInterval(() => refCB.current(), delay);
 }

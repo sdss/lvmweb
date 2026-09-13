@@ -41,7 +41,7 @@ function TurnLightsOffButton(props: { disabled: boolean; refreshData: () => void
   const [opened, { open, close }] = useDisclosure();
 
   const handleClick = React.useCallback(async () => {
-    fetchFromAPI(
+    void fetchFromAPI(
       '/enclosure/nps/calib',
       {
         method: 'PUT',
@@ -56,7 +56,7 @@ function TurnLightsOffButton(props: { disabled: boolean; refreshData: () => void
       .catch(() => {})
       .then(props.refreshData)
       .finally(close);
-  }, [close]);
+  }, [close, props]);
 
   return (
     <>
@@ -92,13 +92,13 @@ export default function CalLamps(props: CalLampsProps) {
 
   const { data, noData, refreshData } = props;
 
-  const onLamps = Object.entries(data || {}).filter(([_, value]) => value);
+  const onLamps = Object.entries(data || {}).filter(([, value]) => value);
 
   let LampPills: React.ReactNode;
   if (noData || onLamps.length === 0) {
     LampPills = <APIStatusText nodata={noData}>All off</APIStatusText>;
   } else {
-    LampPills = onLamps.map(([light, _]) => (
+    LampPills = onLamps.map(([light]) => (
       <Tooltip key={light} label={LAMP_TO_LABEL[light]}>
         <Pill bg="orange.9" component="div">
           <APIStatusText nodata={noData} size="xs">

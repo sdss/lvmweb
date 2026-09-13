@@ -28,7 +28,12 @@ function formatPayload(payload: object | null) {
   }
 
   const chunks = Object.keys(payload).map((key) => {
-    return `${key}: ${payload[key as keyof typeof payload]}`;
+    const value = payload[key as keyof typeof payload] as
+      | string
+      | number
+      | boolean
+      | null;
+    return `${key}: ${value}`;
   });
 
   return chunks.join(', ');

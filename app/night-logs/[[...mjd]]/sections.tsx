@@ -45,10 +45,10 @@ function DeleteCommentModal(props: DeleteCommentModalProps) {
 
     setLoading(true);
 
-    fetchFromAPI(`/logs/night-logs/comments/delete/${pk}`)
+    void fetchFromAPI(`/logs/night-logs/comments/delete/${pk}`)
       .then(() => close())
       .finally(() => setLoading(false));
-  }, [pk]);
+  }, [pk, close]);
 
   return (
     <Modal
@@ -182,7 +182,7 @@ function AddCommentModal(props: AddCommentModalProps) {
     }
 
     setLoading(true);
-    fetchFromAPI('/logs/night-logs/comments/add', {
+    void fetchFromAPI('/logs/night-logs/comments/add', {
       method: 'POST',
       body: JSON.stringify({ mjd, category, comment, pk }),
       headers: {
@@ -193,7 +193,7 @@ function AddCommentModal(props: AddCommentModalProps) {
       .then(() => close())
       .catch(() => setError('Failed to submit comment.'))
       .finally(() => setLoading(false));
-  }, [mjd, category]);
+  }, [mjd, category, pk, close]);
 
   const title = edit ? 'Edit comment' : 'Add comment';
 

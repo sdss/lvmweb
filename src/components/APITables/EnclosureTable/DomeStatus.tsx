@@ -56,7 +56,7 @@ function DomeIcon(props: {
       setDisabled && setDisabled(isRunning);
       result.catch(() => {}).finally(refreshData);
     } else {
-      fetchFromAPI(route, {}, true)
+      void fetchFromAPI(route, {}, true)
         .catch(() => {})
         .then(() => {
           refreshData && refreshData();
@@ -65,7 +65,7 @@ function DomeIcon(props: {
           setDisabled && setDisabled(false);
         });
     }
-  }, [route, close, isRunning, runner, setDisabled, task]);
+  }, [route, close, isRunning, runner, setDisabled, task, refreshData]);
 
   return (
     <>

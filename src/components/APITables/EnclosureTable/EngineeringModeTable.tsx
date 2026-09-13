@@ -89,7 +89,7 @@ export default function EngineeringModeTable(props: {
     }
 
     setPills(tmpPills);
-  }, [enclosureStatus?.engineering_mode]);
+  }, [enclosureStatus?.engineering_mode, noData]);
 
   const disableEMode = React.useCallback(() => {
     if (!isInEMode) {
