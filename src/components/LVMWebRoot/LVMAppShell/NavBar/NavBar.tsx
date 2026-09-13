@@ -7,6 +7,7 @@
 
 'use client';
 
+import { Box, ScrollArea, Stack } from '@mantine/core';
 import {
   IconCloudRain,
   IconDeviceComputerCamera,
@@ -18,9 +19,10 @@ import {
   IconSnowflake,
   IconTelescope,
 } from '@tabler/icons-react';
-import { Box, ScrollArea, Stack } from '@mantine/core';
+
 import NavAccordion from '@/src/components/NavAccordion/NavAccordion';
 import NavAccordionItem from '@/src/components/NavAccordionItem/NavAccordionItem';
+
 import NavBarItem from './NavBarItem/NavBarItem';
 
 export default function NavBar() {

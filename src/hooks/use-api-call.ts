@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+
 import fetchFromAPI from '../actions/fetch-from-API';
 import useIntervalImmediate from './use-interval-immediate';
 

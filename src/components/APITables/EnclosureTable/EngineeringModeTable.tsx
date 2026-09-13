@@ -7,12 +7,14 @@
 
 'use client';
 
-import React from 'react';
-import { IconAlertHexagonOff } from '@tabler/icons-react';
 import { ActionIcon, Box, Group, Pill, rem, Tooltip } from '@mantine/core';
+import { IconAlertHexagonOff } from '@tabler/icons-react';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
+
 import { EnclosureResponse } from './types';
 
 export default function EngineeringModeTable(props: {

@@ -7,14 +7,15 @@
 
 // Adapted from https://airbnb.io/visx/lineradial
 
-import React from 'react';
-import Link from 'next/link';
+import { Tooltip } from '@mantine/core';
 import { AxisLeft } from '@visx/axis';
 import { LinearGradient } from '@visx/gradient';
 import { GridAngle, GridRadial } from '@visx/grid';
 import { Group } from '@visx/group';
 import { scaleLinear } from '@visx/scale';
-import { Tooltip } from '@mantine/core';
+import Link from 'next/link';
+import React from 'react';
+
 import useAPICall from '@/src/hooks/use-api-call';
 
 const green = '#e5fd3d';

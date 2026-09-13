@@ -7,14 +7,16 @@
 
 'use client';
 
-import React from 'react';
-import { IconBulbOff } from '@tabler/icons-react';
 import { ActionIcon, Box, Group, Pill, rem, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { IconBulbOff } from '@tabler/icons-react';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import ConfirmationModal from '@/src/components/ConfirmationModal/ConfirmationModal';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
+
 import { CalLampsResponse } from './types';
 
 const LAMP_TO_NAME: { [k: string]: string } = {

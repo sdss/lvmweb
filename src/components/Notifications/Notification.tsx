@@ -7,6 +7,7 @@
 
 'use client';
 
+import { Box, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import {
   IconAlertTriangle,
   IconBug,
@@ -14,7 +15,7 @@ import {
   IconInfoSquare,
 } from '@tabler/icons-react';
 import Markdown from 'react-markdown';
-import { Box, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
+
 import LinkRenderer from '../LinkRenderer/LinkRenderer';
 import classes from './Notification.module.css';
 

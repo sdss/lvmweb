@@ -7,14 +7,16 @@
 
 'use client';
 
-import React from 'react';
-import { useCookies } from 'next-client-cookies';
 import { Affix, AppShell, Box, Burger, Drawer } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useCookies } from 'next-client-cookies';
+import React from 'react';
+
 import Notifications from '@/src/components/Notifications/Notifications';
+
 import Header from './Header/Header';
-import NavBar from './NavBar/NavBar';
 import classes from './LVMAppShell.module.css';
+import NavBar from './NavBar/NavBar';
 
 export default function LVMAppShell({ children }: { children: React.ReactNode }) {
   const [drawerOpened, { close, toggle }] = useDisclosure(false);

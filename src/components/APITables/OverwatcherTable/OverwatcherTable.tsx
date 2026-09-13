@@ -7,14 +7,6 @@
 
 'use client';
 
-import React from 'react';
-import {
-  IconExchange,
-  IconRobot,
-  IconRuler2,
-  IconRuler2Off,
-  IconSpray,
-} from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -29,12 +21,22 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import {
+  IconExchange,
+  IconRobot,
+  IconRuler2,
+  IconRuler2Off,
+  IconSpray,
+} from '@tabler/icons-react';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import APITable from '@/src/components/APITable/APITable';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import useAPICall from '@/src/hooks/use-api-call';
 import useTask from '@/src/hooks/use-task';
+
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 
 type OverwatcherResponse = {

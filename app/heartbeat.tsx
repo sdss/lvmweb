@@ -7,8 +7,9 @@
 
 'use client';
 
-import React from 'react';
 import { Modal, Text } from '@mantine/core';
+import React from 'react';
+
 import useAPICall, { APICallStatus } from '@/src/hooks/use-api-call';
 
 export default function LVMWebHeartbeat() {

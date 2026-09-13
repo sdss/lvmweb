@@ -7,12 +7,14 @@
 
 'use client';
 
-import React from 'react';
-import { IconArrowBarLeft } from '@tabler/icons-react';
 import { ActionIcon, Group, Loader, Text, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { IconArrowBarLeft } from '@tabler/icons-react';
+import React from 'react';
+
 import { getLCOOverrideCode, isLCO } from '@/src/actions/get-ip';
 import useTask from '@/src/hooks/use-task';
+
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import { AuthContext } from '../LVMWebRoot/LVMWebRoot';
 import classes from './ShutdownActionIcon.module.css';

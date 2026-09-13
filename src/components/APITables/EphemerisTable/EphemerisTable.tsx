@@ -7,13 +7,15 @@
 
 'use client';
 
-import React from 'react';
-import { IconSunrise } from '@tabler/icons-react';
 import { Progress, Tooltip } from '@mantine/core';
+import { IconSunrise } from '@tabler/icons-react';
+import React from 'react';
+
 import useAPICall from '@/src/hooks/use-api-call';
 import useNow from '@/src/hooks/use-now';
 import booleanYesNo from '@/src/tools/boolean-yes-no';
 import JDToISO from '@/src/tools/jd-to-iso';
+
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import APITable from '../../APITable/APITable';
 

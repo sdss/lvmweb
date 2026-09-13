@@ -7,9 +7,11 @@
 
 'use client';
 
-import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { Divider, Group } from '@mantine/core';
 import React from 'react';
+
+import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
+
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import { EnclosureResponse } from './types';
 

@@ -12,6 +12,7 @@ import { IconExternalLink } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactElement } from 'react';
+
 import classes from './NavBarItem.module.css';
 
 type NavBarItemProps = {

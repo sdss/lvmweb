@@ -7,8 +7,9 @@
 
 'use client';
 
-import React from 'react';
 import { Box, Stack, Title } from '@mantine/core';
+import React from 'react';
+
 import TelescopePositionPlot from '@/src/components/TelescopePositionPlot/TelescopePositionPlot';
 
 type TelescopePageProps = {

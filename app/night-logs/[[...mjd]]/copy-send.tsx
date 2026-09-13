@@ -5,12 +5,14 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
-import { IconSend } from '@tabler/icons-react';
 import { Button, ButtonProps, Group, rem } from '@mantine/core';
 import { useClipboard } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
+import { IconSend } from '@tabler/icons-react';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+
 import classes from './night-logs.module.css';
 
 type EmailButtonProps = {

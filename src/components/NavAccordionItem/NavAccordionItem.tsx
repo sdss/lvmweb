@@ -9,6 +9,7 @@ import { Box, Group, Text } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 import classes from './NavAccordionItem.module.css';
 
 type NavAccordionPropsItem = {

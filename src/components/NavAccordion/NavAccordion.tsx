@@ -8,6 +8,7 @@
 import { Accordion, Title } from '@mantine/core';
 import { IconProps } from '@tabler/icons-react';
 import React from 'react';
+
 import classes from './NacAccordion.module.css';
 
 type NavAccordionProps = {

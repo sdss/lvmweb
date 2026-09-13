@@ -7,14 +7,15 @@
 
 'use client';
 
-import React from 'react';
+import { ActionIcon, Box, Group, Pill, Progress, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
   IconArrowsMaximize,
   IconArrowsMinimize,
   IconHandStop,
 } from '@tabler/icons-react';
-import { ActionIcon, Box, Group, Pill, Progress, Tooltip } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import APIStatusText from '@/src/components/APITable/APIStatusText/APIStatusText';
 import ConfirmationModal from '@/src/components/ConfirmationModal/ConfirmationModal';

@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+
 import { testAuthentication } from '../actions/authenticate-api';
 import useIntervalImmediate from './use-interval-immediate';
 

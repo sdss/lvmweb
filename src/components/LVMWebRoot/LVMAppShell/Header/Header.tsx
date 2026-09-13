@@ -5,12 +5,6 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
-import Link from 'next/link';
-import {
-  IconExclamationCircle,
-  IconLayoutSidebarRightFilled,
-} from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -23,9 +17,17 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
+import {
+  IconExclamationCircle,
+  IconLayoutSidebarRightFilled,
+} from '@tabler/icons-react';
+import Link from 'next/link';
+import React from 'react';
+
 import AlertsActionIcon from '@/src/components/AlertsActionIcon/AlertsActionIcon';
 import AuthenticatedIcon from '@/src/components/AuthenticatedIcon/AuthenticatedIcon';
 import useAlertsContext from '@/src/hooks/use-alerts-context';
+
 import ShutdownActionIcon from '../../../ShutdownActionIcon/ShutdownActionIcon';
 import AlertsModal from '../../AlertsModal/AlertsModal';
 import classes from './Header.module.css';

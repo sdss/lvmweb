@@ -7,9 +7,10 @@
 
 'use client';
 
-import React, { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { Image } from '@mantine/core';
+import { useSearchParams } from 'next/navigation';
+import React, { Suspense } from 'react';
+
 import getSystemFile from '@/src/actions/get-system-image';
 
 function ImageFile(props: { path: string | null }) {

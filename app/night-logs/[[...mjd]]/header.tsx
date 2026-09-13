@@ -8,6 +8,7 @@
 'use client';
 
 import { Group, NativeSelect, SegmentedControl, Tooltip } from '@mantine/core';
+
 import { NightLogMode } from './page';
 
 type HeaderProps = {

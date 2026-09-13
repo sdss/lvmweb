@@ -7,10 +7,6 @@
 
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { IconExclamationCircle, IconInfoCircle } from '@tabler/icons-react';
 import {
   Alert,
   Box,
@@ -22,7 +18,13 @@ import {
   Title,
 } from '@mantine/core';
 import { useForceUpdate, useInterval } from '@mantine/hooks';
+import { IconExclamationCircle, IconInfoCircle } from '@tabler/icons-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+
 import CopySend, { EmailButton } from './copy-send';
 import Exposures from './exposures';
 import Header from './header';

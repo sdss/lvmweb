@@ -7,8 +7,6 @@
 
 'use client';
 
-import React from 'react';
-import { IconCircleCheck, IconExclamationCircle } from '@tabler/icons-react';
 import {
   ActionIcon,
   Button,
@@ -20,7 +18,11 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { IconCircleCheck, IconExclamationCircle } from '@tabler/icons-react';
+import React from 'react';
+
 import useAlertsContext from '@/src/hooks/use-alerts-context';
+
 import AlertsModal from '../LVMWebRoot/AlertsModal/AlertsModal';
 
 export type AllesIstGutModalProps = {

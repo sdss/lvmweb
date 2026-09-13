@@ -8,7 +8,9 @@
 'use client';
 
 import { IconBuildingWarehouse } from '@tabler/icons-react';
+
 import useAPICall from '@/src/hooks/use-api-call';
+
 import APITable from '../../APITable/APITable';
 import CalLamps from './CalLamps';
 import DomeStatus from './DomeStatus';

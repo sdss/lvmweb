@@ -5,9 +5,10 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
-import Link from 'next/link';
 import { Box, Image, Paper, Stack, Title } from '@mantine/core';
+import Link from 'next/link';
+import React from 'react';
+
 import getSystemFile from '@/src/actions/get-system-image';
 
 function Plot(props: { file: string }) {

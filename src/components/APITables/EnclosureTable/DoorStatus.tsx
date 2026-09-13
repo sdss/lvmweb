@@ -8,6 +8,7 @@
 'use client';
 
 import { Pill } from '@mantine/core';
+
 import APIStatusText from '../../APITable/APIStatusText/APIStatusText';
 import { EnclosureResponse } from './types';
 

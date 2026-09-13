@@ -7,9 +7,11 @@
 
 'use client';
 
-import React from 'react';
 import { Box, ScrollArea, Skeleton, Stack, Text, Title } from '@mantine/core';
+import React from 'react';
+
 import useAPICall from '@/src/hooks/use-api-call';
+
 import Notification from './Notification';
 
 type NotificationsResponse = {

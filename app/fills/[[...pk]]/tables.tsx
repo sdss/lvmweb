@@ -5,9 +5,10 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
-import { IconCheck, IconQuestionMark } from '@tabler/icons-react';
 import { Box, Stack, Table, Title, Tooltip } from '@mantine/core';
+import { IconCheck, IconQuestionMark } from '@tabler/icons-react';
+import React from 'react';
+
 import { ValveTimesType } from './types';
 
 function toTime(date: string | null) {

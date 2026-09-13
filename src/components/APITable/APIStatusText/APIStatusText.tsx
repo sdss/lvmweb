@@ -5,8 +5,9 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
 import { Text, Tooltip } from '@mantine/core';
+import React from 'react';
+
 import classes from './APIStatusText.module.css';
 
 type APIStatusTextProps = {

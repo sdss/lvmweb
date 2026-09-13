@@ -5,8 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import { IconExclamationCircle } from '@tabler/icons-react';
 import { Alert } from '@mantine/core';
+import { IconExclamationCircle } from '@tabler/icons-react';
 
 export default function ErrorAlert(props: { error: string | null }) {
   if (!props.error) {

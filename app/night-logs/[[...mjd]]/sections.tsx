@@ -5,8 +5,6 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
-import { IconPencil, IconPlus } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -23,9 +21,13 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { IconPencil, IconPlus } from '@tabler/icons-react';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
-import { NightLogComment, NightLogData, NightMetrics } from './page';
+
 import classes from './night-logs.module.css';
+import { NightLogComment, NightLogData, NightMetrics } from './page';
 
 type DeleteCommentModalProps = {
   pk: number;

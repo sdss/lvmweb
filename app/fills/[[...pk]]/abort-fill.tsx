@@ -5,9 +5,10 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
 import { Button, Group, Modal, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import { AuthContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
 

@@ -8,12 +8,13 @@
 import '@/src/variables.css';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
-
-import { CookiesProvider } from 'next-client-cookies/server';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { CookiesProvider } from 'next-client-cookies/server';
+
 import LVMWebRoot from '@/src/components/LVMWebRoot/LVMWebRoot';
 import { theme } from '@/src/theme';
+
 import LVMWebHeartbeat from './heartbeat';
 
 export const metadata = {

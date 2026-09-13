@@ -5,8 +5,6 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
-import { IconInfoCircle } from '@tabler/icons-react';
 import {
   Alert,
   Box,
@@ -18,9 +16,13 @@ import {
   Text,
   Tooltip,
 } from '@mantine/core';
+import { IconInfoCircle } from '@tabler/icons-react';
+import React from 'react';
+
 import useAlertsContext from '@/src/hooks/use-alerts-context';
 import useAPICall from '@/src/hooks/use-api-call';
 import useTask from '@/src/hooks/use-task';
+
 import { EnclosureResponse } from '../../APITables/EnclosureTable/types';
 import classes from './AlertModal.module.css';
 

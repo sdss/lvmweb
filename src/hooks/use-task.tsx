@@ -7,10 +7,11 @@
 
 'use client';
 
-import React from 'react';
-import { IconCheck, IconX } from '@tabler/icons-react';
 import { rem } from '@mantine/core';
 import { NotificationData, notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import React from 'react';
+
 import fetchFromAPI from '../actions/fetch-from-API';
 import useDeferredPromise from './use-deferred';
 

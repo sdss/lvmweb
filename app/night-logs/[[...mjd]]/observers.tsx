@@ -5,9 +5,6 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
-import Link from 'next/link';
-import { IconCheck } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -19,10 +16,15 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
+import { IconCheck } from '@tabler/icons-react';
+import Link from 'next/link';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
+
 import GrafanaIcon from './GrafanaIcon';
-import { NightLogData } from './page';
 import classes from './night-logs.module.css';
+import { NightLogData } from './page';
 
 function MJDToUnix(mjd: number) {
   return (mjd - 40587) * 86400 * 1000;

@@ -5,11 +5,13 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import Markdown from 'react-markdown';
 import { Box, Stack, Table, Text, Title } from '@mantine/core';
+import Markdown from 'react-markdown';
+
 import LinkRenderer from '@/src/components/LinkRenderer/LinkRenderer';
-import { NotificationType } from './page';
+
 import classes from './night-logs.module.css';
+import { NotificationType } from './page';
 
 type NotificationsProps = {
   notifications: NotificationType[];

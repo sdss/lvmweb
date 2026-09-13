@@ -7,8 +7,6 @@
 
 'use client';
 
-import React from 'react';
-import { IconRefresh } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -22,6 +20,9 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
+import { IconRefresh } from '@tabler/icons-react';
+import React from 'react';
+
 import fetchFromAPI from '@/src/actions/fetch-from-API';
 import fetchTask from '@/src/actions/fetch-task';
 

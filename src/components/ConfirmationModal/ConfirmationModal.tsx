@@ -5,8 +5,8 @@
  *  @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
  */
 
-import React from 'react';
 import { Box, Button, Group, Modal } from '@mantine/core';
+import React from 'react';
 
 export type ConfirmationModalProps = {
   opened: boolean;

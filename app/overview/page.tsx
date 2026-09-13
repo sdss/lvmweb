@@ -7,8 +7,9 @@
 
 'use client';
 
-import React from 'react';
 import { Box, SimpleGrid, Stack, useMatches } from '@mantine/core';
+import React from 'react';
+
 import ActorsTable from '@/src/components/APITables/ActorsTable/ActorsTable';
 import EnclosureTable from '@/src/components/APITables/EnclosureTable/EnclosureTable';
 import EphemerisTable from '@/src/components/APITables/EphemerisTable/EphemerisTable';
