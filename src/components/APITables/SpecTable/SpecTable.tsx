@@ -10,6 +10,7 @@
 import { Divider, Group, Pill, Progress, Stack, Text, Tooltip } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
 import { IconPrismLight } from '@tabler/icons-react';
+import Link from 'next/link';
 import React from 'react';
 
 import { AlertsContext } from '@/src/components/LVMWebRoot/LVMWebRoot';
@@ -39,6 +40,12 @@ type SpecTempsResponse = {
   sensor: Sensor;
   temperature: number;
 }[];
+
+type LastFillResponse = {
+  pk: number;
+  failed: boolean;
+  start_time: string;
+};
 
 function SpecTemperatures(
   specs: { [k in Cameras]?: number },
@@ -275,6 +282,41 @@ function LN2Status(props: { filling: boolean | null; noData: boolean }) {
   );
 }
 
+function LastFill(props: {
+  ongoing: boolean;
+  lastFill: LastFillResponse | null;
+  noData: boolean;
+}) {
+  const { lastFill, noData, ongoing } = props;
+
+  if (ongoing) {
+    return <APIStatusText>Fill in progress</APIStatusText>;
+  }
+
+  if (!lastFill || noData) {
+    return <APIStatusText>No fill data</APIStatusText>;
+  }
+
+  let startTime = new Date(lastFill.start_time);
+  let now = new Date();
+  let time_diff = Math.abs(now.getTime() - startTime.getTime());
+  let diff_hours = time_diff / (1000 * 60 * 60);
+
+  // The maximum difference when we fill twice a day is 14 hours.
+  let colour = 'undefined';
+  if (diff_hours > 15) {
+    colour = 'red.8';
+  } else if (diff_hours > 14.5) {
+    colour = 'yellow.8';
+  }
+
+  return (
+    <APIStatusText color={colour}>
+      <Link href={`/fills/${lastFill.pk}`}>{diff_hours.toFixed(1)} hours ago</Link>
+    </APIStatusText>
+  );
+}
+
 export default function SpecTable() {
   const STATUS_INTERVAL = 5000;
   const TEMPS_INTERVAL = 60000;
@@ -295,6 +337,11 @@ export default function SpecTable() {
   const [filling, , noDataFilling] = useAPICall<boolean>(
     '/spectrographs/fills/running',
     { interval: FILLING_INTERVAL }
+  );
+
+  const [lastFill, , noDataLastFill] = useAPICall<LastFillResponse>(
+    '/spectrographs/fills/metadata/last?complete=true',
+    { interval: 30000 }
   );
 
   const noData = noDataSpec || noDataTemps;
@@ -381,6 +428,18 @@ export default function SpecTable() {
       label: 'LN\u2082 Status',
       value: <LN2Status filling={filling} noData={noDataFilling} />,
     },
+    {
+      key: 'last_fill',
+      label: 'Last Fill',
+      value: (
+        <LastFill
+          ongoing={filling || false}
+          lastFill={lastFill}
+          noData={noDataLastFill}
+        />
+      ),
+    },
+
     {
       key: 'last_exposure_no',
       label: 'Last Exposure',
