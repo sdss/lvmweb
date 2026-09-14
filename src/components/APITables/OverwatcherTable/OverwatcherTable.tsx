@@ -71,6 +71,11 @@ type CalibrationsListResponse = {
   disabled: boolean;
 }[];
 
+type ConnectivityResponse = {
+  internet: boolean;
+  lco: boolean;
+};
+
 type OverwatcherPillProps = {
   value: boolean | string | null | undefined;
   nodata: boolean;
@@ -80,6 +85,7 @@ type OverwatcherPillProps = {
   naColor?: string;
   customColour?: string;
   tooltipText?: string;
+  maw?: number;
 };
 
 function OverwatcherPill(props: OverwatcherPillProps) {
@@ -90,6 +96,7 @@ function OverwatcherPill(props: OverwatcherPillProps) {
     yesColor = 'green-yes.9',
     noColor = 'dark.5',
     naColor = 'dark.5',
+    maw = 70,
     customColour,
     tooltipText,
   } = props;
@@ -117,7 +124,7 @@ function OverwatcherPill(props: OverwatcherPillProps) {
   return (
     <Box style={{ flexGrow: 1, paddingLeft: 8 }}>
       <Tooltip label={tooltipText} hidden={tooltipText === undefined}>
-        <Pill bg={colour} maw={70}>
+        <Pill bg={colour} maw={maw}>
           <APIStatusText nodata={nodata}>{text}</APIStatusText>
         </Pill>
       </Tooltip>
@@ -535,6 +542,28 @@ function SafetyGroup(props: { data: OverwatcherResponse | null; nodata: boolean 
   );
 }
 
+function ConnectivityGroup() {
+  const [data, ,] = useAPICall<ConnectivityResponse>('/alerts/connectivity', {
+    interval: 5000,
+  });
+
+  return (
+    <Box display="inline-flex">
+      <OverwatcherPill
+        value="Internet"
+        nodata={false}
+        useErrorColour={data?.internet === false}
+        maw={90}
+      />
+      <OverwatcherPill
+        value="LCO"
+        nodata={false}
+        useErrorColour={data?.lco === false}
+      />
+    </Box>
+  );
+}
+
 function ObservingText(props: { data: OverwatcherResponse | null }) {
   const { data } = props;
 
@@ -546,7 +575,7 @@ function ObservingText(props: { data: OverwatcherResponse | null }) {
     return (
       <APIStatusText
         size="xs"
-        color="red.9"
+        color="yellow.9"
         style={{
           paddingRight: 16,
           textAlign: 'right',
@@ -669,6 +698,11 @@ export default function OverwatcherTable() {
       key: 'safe',
       label: 'Safe',
       value: <SafetyGroup data={data} nodata={noData} />,
+    },
+    {
+      key: 'connectivity',
+      label: 'Connectivity',
+      value: <ConnectivityGroup />,
     },
     {
       key: 'night',
