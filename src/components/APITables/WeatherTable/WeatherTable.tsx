@@ -161,7 +161,7 @@ export default function WeatherTable() {
     {
       key: 'station',
       label: 'Station',
-      value: weather?.[0]?.station,
+      value: weather?.[0]?.station === 'dupont' ? 'du Pont' : weather?.[0]?.station,
     },
   ];
 
