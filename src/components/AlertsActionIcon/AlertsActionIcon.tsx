@@ -86,7 +86,7 @@ export default function AlertsActionIcon() {
         <ActionIcon
           size="lg"
           variant="transparent"
-          color={isAlert ? 'white' : 'lime.9'}
+          color="white"
           onClick={openAlerts}
           styles={{ root: { '&:active': isAlert ? undefined : 'none' } }}
         >
