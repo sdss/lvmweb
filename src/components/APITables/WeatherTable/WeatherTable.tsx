@@ -91,6 +91,12 @@ export default function WeatherTable() {
     const diff = new Date(now.getTime() - new Date(`${weather[0].ts}Z`).getTime());
 
     const minutes = diff.getUTCMinutes() + diff.getUTCHours() * 60;
+    if (minutes < 0) {
+      return null;
+    } else if (minutes >= 1440) {
+      return minutes - 1440;
+    }
+
     return minutes;
   }, [weather, now]);
 
