@@ -234,7 +234,7 @@ export default function NightLogsPage(props: NightLogsPageProps) {
       <Stack p={8} mt={2} gap="xl">
         <Alert
           variant="light"
-          color={data && data.sent ? 'blue.6' : 'yellow.8'}
+          color={data && data.sent ? 'blue.6' : 'yellow.9'}
           icon={data && data.sent ? <IconInfoCircle /> : <IconExclamationCircle />}
         >
           <Group>
