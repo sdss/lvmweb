@@ -39,7 +39,7 @@ function HealthPills(props: { data: ActorHealthResponse; noData: boolean }) {
 
   return (
     <Group gap={12} pl={8} style={{ flexWrap: 'nowrap' }}>
-      <Pill bg={data.is_deployed ? 'lime.9' : 'red.8'} style={{ maxWidth: rem(85) }}>
+      <Pill bg={data.is_deployed ? 'blue' : 'red.8'} style={{ maxWidth: rem(85) }}>
         <APIStatusText size="xs" nodata={noData} defaultTooltipText={deployedTooltip}>
           {deployedText}
         </APIStatusText>
