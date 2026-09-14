@@ -24,7 +24,7 @@ export async function fetchFillList(): Promise<FillListType> {
 
 export async function fetchFillData(pk: number): Promise<FillMetadataType> {
   const response = await fetchFromAPI<FillMetadataType>(
-    `/spectrographs/fills/${pk}/metadata?transparent_plots=true`
+    `/spectrographs/fills/metadata/${pk}?transparent_plots=true`
   );
 
   return response;
