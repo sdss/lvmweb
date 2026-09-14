@@ -45,7 +45,7 @@ function AllesIstGutModal(props: AllesIstGutModalProps) {
       <Stack gap="lg">
         <Text pb={10} />
         <Text style={{ fontSize: 100 }} ta="center">
-          😌
+          🎉
         </Text>
         <Group justify="flex-end">
           <Button variant="default" onClick={close}>
