@@ -39,7 +39,8 @@ function ParkButton(props: { refresh: () => void }) {
     <Tooltip label={authStatus.logged ? 'Park telescopes' : 'Authentication needed'}>
       <Button
         size="compact-xs"
-        variant="light"
+        variant="filled"
+        color="orange"
         disabled={!authStatus.logged || parking}
         onClick={() => runner('/telescopes/park', true).then(props.refresh)}
       >
@@ -109,7 +110,8 @@ function ConnectButton(props: { refresh: () => void }) {
   return (
     <Button
       size="compact-xs"
-      variant="light"
+      variant="filled"
+      color="orange"
       disabled={!authStatus.logged || running}
       onClick={connect}
     >
