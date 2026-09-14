@@ -87,7 +87,7 @@ function OverwatcherPill(props: OverwatcherPillProps) {
     value,
     nodata,
     useErrorColour = false,
-    yesColor = 'lime.9',
+    yesColor = 'green-yes.9',
     noColor = 'dark.5',
     naColor = 'dark.5',
     customColour,

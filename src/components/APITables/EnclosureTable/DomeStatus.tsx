@@ -162,7 +162,7 @@ export default function DomeStatus(props: DomeStatusProps) {
 
   return (
     <Group pr={4}>
-      <Pill bg={domeLabels.includes('CLOSED') ? 'lime.9' : 'orange.9'}>
+      <Pill bg={domeLabels.includes('CLOSED') ? 'green-yes.9' : 'orange.9'}>
         <APIStatusText size="xs" nodata={noData}>
           {label}
         </APIStatusText>

@@ -17,6 +17,18 @@ export const theme = createTheme({
       '#39588f',
       '#2d4b81',
     ],
+    'green-yes': [
+      '#f3fcee',
+      '#e5f6dc',
+      '#c7edb2',
+      '#a7e486',
+      '#8cdc61',
+      '#7bd74a',
+      '#72d53e',
+      '#61bc30',
+      '#54a728',
+      '#3e821a',
+    ],
   },
   scale: 1.05,
   breakpoints: {
